@@ -19,6 +19,11 @@ local function createBankBlip(coords)
     EndTextCommandSetBlipName(blip)
 end
 
+local function openUI(isATM)
+    local accounts = lib.callback.await('ox_banking:getPlayerAccounts')
+    print(json.encode(accounts))
+end
+
 if not oxTarget then
     for i = 1, #locations do
         local location = locations[i]
@@ -31,7 +36,7 @@ if not oxTarget then
         end
         function point:nearby()
             if self.currentDistance <= 1.5 and IsControlJustPressed(0, 38) then
-                print('open ui')
+               openUI(false)
             end
         end
         createBankBlip(location)
@@ -43,7 +48,7 @@ else
             icon = 'fa-solid fa-money-check',
             label = 'Access ATM',
             onSelect = function()
-                print('open atm ui')
+                openUI(true)
             end,
         }
     })
@@ -61,7 +66,7 @@ else
                     icon = 'fa-solid fa-dollar-sign',
                     label = 'Access bank',
                     onSelect = function()
-                        print('open bank ui')
+                        openUI(false)
                     end,
                 }
             }
