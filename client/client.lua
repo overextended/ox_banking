@@ -42,32 +42,29 @@ if not oxTarget then
         createBankBlip(location)
     end
     CreateThread(function()
-        local atmFound = nil
-        local sleep = nil
         while true do
-            local playerCoords = GetEntityCoords(cache.ped)
-            if not atmFound then
-                sleep = 1000
+            if not IsNuiFocused() then
+                local playerCoords = GetEntityCoords(cache.ped)
                 for i = 1, #ATMProps do
                     local atm = GetClosestObjectOfType(playerCoords.x, playerCoords.y, playerCoords.z, 1.5, ATMProps[i], false)
                     if atm ~= 0 then
-                        atmFound = GetEntityCoords(atm)
-                        if atmFound then lib.showTextUI('[E] - Access ATM') end
+                        lib.showTextUI('[E] - Access ATM')
+                        local atmCoords = GetEntityCoords(atm)
+                        local distance = #(playerCoords - atmCoords)
+                        repeat
+                            Wait(0)
+                            distance = #(GetEntityCoords(cache.ped) - atmCoords)
+                            if IsControlJustPressed(0, 38) then
+                                openUI(true)
+                                SetNuiFocus(true, true)
+                                break
+                            end
+                        until distance > 1.5
+                        lib.hideTextUI()
                     end
-                end
-            else
-                sleep = 0
-                if #(playerCoords - atmFound) < 2 then
-                    if IsControlJustReleased(0, 38) then
-                        openUI(true)
-                        -- TODO: hide text ui and don't check input
-                    end
-                else
-                    atmFound = nil
-                    lib.hideTextUI()
                 end
             end
-            Wait(sleep)
+            Wait(1000)
         end
     end)
 else
