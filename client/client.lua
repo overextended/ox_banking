@@ -41,6 +41,35 @@ if not oxTarget then
         end
         createBankBlip(location)
     end
+    CreateThread(function()
+        local atmFound = nil
+        local sleep = nil
+        while true do
+            local playerCoords = GetEntityCoords(cache.ped)
+            if not atmFound then
+                sleep = 1000
+                for i = 1, #ATMProps do
+                    local atm = GetClosestObjectOfType(playerCoords.x, playerCoords.y, playerCoords.z, 1.5, ATMProps[i], false)
+                    if atm ~= 0 then
+                        atmFound = GetEntityCoords(atm)
+                        if atmFound then lib.showTextUI('[E] - Access ATM') end
+                    end
+                end
+            else
+                sleep = 0
+                if #(playerCoords - atmFound) < 2 then
+                    if IsControlJustReleased(0, 38) then
+                        openUI(true)
+                        -- TODO: hide text ui and don't check input
+                    end
+                else
+                    atmFound = nil
+                    lib.hideTextUI()
+                end
+            end
+            Wait(sleep)
+        end
+    end)
 else
     exports.ox_target:addModel(ATMProps, {
         {
