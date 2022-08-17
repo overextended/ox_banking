@@ -22,6 +22,7 @@ end
 local function openUI(isATM)
     local accounts = lib.callback.await('ox_banking:getPlayerAccounts')
     print(json.encode(accounts))
+    SetNuiFocus(true, true)
 end
 
 if not oxTarget then
@@ -43,21 +44,19 @@ if not oxTarget then
     end
     CreateThread(function()
         while true do
-            if not IsNuiFocused() then
+            if not IsNuiFocused() and not IsPauseMenuActive() then
                 local playerCoords = GetEntityCoords(cache.ped)
                 for i = 1, #ATMProps do
                     local atm = GetClosestObjectOfType(playerCoords.x, playerCoords.y, playerCoords.z, 1.5, ATMProps[i], false)
                     if atm ~= 0 then
                         lib.showTextUI('[E] - Access ATM')
                         local atmCoords = GetEntityCoords(atm)
-                        local distance = #(playerCoords - atmCoords)
                         repeat
                             Wait(0)
-                            distance = #(GetEntityCoords(cache.ped) - atmCoords)
+                            local distance = #(GetEntityCoords(cache.ped) - atmCoords)
+                            if IsNuiFocused() or IsPauseMenuActive() then break end
                             if IsControlJustPressed(0, 38) then
                                 openUI(true)
-                                SetNuiFocus(true, true)
-                                break
                             end
                         until distance > 1.5
                         lib.hideTextUI()
