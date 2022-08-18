@@ -6,8 +6,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
-  background: none !important
-  overflow: none !important;
+  background: none !important;
+  overflow: hidden !important;
 }
 
 #root {
