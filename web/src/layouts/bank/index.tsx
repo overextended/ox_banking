@@ -10,7 +10,7 @@ import Invoices from './views/invoices';
 const useStyles = createStyles((theme) => ({
   wrapper: {
     width: 1280,
-    height: 720,
+    height: 768,
     // backgroundColor: theme.colors.dark[8],
     borderRadius: theme.radius.sm,
     color: theme.colors.dark[1],
@@ -27,8 +27,8 @@ const Bank: React.FC = () => {
         styles={(theme) => ({
           main: {
             backgroundColor: theme.colors.dark[8],
-            width: 1280,
-            height: 720,
+            width: 1024,
+            height: 768,
             borderTopRightRadius: theme.radius.sm,
             borderBottomRightRadius: theme.radius.sm,
           },
@@ -36,7 +36,7 @@ const Bank: React.FC = () => {
         navbar={<Nav />}
       >
         <Routes>
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/accounts" element={<Accounts />} />
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/invoices" element={<Invoices />} />

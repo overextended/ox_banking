@@ -9,14 +9,14 @@ const Nav: React.FC = () => {
       p="md"
       fixed={false}
       sx={(theme) => ({
-        height: 720,
+        height: 768,
         borderTopLeftRadius: theme.radius.sm,
         borderBottomLeftRadius: theme.radius.sm,
       })}
     >
       <Navbar.Section grow>
         <Stack justify="center" spacing={0}>
-          <NavIcon tooltip="Home" Icon={TbHome} to="/home" />
+          <NavIcon tooltip="Home" Icon={TbHome} to="/" />
           <NavIcon tooltip="Accounts" Icon={TbCreditCard} to="/accounts" />
           <NavIcon tooltip="Transactions" Icon={TbArrowsRightLeft} to="/transactions" />
           <NavIcon tooltip="Invoices" Icon={TbFileInvoice} to="/invoices" />
