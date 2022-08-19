@@ -1,5 +1,11 @@
 import { AppShell, Box, createStyles, Navbar } from '@mantine/core';
+import { Route } from 'react-router-dom';
+import { Routes } from 'react-router-dom';
 import Nav from './components/Nav';
+import Home from './views/home/home';
+import Accounts from './views/accounts';
+import Transactions from './views/transactions';
+import Invoices from './views/invoices';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -29,7 +35,12 @@ const Bank: React.FC = () => {
         })}
         navbar={<Nav />}
       >
-        Content
+        <Routes>
+          <Route path="/home" element={<Home />} />
+          <Route path="/accounts" element={<Accounts />} />
+          <Route path="/transactions" element={<Transactions />} />
+          <Route path="/invoices" element={<Invoices />} />
+        </Routes>
       </AppShell>
     </Box>
   );

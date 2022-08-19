@@ -1,4 +1,4 @@
-import { ActionIcon, Navbar, Stack } from '@mantine/core';
+import { Navbar, Stack } from '@mantine/core';
 import { TbArrowsRightLeft, TbCreditCard, TbFileInvoice, TbHome, TbLogout } from 'react-icons/tb';
 import NavIcon from './NavIcon';
 
@@ -16,15 +16,15 @@ const Nav: React.FC = () => {
     >
       <Navbar.Section grow>
         <Stack justify="center" spacing={0}>
-          <NavIcon tooltip="Home" Icon={TbHome} />
-          <NavIcon tooltip="Accounts" Icon={TbCreditCard} />
-          <NavIcon tooltip="Transactions" Icon={TbArrowsRightLeft} />
-          <NavIcon tooltip="Bills" Icon={TbFileInvoice} />
+          <NavIcon tooltip="Home" Icon={TbHome} to="/home" />
+          <NavIcon tooltip="Accounts" Icon={TbCreditCard} to="/accounts" />
+          <NavIcon tooltip="Transactions" Icon={TbArrowsRightLeft} to="/transactions" />
+          <NavIcon tooltip="Invoices" Icon={TbFileInvoice} to="/invoices" />
         </Stack>
       </Navbar.Section>
       <Navbar.Section>
         <Stack justify="center">
-          <NavIcon tooltip="Exit" Icon={TbLogout} color="red.4" />
+          <NavIcon tooltip="Exit" Icon={TbLogout} color="red.4" to="" />
         </Stack>
       </Navbar.Section>
     </Navbar>

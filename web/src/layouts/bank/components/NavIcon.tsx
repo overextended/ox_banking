@@ -1,8 +1,10 @@
 import { ActionIcon, createStyles, Tooltip } from '@mantine/core';
 import { IconBaseProps } from 'react-icons';
+import { Link, useLocation } from 'react-router-dom';
 
 interface Props {
   tooltip: string;
+  to: string;
   Icon: React.ComponentType<IconBaseProps>;
   color?: string;
   hoverColor?: string;
@@ -16,15 +18,19 @@ const useStyles = createStyles((theme, color) => ({
   },
 }));
 
-const NavIcon: React.FC<Props> = ({ tooltip, Icon, color }) => {
+const NavIcon: React.FC<Props> = ({ tooltip, Icon, color, to }) => {
   const { classes } = useStyles();
+  const location = useLocation();
 
   return (
     <Tooltip label={tooltip} position="right">
       <ActionIcon
         size="xl"
+        component={Link}
+        to={to}
         color={color || 'blue.4'}
         className={classes.icon}
+        variant={location.pathname === to ? 'light' : undefined}
         sx={(theme) => ({ hover: { color: color ? theme.colors.red[3] : theme.colors.blue[3] } })}
       >
         <Icon fontSize={24} />
