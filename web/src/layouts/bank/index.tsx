@@ -1,4 +1,5 @@
 import { AppShell, Box, createStyles, Navbar } from '@mantine/core';
+import Nav from './components/Nav';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -26,20 +27,7 @@ const Bank: React.FC = () => {
             borderBottomRightRadius: theme.radius.sm,
           },
         })}
-        navbar={
-          <Navbar
-            width={{ base: 80 }}
-            p="md"
-            fixed={false}
-            sx={(theme) => ({
-              height: 720,
-              borderTopLeftRadius: theme.radius.sm,
-              borderBottomLeftRadius: theme.radius.sm,
-            })}
-          >
-            Item
-          </Navbar>
-        }
+        navbar={<Nav />}
       >
         Content
       </AppShell>
