@@ -1,5 +1,5 @@
 import { Box, Button, createStyles, Group, Paper, Stack, Text, ThemeIcon } from '@mantine/core';
-import { TbArrowDownLeft, TbArrowUpRight, TbArrowsLeftRight } from 'react-icons/tb';
+import { TbArrowDownLeft, TbArrowUpRight, TbArrowsRightLeft } from 'react-icons/tb';
 
 const mockTransactions: { type: 'inbound' | 'outbound'; amount: number; account: string; date: string }[] = [
   { type: 'inbound', amount: 3500, account: 'Billy', date: '01/01/1999' },
@@ -32,7 +32,7 @@ const Transactions: React.FC = () => {
         <Stack>
           <Group position="apart">
             <Text>Recent Transactions</Text>
-            <TbArrowsLeftRight size={20} />
+            <TbArrowsRightLeft size={24} />
           </Group>
           <Stack>
             {mockTransactions.map((transaction) => (
@@ -63,7 +63,7 @@ const Transactions: React.FC = () => {
             ))}
           </Stack>
         </Stack>
-        <Button uppercase color="teal">
+        <Button uppercase color="blue">
           See all
         </Button>
       </Stack>

@@ -32,7 +32,7 @@ const Invoices: React.FC = () => {
         <Stack>
           <Group position="apart">
             <Text>Recent Invoices</Text>
-            <TbFileInvoice size={20} />
+            <TbFileInvoice size={24} />
           </Group>
           <Stack>
             {mockInvoices.map((invoice) => (
@@ -49,7 +49,7 @@ const Invoices: React.FC = () => {
                       </Text>
                     </Stack>
                   </Group>
-                  <Text color="blue" weight={700}>
+                  <Text color="cyan" weight={700}>
                     ${invoice.amount}
                   </Text>
                 </Group>
@@ -57,7 +57,7 @@ const Invoices: React.FC = () => {
             ))}
           </Stack>
         </Stack>
-        <Button uppercase color="teal">
+        <Button uppercase color="blue">
           See all
         </Button>
       </Stack>
