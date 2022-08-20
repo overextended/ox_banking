@@ -3,38 +3,15 @@ import { TbBriefcase, TbCash, TbCoin } from 'react-icons/tb';
 import Invoices from './components/Invoices';
 import Transactions from './components/Transactions';
 import QuickActions from './components/QuickActions';
+import Balance from './components/Balance';
 
 const Home: React.FC = () => {
   return (
     <SimpleGrid cols={2}>
       <Stack>
-        <Paper p="md" withBorder>
-          <Stack>
-            <Group position="apart">
-              <Text>Account balance</Text>
-              <TbCoin size={24} />
-            </Group>
-            <Title>$132,320</Title>
-          </Stack>
-        </Paper>
-        <Paper p="md" withBorder>
-          <Stack>
-            <Group position="apart">
-              <Text>Paycheck balance</Text>
-              <TbBriefcase size={24} />
-            </Group>
-            <Title>$0</Title>
-          </Stack>
-        </Paper>
-        <Paper p="md" withBorder>
-          <Stack>
-            <Group position="apart">
-              <Text>Cash balance</Text>
-              <TbCash size={24} />
-            </Group>
-            <Title>$9,832</Title>
-          </Stack>
-        </Paper>
+        <Balance header="Account balance" Icon={TbCoin} value="132,320" />
+        <Balance header="Paycheck balance" Icon={TbBriefcase} value="0" />
+        <Balance header="Cash balance" Icon={TbCash} value="9,520" />
         <QuickActions />
       </Stack>
       <Box>
