@@ -9,7 +9,7 @@ interface Props {
 
 const Balance: React.FC<Props> = ({ header, Icon, value }) => {
   return (
-    <Paper p="md" withBorder>
+    <Paper p="md">
       <Stack>
         <Group position="apart">
           <Text>{header}</Text>

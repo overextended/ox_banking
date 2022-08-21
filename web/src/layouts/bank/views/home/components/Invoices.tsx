@@ -27,7 +27,7 @@ const Invoices: React.FC = () => {
   const { classes } = useStyles();
 
   return (
-    <Paper p="md" withBorder className={classes.paper}>
+    <Paper p="md" className={classes.paper}>
       <Stack justify="space-between" className={classes.stack}>
         <Stack>
           <Group position="apart">

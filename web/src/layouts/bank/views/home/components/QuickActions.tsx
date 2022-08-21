@@ -3,7 +3,7 @@ import { TbBolt, TbCurrencyDollar } from 'react-icons/tb';
 
 const QuickActions: React.FC = () => {
   return (
-    <Paper p="md" withBorder sx={{ height: '100%' }}>
+    <Paper p="md" sx={{ height: '100%' }}>
       <Stack sx={{ height: '100%' }}>
         <Group position="apart">
           <Text>Quick Actions</Text>

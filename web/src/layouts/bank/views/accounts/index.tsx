@@ -32,7 +32,7 @@ const Accounts: React.FC = () => {
 
   return (
     <SimpleGrid cols={3} sx={{ height: '100%' }}>
-      <Paper p="md" withBorder>
+      <Paper p="md">
         <Stack>
           <Text>Available accounts</Text>
           <TextInput placeholder="Search" icon={<TbSearch size={20} />} />
