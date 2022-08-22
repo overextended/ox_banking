@@ -9,6 +9,7 @@ const AccountSelect: React.FC = () => {
         <Select
           icon={<TbCreditCard size={20} />}
           searchable
+          nothingFound="No such account found."
           data={[
             { label: 'Personal', value: 'personal' },
             { label: 'Paycheck', value: 'paycheck' },
