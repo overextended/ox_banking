@@ -30,8 +30,13 @@ const NavIcon: React.FC<Props> = ({ tooltip, Icon, color, to }) => {
         to={to}
         color={color || 'blue.4'}
         className={classes.icon}
-        variant={location.pathname === to ? 'light' : undefined}
-        sx={(theme) => ({ hover: { color: color ? theme.colors.red[3] : theme.colors.blue[3] } })}
+        variant={location.pathname === to ? 'light' : 'transparent'}
+        sx={(theme) => ({
+          '&:hover': {
+            color: color ? theme.colors.red[3] : theme.colors.blue[3],
+            backgroundColor: location.pathname !== to ? theme.colors.dark[6] : undefined,
+          },
+        })}
       >
         <Icon fontSize={24} />
       </ActionIcon>
