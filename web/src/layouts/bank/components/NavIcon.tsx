@@ -8,6 +8,7 @@ interface Props {
   Icon: React.ComponentType<IconBaseProps>;
   color?: string;
   hoverColor?: string;
+  handleClick?: () => void;
 }
 
 const useStyles = createStyles((theme, color) => ({
@@ -18,13 +19,16 @@ const useStyles = createStyles((theme, color) => ({
   },
 }));
 
-const NavIcon: React.FC<Props> = ({ tooltip, Icon, color, to }) => {
+const NavIcon: React.FC<Props> = ({ tooltip, Icon, color, to, handleClick }) => {
   const { classes } = useStyles();
   const location = useLocation();
 
   return (
     <Tooltip label={tooltip} position="right">
       <ActionIcon
+        onClick={() => {
+          if (handleClick) return handleClick();
+        }}
         size="xl"
         component={Link}
         to={to}

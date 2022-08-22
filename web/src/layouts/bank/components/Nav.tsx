@@ -1,8 +1,12 @@
 import { Navbar, Stack } from '@mantine/core';
-import { TbArrowsRightLeft, TbCreditCard, TbHistory, TbHome, TbLogout } from 'react-icons/tb';
+import { TbCreditCard, TbHistory, TbHome, TbLogout } from 'react-icons/tb';
 import NavIcon from './NavIcon';
+import { useAtom } from 'jotai';
+import { bankVisibilityAtom } from '../../../atoms/visibility';
 
 const Nav: React.FC = () => {
+  const [, setVisible] = useAtom(bankVisibilityAtom);
+
   return (
     <Navbar
       width={{ base: 80 }}
@@ -23,7 +27,7 @@ const Nav: React.FC = () => {
       </Navbar.Section>
       <Navbar.Section>
         <Stack justify="center">
-          <NavIcon tooltip="Exit" Icon={TbLogout} color="red.4" to="" />
+          <NavIcon tooltip="Exit" Icon={TbLogout} color="red.4" to="" handleClick={() => setVisible(false)} />
         </Stack>
       </Navbar.Section>
     </Navbar>

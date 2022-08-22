@@ -2,7 +2,6 @@ import { Box, Button, CloseButton, createStyles, Group, NumberInput, Stack, Text
 import { useAtom } from 'jotai';
 import { atmVisibilityAtom } from '../../atoms/visibility';
 import { useExitListener } from '../../hooks/useExitListener';
-import { useEffect } from 'react';
 import { TbCurrencyDollar } from 'react-icons/tb';
 
 const useStyles = createStyles((theme) => ({
@@ -29,8 +28,6 @@ const ATM: React.FC = () => {
   const [visible, setVisible] = useAtom(atmVisibilityAtom);
 
   useExitListener(setVisible);
-
-  useEffect(() => console.log(visible), [visible]);
 
   return (
     <Transition transition="slide-up" mounted={visible}>
