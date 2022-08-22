@@ -35,8 +35,8 @@ const Transactions: React.FC = () => {
             <TbArrowsRightLeft size={24} />
           </Group>
           <Stack>
-            {mockTransactions.map((transaction) => (
-              <Box className={classes.transactions}>
+            {mockTransactions.map((transaction, index) => (
+              <Box className={classes.transactions} key={`transaction-${index}`}>
                 <Group position="apart">
                   <Group>
                     <ThemeIcon size="lg" color={transaction.type === 'inbound' ? 'teal' : 'red'} variant="light">

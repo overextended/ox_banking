@@ -36,8 +36,8 @@ const Transactions: React.FC = () => {
         <Text>Transactions</Text>
         <TextInput placeholder="Search" icon={<TbSearch size={20} />} />
         <Stack>
-          {mockTransactions.map((transaction) => (
-            <Tooltip label="Click for details" withArrow transition="pop">
+          {mockTransactions.map((transaction, index) => (
+            <Tooltip label="Click for details" withArrow transition="pop" key={`transaction-${index}`}>
               <Box className={classes.transactions}>
                 <Group position="apart">
                   <Group>

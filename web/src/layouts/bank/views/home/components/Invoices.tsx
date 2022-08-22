@@ -35,8 +35,8 @@ const Invoices: React.FC = () => {
             <TbFileInvoice size={24} />
           </Group>
           <Stack>
-            {mockInvoices.map((invoice) => (
-              <Box className={classes.invoice}>
+            {mockInvoices.map((invoice, index) => (
+              <Box className={classes.invoice} key={`invoice-${index}`}>
                 <Group position="apart">
                   <Group>
                     <ThemeIcon size="lg" color="cyan" variant="light">

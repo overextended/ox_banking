@@ -28,9 +28,9 @@ const Invoices: React.FC = () => {
         <Text>Account invoices</Text>
         <TextInput placeholder="Search" icon={<TbSearch size={20} />} />
         <Stack justify="center">
-          {mockInvoices.map((invoice) => (
+          {mockInvoices.map((invoice, index) => (
             <Tooltip label="Click for details" withArrow transition="pop">
-              <Box className={classes.invoice}>
+              <Box className={classes.invoice} key={`invoice-${index}`}>
                 <Group position="apart">
                   <Group>
                     <ThemeIcon size="lg" color="cyan" variant="light">
