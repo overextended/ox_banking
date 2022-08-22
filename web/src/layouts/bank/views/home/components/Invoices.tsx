@@ -39,8 +39,8 @@ const Invoices: React.FC = () => {
               <Box className={classes.invoice}>
                 <Group position="apart">
                   <Group>
-                    <ThemeIcon size="lg" color={invoice.isPaid ? 'teal' : 'red'} variant="light">
-                      {invoice.isPaid ? <TbCheck size={24} /> : <TbX size={24} />}
+                    <ThemeIcon size="lg" color="cyan" variant="light">
+                      <TbFileInvoice size={24} />
                     </ThemeIcon>
                     <Stack spacing={0}>
                       <Text>{invoice.from}</Text>
