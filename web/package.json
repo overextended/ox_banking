@@ -14,6 +14,7 @@
     "@emotion/react": "^11.10.0",
     "@mantine/core": "^5.1.7",
     "@mantine/hooks": "^5.1.7",
+    "jotai": "^1.8.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-icons": "^4.4.0",

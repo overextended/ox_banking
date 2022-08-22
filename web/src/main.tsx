@@ -6,6 +6,9 @@ import './index.css';
 import { customTheme } from './theme';
 import { HashRouter } from 'react-router-dom';
 import { isEnvBrowser } from './utils/misc';
+import { debugData } from './utils/debugData';
+
+debugData([{ action: 'setBankVisible', data: true }]);
 
 if (isEnvBrowser()) {
   const root = document.getElementById('root');
