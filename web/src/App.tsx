@@ -1,6 +1,8 @@
 import { Box, createStyles } from '@mantine/core';
 import ATM from './layouts/atm';
 import Bank from './layouts/bank';
+import Dev from './layouts/dev';
+import { isEnvBrowser } from './utils/misc';
 
 const useStyles = createStyles((theme) => ({
   container: {
@@ -19,6 +21,7 @@ const App: React.FC = () => {
     <Box className={classes.container}>
       <Bank />
       {/*<ATM />*/}
+      {isEnvBrowser() && <Dev />}
     </Box>
   );
 };
