@@ -4,7 +4,7 @@ import { Routes } from 'react-router-dom';
 import Nav from './components/Nav';
 import Home from './views/home/home';
 import Accounts from './views/accounts';
-import Transactions from './views/transactions';
+import Logs from './views/logs';
 import Invoices from './views/invoices';
 
 const useStyles = createStyles((theme) => ({
@@ -38,7 +38,7 @@ const Bank: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/accounts" element={<Accounts />} />
-          <Route path="/transactions" element={<Transactions />} />
+          <Route path="/logs" element={<Logs />} />
           <Route path="/invoices" element={<Invoices />} />
         </Routes>
       </AppShell>
