@@ -2,11 +2,12 @@ import { ActionIcon, Button, Drawer, Stack, Tooltip } from '@mantine/core';
 import { FaWrench } from 'react-icons/fa';
 import { useState } from 'react';
 import { useAtom } from 'jotai';
-import { bankVisibilityAtom } from '../../atoms/visibility';
+import { atmVisibilityAtom, bankVisibilityAtom } from '../../atoms/visibility';
 
 const Dev: React.FC = () => {
   const [opened, setOpened] = useState(false);
   const [bankVisible, setBankVisible] = useAtom(bankVisibilityAtom);
+  const [atmVisible, setAtmVisible] = useAtom(atmVisibilityAtom);
 
   return (
     <>
@@ -28,7 +29,7 @@ const Dev: React.FC = () => {
       <Drawer opened={opened} onClose={() => setOpened(false)} title="Developer drawer" padding="md">
         <Stack>
           <Button onClick={() => setBankVisible(!bankVisible)}>{!bankVisible ? 'Open' : 'Close'} bank</Button>
-          <Button>Open ATM</Button>
+          <Button onClick={() => setAtmVisible(!atmVisible)}>{!atmVisible ? 'Open' : 'Close'} ATM</Button>
         </Stack>
       </Drawer>
     </>

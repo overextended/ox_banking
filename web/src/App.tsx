@@ -20,7 +20,7 @@ const App: React.FC = () => {
   return (
     <Box className={classes.container}>
       <Bank />
-      {/*<ATM />*/}
+      <ATM />
       {isEnvBrowser() && <Dev />}
     </Box>
   );
