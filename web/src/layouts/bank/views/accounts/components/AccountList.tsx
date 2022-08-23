@@ -1,6 +1,8 @@
 import { Box, Button, createStyles, Grid, Group, Paper, ScrollArea, Stack, Text, TextInput } from '@mantine/core';
 import { TbSearch } from 'react-icons/tb';
 import { Account } from '../index';
+import { openModal } from '@mantine/modals';
+import CreateAccount from './modals/CreateAccount';
 
 interface Props {
   mockAccounts: Account[];
@@ -30,7 +32,17 @@ const AccountList: React.FC<Props> = ({ mockAccounts, setAccount }) => {
         <Stack>
           <Text>Available accounts</Text>
           <TextInput placeholder="Search" icon={<TbSearch size={20} />} />
-          <Button uppercase variant="light">
+          <Button
+            uppercase
+            variant="light"
+            onClick={() =>
+              openModal({
+                title: 'Create account',
+                size: 'xs',
+                children: <CreateAccount />,
+              })
+            }
+          >
             Create account
           </Button>
           <ScrollArea style={{ height: 555 }} scrollbarSize={0}>

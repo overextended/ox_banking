@@ -6,6 +6,7 @@ import './index.css';
 import { customTheme } from './theme';
 import { HashRouter } from 'react-router-dom';
 import { isEnvBrowser } from './utils/misc';
+import { ModalsProvider } from '@mantine/modals';
 
 if (isEnvBrowser()) {
   const root = document.getElementById('root');
@@ -21,7 +22,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <HashRouter>
       <MantineProvider withNormalizeCSS withGlobalStyles theme={customTheme}>
-        <App />
+        <ModalsProvider modalProps={{ centered: true }}>
+          <App />
+        </ModalsProvider>
       </MantineProvider>
     </HashRouter>
   </React.StrictMode>
