@@ -1,8 +1,8 @@
 import { Box, Button, CloseButton, createStyles, Group, NumberInput, Stack, Text, Transition } from '@mantine/core';
-import { useAtom } from 'jotai';
 import { atmVisibilityAtom } from '../../atoms/visibility';
 import { useExitListener } from '../../hooks/useExitListener';
 import { TbCurrencyDollar } from 'react-icons/tb';
+import { useRecoilState } from 'recoil';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -25,7 +25,7 @@ const useStyles = createStyles((theme) => ({
 
 const ATM: React.FC = () => {
   const { classes } = useStyles();
-  const [visible, setVisible] = useAtom(atmVisibilityAtom);
+  const [visible, setVisible] = useRecoilState(atmVisibilityAtom);
 
   useExitListener(setVisible);
 

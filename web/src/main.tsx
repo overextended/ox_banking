@@ -7,6 +7,7 @@ import { customTheme } from './theme';
 import { HashRouter } from 'react-router-dom';
 import { isEnvBrowser } from './utils/misc';
 import { ModalsProvider } from '@mantine/modals';
+import { RecoilRoot } from 'recoil';
 
 if (isEnvBrowser()) {
   const root = document.getElementById('root');
@@ -23,7 +24,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <HashRouter>
       <MantineProvider withNormalizeCSS withGlobalStyles theme={customTheme}>
         <ModalsProvider modalProps={{ centered: true }}>
-          <App />
+          <RecoilRoot>
+            <App />
+          </RecoilRoot>
         </ModalsProvider>
       </MantineProvider>
     </HashRouter>

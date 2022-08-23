@@ -15,11 +15,11 @@
     "@mantine/core": "^5.2.3",
     "@mantine/hooks": "^5.2.3",
     "@mantine/modals": "^5.2.3",
-    "jotai": "^1.8.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-icons": "^4.4.0",
-    "react-router-dom": "^6.3.0"
+    "react-router-dom": "^6.3.0",
+    "recoil": "^0.7.5"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",

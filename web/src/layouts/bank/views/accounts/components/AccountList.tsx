@@ -1,13 +1,9 @@
 import { Box, Button, createStyles, Grid, Group, Paper, ScrollArea, Stack, Text, TextInput } from '@mantine/core';
 import { TbSearch } from 'react-icons/tb';
-import { Account } from '../index';
 import { openModal } from '@mantine/modals';
 import CreateAccount from './modals/CreateAccount';
-
-interface Props {
-  mockAccounts: Account[];
-  setAccount: React.Dispatch<React.SetStateAction<number | null>>;
-}
+import { accountsAtom, selectedAccountAtom } from '../../../../../atoms/account';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 const useStyles = createStyles((theme) => ({
   account: {
@@ -23,8 +19,10 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const AccountList: React.FC<Props> = ({ mockAccounts, setAccount }) => {
+const AccountList: React.FC = () => {
   const { classes } = useStyles();
+  const accounts = useRecoilValue(accountsAtom);
+  const setSelectedAccount = useSetRecoilState(selectedAccountAtom);
 
   return (
     <Grid.Col span={1}>
@@ -47,11 +45,11 @@ const AccountList: React.FC<Props> = ({ mockAccounts, setAccount }) => {
           </Button>
           <ScrollArea style={{ height: 555 }} scrollbarSize={0}>
             <Stack>
-              {mockAccounts.map((account, index) => (
-                <Box className={classes.account} key={`account-${index}`} onClick={() => setAccount(index)}>
+              {accounts.map((account, index) => (
+                <Box className={classes.account} key={`account-${index}`} onClick={() => setSelectedAccount(index)}>
                   <Stack spacing="xl">
                     <Stack spacing={0}>
-                      <Text size="xl">{account.label}</Text>
+                      <Text size="xl">{account.name}</Text>
                       <Text size="xs">
                         {account.type === 'personal' ? 'Personal' : account.type === 'group' ? 'Group' : 'Shared'}{' '}
                         Account

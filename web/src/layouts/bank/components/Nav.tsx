@@ -1,11 +1,11 @@
 import { Navbar, Stack } from '@mantine/core';
 import { TbCreditCard, TbHistory, TbHome, TbLogout } from 'react-icons/tb';
 import NavIcon from './NavIcon';
-import { useAtom } from 'jotai';
 import { bankVisibilityAtom } from '../../../atoms/visibility';
+import { useSetRecoilState } from 'recoil';
 
 const Nav: React.FC = () => {
-  const [, setVisible] = useAtom(bankVisibilityAtom);
+  const setVisible = useSetRecoilState(bankVisibilityAtom);
 
   return (
     <Navbar

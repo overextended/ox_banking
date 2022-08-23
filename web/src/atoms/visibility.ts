@@ -1,4 +1,4 @@
-import { atom } from 'jotai';
+import { atom } from 'recoil';
 
-export const bankVisibilityAtom = atom(false);
-export const atmVisibilityAtom = atom(false);
+export const bankVisibilityAtom = atom({ key: 'bankVisibility', default: false });
+export const atmVisibilityAtom = atom({ key: 'atmVisibility', default: false });

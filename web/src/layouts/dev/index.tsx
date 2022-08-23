@@ -1,13 +1,13 @@
 import { ActionIcon, Button, Drawer, Stack, Tooltip } from '@mantine/core';
 import { FaWrench } from 'react-icons/fa';
 import { useState } from 'react';
-import { useAtom } from 'jotai';
 import { atmVisibilityAtom, bankVisibilityAtom } from '../../atoms/visibility';
+import { useRecoilState } from 'recoil';
 
 const Dev: React.FC = () => {
   const [opened, setOpened] = useState(false);
-  const [bankVisible, setBankVisible] = useAtom(bankVisibilityAtom);
-  const [atmVisible, setAtmVisible] = useAtom(atmVisibilityAtom);
+  const [bankVisible, setBankVisible] = useRecoilState(bankVisibilityAtom);
+  const [atmVisible, setAtmVisible] = useRecoilState(atmVisibilityAtom);
 
   return (
     <>

@@ -7,9 +7,9 @@ import Accounts from './views/accounts';
 import Logs from './views/logs';
 import Invoices from './views/invoices';
 import { bankVisibilityAtom } from '../../atoms/visibility';
-import { useAtom } from 'jotai';
 import { useNuiEvent } from '../../hooks/useNuiEvent';
 import { useExitListener } from '../../hooks/useExitListener';
+import { useRecoilState } from 'recoil';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -23,7 +23,7 @@ const useStyles = createStyles((theme) => ({
 
 const Bank: React.FC = () => {
   const { classes } = useStyles();
-  const [visible, setVisible] = useAtom(bankVisibilityAtom);
+  const [visible, setVisible] = useRecoilState(bankVisibilityAtom);
 
   useNuiEvent('setBankVisible', () => {
     setVisible(true);

@@ -1,36 +1,39 @@
 import { Button, Group, Paper, Stack, Text } from '@mantine/core';
-import { Account } from '../index';
+import { accountsAtom, selectedAccountAtom } from '../../../../../atoms/account';
+import { useRecoilValue } from 'recoil';
 
-interface Props {
-  mockAccounts: Account[];
-  account: number;
-}
+const AccountSettings: React.FC = () => {
+  const accounts = useRecoilValue(accountsAtom);
+  const selectedAccount = useRecoilValue(selectedAccountAtom);
 
-const AccountSettings: React.FC<Props> = ({ mockAccounts, account }) => {
   return (
-    <Paper p="md" sx={{ height: '100%' }}>
-      <Stack justify="space-between" sx={{ height: '100%' }}>
-        <Text>Account settings</Text>
-        <Stack>
-          <Group grow>
-            <Button color="red" variant="outline" uppercase>
-              Transfer Account
-            </Button>
-            <Button
-              color="red"
-              variant="outline"
-              uppercase
-              disabled={mockAccounts[account].type === 'shared' || mockAccounts[account].type === 'group'}
-            >
-              Convert to shared account
-            </Button>
-          </Group>
-          <Button color="red" variant="outline" uppercase>
-            Delete Account
-          </Button>
-        </Stack>
-      </Stack>
-    </Paper>
+    <>
+      {selectedAccount !== null && (
+        <Paper p="md" sx={{ height: '100%' }}>
+          <Stack justify="space-between" sx={{ height: '100%' }}>
+            <Text>Account settings</Text>
+            <Stack>
+              <Group grow>
+                <Button color="red" variant="outline" uppercase>
+                  Transfer Account
+                </Button>
+                <Button
+                  color="red"
+                  variant="outline"
+                  uppercase
+                  disabled={accounts[selectedAccount].type === 'shared' || accounts[selectedAccount].type === 'group'}
+                >
+                  Convert to shared account
+                </Button>
+              </Group>
+              <Button color="red" variant="outline" uppercase>
+                Delete Account
+              </Button>
+            </Stack>
+          </Stack>
+        </Paper>
+      )}
+    </>
   );
 };
 

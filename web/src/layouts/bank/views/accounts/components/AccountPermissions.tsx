@@ -1,23 +1,26 @@
 import { Button, Paper, Stack, Text } from '@mantine/core';
-import { Account } from '../index';
+import { accountsAtom, selectedAccountAtom } from '../../../../../atoms/account';
+import { useRecoilValue } from 'recoil';
 
-interface Props {
-  mockAccounts: Account[];
-  account: number;
-}
+const AccountPermissions: React.FC = () => {
+  const accounts = useRecoilValue(accountsAtom);
+  const selectedAccount = useRecoilValue(selectedAccountAtom);
 
-const AccountPermissions: React.FC<Props> = ({ mockAccounts, account }) => {
   return (
     <>
-      {mockAccounts[account].type === 'group' ||
-        (mockAccounts[account].type === 'shared' && (
-          <Paper p="md">
-            <Stack>
-              <Text>Account permissions</Text>
-              <Button uppercase>Manage account permissions</Button>
-            </Stack>
-          </Paper>
-        ))}
+      {selectedAccount !== null && (
+        <>
+          {accounts[selectedAccount].type === 'group' ||
+            (accounts[selectedAccount].type === 'shared' && (
+              <Paper p="md">
+                <Stack>
+                  <Text>Account permissions</Text>
+                  <Button uppercase>Manage account permissions</Button>
+                </Stack>
+              </Paper>
+            ))}
+        </>
+      )}
     </>
   );
 };

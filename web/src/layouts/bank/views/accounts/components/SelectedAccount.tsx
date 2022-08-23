@@ -1,10 +1,6 @@
 import { Box, Button, createStyles, Group, Paper, Stack, Text } from '@mantine/core';
-import { Account } from '../index';
-
-interface Props {
-  mockAccounts: Account[];
-  account: number;
-}
+import { accountsAtom, selectedAccountAtom } from '../../../../../atoms/account';
+import { useRecoilValue } from 'recoil';
 
 const useStyles = createStyles((theme) => ({
   account: {
@@ -20,46 +16,52 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const SelectedAccount: React.FC<Props> = ({ mockAccounts, account }) => {
+const SelectedAccount: React.FC = () => {
   const { classes } = useStyles();
+  const accounts = useRecoilValue(accountsAtom);
+  const selectedAccount = useRecoilValue(selectedAccountAtom);
 
   return (
-    <Paper p="md">
-      <Group>
-        <Stack>
-          <Text>Selected Account</Text>
+    <>
+      {selectedAccount !== null && (
+        <Paper p="md">
           <Group>
-            <Box className={classes.account}>
-              <Stack spacing="xl">
-                <Stack spacing={0}>
-                  <Text size="xl">{mockAccounts[account].label}</Text>
-                  <Text size="xs">
-                    {mockAccounts[account].type === 'personal'
-                      ? 'Personal'
-                      : mockAccounts[account].type === 'group'
-                      ? 'Group'
-                      : 'Shared'}{' '}
-                    Account
-                  </Text>
+            <Stack>
+              <Text>Selected Account</Text>
+              <Group>
+                <Box className={classes.account}>
+                  <Stack spacing="xl">
+                    <Stack spacing={0}>
+                      <Text size="xl">{accounts[selectedAccount].name}</Text>
+                      <Text size="xs">
+                        {accounts[selectedAccount].type === 'personal'
+                          ? 'Personal'
+                          : accounts[selectedAccount].type === 'group'
+                          ? 'Group'
+                          : 'Shared'}{' '}
+                        Account
+                      </Text>
+                    </Stack>
+                    <Group position="apart">
+                      <Text>${accounts[selectedAccount].balance}</Text>
+                      <Text>{accounts[selectedAccount].id}</Text>
+                    </Group>
+                  </Stack>
+                </Box>
+                <Stack spacing="sm">
+                  <Button uppercase variant="light">
+                    Rename account
+                  </Button>
+                  <Button uppercase variant="light">
+                    Copy account number
+                  </Button>
                 </Stack>
-                <Group position="apart">
-                  <Text>${mockAccounts[account].balance}</Text>
-                  <Text>{mockAccounts[account].id}</Text>
-                </Group>
-              </Stack>
-            </Box>
-            <Stack spacing="sm">
-              <Button uppercase variant="light">
-                Rename account
-              </Button>
-              <Button uppercase variant="light">
-                Copy account number
-              </Button>
+              </Group>
             </Stack>
           </Group>
-        </Stack>
-      </Group>
-    </Paper>
+        </Paper>
+      )}
+    </>
   );
 };
 
