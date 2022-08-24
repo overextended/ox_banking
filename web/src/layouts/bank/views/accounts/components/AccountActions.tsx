@@ -11,7 +11,7 @@ const AccountActions: React.FC = () => {
           <Button uppercase>Deposit</Button>
           <Button uppercase>Transfer</Button>
           <Button uppercase rightIcon={<FaExternalLinkAlt />}>
-            Transactions
+            Logs
           </Button>
         </SimpleGrid>
       </Stack>

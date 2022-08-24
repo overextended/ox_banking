@@ -1,4 +1,5 @@
 import { atom, selector } from 'recoil';
+import selectedAccount from '../layouts/bank/views/accounts/components/SelectedAccount';
 
 export interface Account {
   id: string;
@@ -42,12 +43,28 @@ const mockAccounts: Account[] = [
 ];
 
 export const accountsAtom = atom<Account[]>({ key: 'accounts', default: mockAccounts });
+
 export const selectedAccountAtom = atom<number | null>({ key: 'selectedAccount', default: null });
+
+export const logsAccountsAtom = selector<{ label: string; value: string }[]>({
+  key: 'logsAccounts',
+  get: ({ get }) => {
+    const logsAccounts = get(accountsAtom).map((account) => ({ value: account.id, label: account.name }));
+    return logsAccounts;
+  },
+});
+
+export const selectedLogsAccountAtom = atom<string | null>({
+  key: 'selectedLogsAccount',
+  default: null,
+});
+
 export const defaultAccountAtom = selector({
   key: 'defaultAccount',
   get: ({ get }) => {
     const account = get(accountsAtom).find((account) => account.isDefault);
     if (account) return account;
+    // debug data for web
     return {
       id: '9261979951215',
       owner: '1',
