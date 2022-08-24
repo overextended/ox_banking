@@ -1,5 +1,6 @@
 import { Box, Button, createStyles, Group, Paper, Stack, Text, ThemeIcon } from '@mantine/core';
 import { TbArrowDownLeft, TbArrowUpRight, TbArrowsRightLeft } from 'react-icons/tb';
+import { formatNumber } from '../../../../../utils/formatNumber';
 
 const mockTransactions: { type: 'inbound' | 'outbound'; amount: number; account: string; date: string }[] = [
   { type: 'inbound', amount: 3500, account: 'Billy', date: '01/01/1999' },
@@ -51,11 +52,11 @@ const Transactions: React.FC = () => {
                   </Group>
                   {transaction.type === 'inbound' ? (
                     <Text color="teal" weight={700}>
-                      +${transaction.amount}
+                      +{formatNumber(transaction.amount)}
                     </Text>
                   ) : (
                     <Text color="red" weight={700}>
-                      -${transaction.amount}
+                      -{formatNumber(transaction.amount)}
                     </Text>
                   )}
                 </Group>

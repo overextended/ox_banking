@@ -1,5 +1,6 @@
 import { Box, createStyles, Group, Pagination, Paper, Stack, Text, TextInput, ThemeIcon, Tooltip } from '@mantine/core';
 import { TbFileInvoice, TbSearch } from 'react-icons/tb';
+import { formatNumber } from '../../../../../utils/formatNumber';
 
 const mockInvoices: { from: string; date: string; amount: number; isPaid: boolean; description?: string }[] = [
   { from: 'Karen', date: '01/01/1999', amount: 7500, isPaid: true },
@@ -44,7 +45,7 @@ const Invoices: React.FC = () => {
                     </Stack>
                   </Group>
                   <Text color="cyan" weight={700}>
-                    ${invoice.amount}
+                    {formatNumber(invoice.amount)}
                   </Text>
                 </Group>
               </Box>

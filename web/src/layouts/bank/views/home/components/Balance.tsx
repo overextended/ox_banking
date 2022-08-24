@@ -1,10 +1,11 @@
 import { Group, Paper, Stack, Text, Title } from '@mantine/core';
 import { IconBaseProps } from 'react-icons';
+import { formatNumber } from '../../../../../utils/formatNumber';
 
 interface Props {
   header: string;
   Icon: React.ComponentType<IconBaseProps>;
-  value: string;
+  value: number;
 }
 
 const Balance: React.FC<Props> = ({ header, Icon, value }) => {
@@ -15,7 +16,7 @@ const Balance: React.FC<Props> = ({ header, Icon, value }) => {
           <Text>{header}</Text>
           <Icon size={24} />
         </Group>
-        <Title>${value}</Title>
+        <Title>{formatNumber(value)}</Title>
       </Stack>
     </Paper>
   );

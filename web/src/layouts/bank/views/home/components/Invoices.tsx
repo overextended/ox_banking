@@ -1,5 +1,6 @@
 import { Box, Button, createStyles, Group, Paper, Stack, Text, ThemeIcon } from '@mantine/core';
 import { TbCheck, TbX, TbFileInvoice } from 'react-icons/tb';
+import { formatNumber } from '../../../../../utils/formatNumber';
 
 const useStyles = createStyles((theme) => ({
   paper: {
@@ -50,7 +51,7 @@ const Invoices: React.FC = () => {
                     </Stack>
                   </Group>
                   <Text color="cyan" weight={700}>
-                    ${invoice.amount}
+                    {formatNumber(invoice.amount)}
                   </Text>
                 </Group>
               </Box>

@@ -4,6 +4,7 @@ import { openModal } from '@mantine/modals';
 import CreateAccount from './modals/CreateAccount';
 import { accountsAtom, selectedAccountAtom } from '../../../../../atoms/account';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { formatNumber } from '../../../../../utils/formatNumber';
 
 const useStyles = createStyles((theme) => ({
   account: {
@@ -56,7 +57,7 @@ const AccountList: React.FC = () => {
                       </Text>
                     </Stack>
                     <Group position="apart">
-                      <Text>${account.balance}</Text>
+                      <Text>{formatNumber(account.balance)}</Text>
                       <Text>{account.id}</Text>
                     </Group>
                   </Stack>

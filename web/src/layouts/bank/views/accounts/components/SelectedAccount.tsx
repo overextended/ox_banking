@@ -1,6 +1,7 @@
 import { Box, Button, createStyles, Group, Paper, Stack, Text } from '@mantine/core';
 import { accountsAtom, selectedAccountAtom } from '../../../../../atoms/account';
 import { useRecoilValue } from 'recoil';
+import { formatNumber } from '../../../../../utils/formatNumber';
 
 const useStyles = createStyles((theme) => ({
   account: {
@@ -43,7 +44,7 @@ const SelectedAccount: React.FC = () => {
                       </Text>
                     </Stack>
                     <Group position="apart">
-                      <Text>${accounts[selectedAccount].balance}</Text>
+                      <Text>{formatNumber(accounts[selectedAccount].balance)}</Text>
                       <Text>{accounts[selectedAccount].id}</Text>
                     </Group>
                   </Stack>
