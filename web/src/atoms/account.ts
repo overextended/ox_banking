@@ -56,6 +56,7 @@ export const logsAccountsAtom = selector<{ label: string; value: string }[]>({
 
 export const selectedLogsAccountAtom = atom<string | null>({
   key: 'selectedLogsAccount',
+  // TODO: set default to personal account
   default: null,
 });
 

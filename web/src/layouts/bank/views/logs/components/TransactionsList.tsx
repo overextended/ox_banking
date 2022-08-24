@@ -10,10 +10,11 @@ import {
   ThemeIcon,
   Tooltip,
 } from '@mantine/core';
-import { TbArrowDownLeft, TbArrowsRightLeft, TbArrowUpRight, TbSearch } from 'react-icons/tb';
+import { TbArrowDownLeft, TbArrowsRightLeft, TbArrowUpRight, TbFileInvoice, TbSearch } from 'react-icons/tb';
 import { formatNumber } from '../../../../../utils/formatNumber';
 import { useRecoilValue } from 'recoil';
 import { transactionsAtom } from '../../../../../atoms/transactions';
+import NotFound from './NotFound';
 
 const useStyles = createStyles((theme) => ({
   transactions: {
@@ -69,12 +70,7 @@ const TransactionsList: React.FC = () => {
           </Box>
         </>
       ) : (
-        <Center>
-          <Stack align="center">
-            <TbArrowsRightLeft size={54} />
-            <Text size={28}>No transactions found</Text>
-          </Stack>
-        </Center>
+        <NotFound Icon={TbArrowsRightLeft} label="No transactions found" />
       )}
     </Stack>
   );
