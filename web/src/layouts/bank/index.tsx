@@ -5,7 +5,6 @@ import Nav from './components/Nav';
 import Home from './views/home/home';
 import Accounts from './views/accounts';
 import Logs from './views/logs';
-import Invoices from './views/invoices';
 import { bankVisibilityAtom } from '../../atoms/visibility';
 import { useNuiEvent } from '../../hooks/useNuiEvent';
 import { useExitListener } from '../../hooks/useExitListener';
@@ -53,7 +52,6 @@ const Bank: React.FC = () => {
               <Route path="/" element={<Home />} />
               <Route path="/accounts" element={<Accounts />} />
               <Route path="/logs" element={<Logs />} />
-              <Route path="/invoices" element={<Invoices />} />
             </Routes>
           </AppShell>
         </Box>
