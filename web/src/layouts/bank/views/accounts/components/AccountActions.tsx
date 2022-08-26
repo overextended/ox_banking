@@ -1,8 +1,10 @@
-import { Button, Paper, SimpleGrid, Stack, Text } from '@mantine/core';
+import { Button, Paper, SimpleGrid, Stack } from '@mantine/core';
 import { FaExternalLinkAlt } from 'react-icons/fa';
+import { TbCashBanknote } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { selectedLogsAccountAtom, selectedAccountAtom, accountsAtom } from '../../../../../atoms/account';
+import HeaderGroup from '../../../components/HeaderGroup';
 
 const AccountActions: React.FC = () => {
   const navigate = useNavigate();
@@ -13,7 +15,7 @@ const AccountActions: React.FC = () => {
   return (
     <Paper p="md">
       <Stack>
-        <Text>Account actions</Text>
+        <HeaderGroup header="Account Actions" Icon={TbCashBanknote} />
         <SimpleGrid cols={2}>
           <Button uppercase>Withdraw</Button>
           <Button uppercase>Deposit</Button>

@@ -2,6 +2,8 @@ import { Box, Button, createStyles, Group, Paper, Stack, Text } from '@mantine/c
 import { accountsAtom, selectedAccountAtom } from '../../../../../atoms/account';
 import { useRecoilValue } from 'recoil';
 import { formatNumber } from '../../../../../utils/formatNumber';
+import HeaderGroup from '../../../components/HeaderGroup';
+import { TbCreditCard } from 'react-icons/tb';
 
 const useStyles = createStyles((theme) => ({
   account: {
@@ -27,8 +29,8 @@ const SelectedAccount: React.FC = () => {
       {selectedAccount !== null && (
         <Paper p="md">
           <Group>
-            <Stack>
-              <Text>Selected Account</Text>
+            <Stack sx={{ width: '100%' }}>
+              <HeaderGroup header="Selected Account" Icon={TbCreditCard} />
               <Group>
                 <Box className={classes.account}>
                   <Stack spacing="xl">

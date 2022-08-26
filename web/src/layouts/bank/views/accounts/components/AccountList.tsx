@@ -5,6 +5,8 @@ import CreateAccount from './modals/CreateAccount';
 import { accountsAtom, selectedAccountAtom } from '../../../../../atoms/account';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { formatNumber } from '../../../../../utils/formatNumber';
+import { TbList } from 'react-icons/tb';
+import HeaderGroup from '../../../components/HeaderGroup';
 
 const useStyles = createStyles((theme) => ({
   account: {
@@ -29,7 +31,7 @@ const AccountList: React.FC = () => {
     <Grid.Col span={1}>
       <Paper p="md">
         <Stack>
-          <Text>Available accounts</Text>
+          <HeaderGroup header="Available Accounts" Icon={TbList} />
           <TextInput placeholder="Search" icon={<TbSearch size={20} />} />
           <Button
             uppercase

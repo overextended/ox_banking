@@ -1,6 +1,7 @@
 import { Box, Button, createStyles, Group, Paper, Stack, Text, ThemeIcon } from '@mantine/core';
 import { TbArrowDownLeft, TbArrowUpRight, TbArrowsRightLeft } from 'react-icons/tb';
 import { formatNumber } from '../../../../../utils/formatNumber';
+import HeaderGroup from '../../../components/HeaderGroup';
 
 const mockTransactions: { type: 'inbound' | 'outbound'; amount: number; account: string; date: string }[] = [
   { type: 'inbound', amount: 3500, account: 'Billy', date: '01/01/1999' },
@@ -31,10 +32,7 @@ const Transactions: React.FC = () => {
     <Paper p="md" className={classes.paper}>
       <Stack justify="space-between" className={classes.stack}>
         <Stack>
-          <Group position="apart">
-            <Text>Recent Transactions</Text>
-            <TbArrowsRightLeft size={24} />
-          </Group>
+          <HeaderGroup header="Recent Transactions" Icon={TbArrowsRightLeft} />
           <Stack>
             {mockTransactions.map((transaction, index) => (
               <Box className={classes.transactions} key={`transaction-${index}`}>

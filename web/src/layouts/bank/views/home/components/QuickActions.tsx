@@ -1,14 +1,12 @@
 import { Button, Group, NumberInput, Paper, Stack, Text } from '@mantine/core';
 import { TbBolt, TbCurrencyDollar } from 'react-icons/tb';
+import HeaderGroup from '../../../components/HeaderGroup';
 
 const QuickActions: React.FC = () => {
   return (
     <Paper p="md" sx={{ height: '100%' }}>
       <Stack sx={{ height: '100%' }}>
-        <Group position="apart">
-          <Text>Quick Actions</Text>
-          <TbBolt size={24} />
-        </Group>
+        <HeaderGroup header="Quick Actions" Icon={TbBolt} />
         <Stack justify="space-between" sx={{ height: '100%' }} spacing={0}>
           <NumberInput
             label="Amount"

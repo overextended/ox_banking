@@ -1,6 +1,8 @@
-import { Button, Group, Paper, Stack, Text } from '@mantine/core';
+import { Button, Group, Paper, Stack } from '@mantine/core';
 import { accountsAtom, selectedAccountAtom } from '../../../../../atoms/account';
+import { TbSettings } from 'react-icons/all';
 import { useRecoilValue } from 'recoil';
+import HeaderGroup from '../../../components/HeaderGroup';
 
 const AccountSettings: React.FC = () => {
   const accounts = useRecoilValue(accountsAtom);
@@ -11,7 +13,7 @@ const AccountSettings: React.FC = () => {
       {selectedAccount !== null && (
         <Paper p="md" sx={{ height: '100%' }}>
           <Stack justify="space-between" sx={{ height: '100%' }}>
-            <Text>Account settings</Text>
+            <HeaderGroup header="Account Settings" Icon={TbSettings} />
             <Stack>
               <Group grow>
                 <Button color="red" variant="outline" uppercase>

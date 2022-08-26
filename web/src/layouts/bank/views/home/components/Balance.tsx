@@ -1,6 +1,7 @@
 import { Group, Paper, Stack, Text, Title } from '@mantine/core';
 import { IconBaseProps } from 'react-icons';
 import { formatNumber } from '../../../../../utils/formatNumber';
+import HeaderGroup from '../../../components/HeaderGroup';
 
 interface Props {
   header: string;
@@ -12,10 +13,7 @@ const Balance: React.FC<Props> = ({ header, Icon, value }) => {
   return (
     <Paper p="md">
       <Stack>
-        <Group position="apart">
-          <Text>{header}</Text>
-          <Icon size={24} />
-        </Group>
+        <HeaderGroup header={header} Icon={Icon} />
         <Title>{formatNumber(value)}</Title>
       </Stack>
     </Paper>

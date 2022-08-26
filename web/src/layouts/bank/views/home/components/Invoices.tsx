@@ -1,6 +1,7 @@
 import { Box, Button, createStyles, Group, Paper, Stack, Text, ThemeIcon } from '@mantine/core';
-import { TbCheck, TbX, TbFileInvoice } from 'react-icons/tb';
+import { TbFileInvoice } from 'react-icons/tb';
 import { formatNumber } from '../../../../../utils/formatNumber';
+import HeaderGroup from '../../../components/HeaderGroup';
 
 const useStyles = createStyles((theme) => ({
   paper: {
@@ -31,10 +32,7 @@ const Invoices: React.FC = () => {
     <Paper p="md" className={classes.paper}>
       <Stack justify="space-between" className={classes.stack}>
         <Stack>
-          <Group position="apart">
-            <Text>Recent Invoices</Text>
-            <TbFileInvoice size={24} />
-          </Group>
+          <HeaderGroup header="Recent Invoices" Icon={TbFileInvoice} />
           <Stack>
             {mockInvoices.map((invoice, index) => (
               <Box className={classes.invoice} key={`invoice-${index}`}>

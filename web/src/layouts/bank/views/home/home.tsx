@@ -13,9 +13,9 @@ const Home: React.FC = () => {
   return (
     <SimpleGrid cols={2}>
       <Stack>
-        <Balance header="Account balance" Icon={TbCoin} value={account.balance} />
-        <Balance header="Paycheck balance" Icon={TbBriefcase} value={1000} />
-        <Balance header="Cash balance" Icon={TbCash} value={9520} />
+        <Balance header="Account Balance" Icon={TbCoin} value={account.balance} />
+        <Balance header="Paycheck Balance" Icon={TbBriefcase} value={1000} />
+        <Balance header="Cash Balance" Icon={TbCash} value={9520} />
         <QuickActions />
       </Stack>
       <Box>
