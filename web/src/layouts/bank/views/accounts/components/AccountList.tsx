@@ -2,7 +2,7 @@ import { Box, Button, createStyles, Grid, Group, Paper, ScrollArea, Stack, Text,
 import { TbSearch } from 'react-icons/tb';
 import { openModal } from '@mantine/modals';
 import CreateAccount from './modals/CreateAccount';
-import { accountsAtom, selectedAccountAtom } from '../../../../../atoms/account';
+import { accountsAtom, selectedAccountAtom, selectedAccountIndexAtom } from '../../../../../atoms/account';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { formatNumber } from '../../../../../utils/formatNumber';
 import { TbList } from 'react-icons/tb';
@@ -25,7 +25,7 @@ const useStyles = createStyles((theme) => ({
 const AccountList: React.FC = () => {
   const { classes } = useStyles();
   const accounts = useRecoilValue(accountsAtom);
-  const setSelectedAccount = useSetRecoilState(selectedAccountAtom);
+  const setSelectedAccountIndex = useSetRecoilState(selectedAccountIndexAtom);
 
   return (
     <Grid.Col span={1}>
@@ -49,7 +49,11 @@ const AccountList: React.FC = () => {
           <ScrollArea style={{ height: 555 }} scrollbarSize={0}>
             <Stack>
               {accounts.map((account, index) => (
-                <Box className={classes.account} key={`account-${index}`} onClick={() => setSelectedAccount(index)}>
+                <Box
+                  className={classes.account}
+                  key={`account-${index}`}
+                  onClick={() => setSelectedAccountIndex(index)}
+                >
                   <Stack spacing="xl">
                     <Stack spacing={0}>
                       <Text size="xl">{account.name}</Text>

@@ -1,4 +1,4 @@
-import { atom, selector } from 'recoil';
+import { atom, selector, useRecoilValue } from 'recoil';
 import selectedAccount from '../layouts/bank/views/accounts/components/SelectedAccount';
 
 export interface Account {
@@ -44,7 +44,18 @@ const mockAccounts: Account[] = [
 
 export const accountsAtom = atom<Account[]>({ key: 'accounts', default: mockAccounts });
 
-export const selectedAccountAtom = atom<number | null>({ key: 'selectedAccount', default: null });
+export const selectedAccountIndexAtom = atom<number | null>({ key: 'selectedAccountIndex', default: null });
+
+export const selectedAccountAtom = selector({
+  key: 'selectedAccount',
+  get: ({ get }) => {
+    const index = get(selectedAccountIndexAtom);
+    if (index === null) return null;
+    return get(accountsAtom)[index];
+  },
+});
+
+export const useSelectedAccount = () => useRecoilValue(selectedAccountAtom);
 
 export const logsAccountsAtom = selector<{ label: string; value: string }[]>({
   key: 'logsAccounts',

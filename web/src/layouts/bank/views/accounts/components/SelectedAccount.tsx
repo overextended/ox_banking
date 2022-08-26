@@ -1,6 +1,5 @@
 import { Box, Button, createStyles, Group, Paper, Stack, Text } from '@mantine/core';
-import { accountsAtom, selectedAccountAtom } from '../../../../../atoms/account';
-import { useRecoilValue } from 'recoil';
+import { useSelectedAccount } from '../../../../../atoms/account';
 import { formatNumber } from '../../../../../utils/formatNumber';
 import HeaderGroup from '../../../components/HeaderGroup';
 import { TbCreditCard } from 'react-icons/tb';
@@ -21,12 +20,11 @@ const useStyles = createStyles((theme) => ({
 
 const SelectedAccount: React.FC = () => {
   const { classes } = useStyles();
-  const accounts = useRecoilValue(accountsAtom);
-  const selectedAccount = useRecoilValue(selectedAccountAtom);
+  const account = useSelectedAccount();
 
   return (
     <>
-      {selectedAccount !== null && (
+      {account !== null && (
         <Paper p="md">
           <Group>
             <Stack sx={{ width: '100%' }}>
@@ -35,19 +33,15 @@ const SelectedAccount: React.FC = () => {
                 <Box className={classes.account}>
                   <Stack spacing="xl">
                     <Stack spacing={0}>
-                      <Text size="xl">{accounts[selectedAccount].name}</Text>
+                      <Text size="xl">{account.name}</Text>
                       <Text size="xs">
-                        {accounts[selectedAccount].type === 'personal'
-                          ? 'Personal'
-                          : accounts[selectedAccount].type === 'group'
-                          ? 'Group'
-                          : 'Shared'}{' '}
+                        {account.type === 'personal' ? 'Personal' : account.type === 'group' ? 'Group' : 'Shared'}{' '}
                         Account
                       </Text>
                     </Stack>
                     <Group position="apart">
-                      <Text>{formatNumber(accounts[selectedAccount].balance)}</Text>
-                      <Text>{accounts[selectedAccount].id}</Text>
+                      <Text>{formatNumber(account.balance)}</Text>
+                      <Text>{account.id}</Text>
                     </Group>
                   </Stack>
                 </Box>

@@ -2,15 +2,14 @@ import { Button, Paper, SimpleGrid, Stack } from '@mantine/core';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import { TbCashBanknote } from 'react-icons/tb';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { selectedLogsAccountAtom, selectedAccountAtom, accountsAtom } from '../../../../../atoms/account';
+import { useSetRecoilState } from 'recoil';
+import { selectedLogsAccountAtom, useSelectedAccount } from '../../../../../atoms/account';
 import HeaderGroup from '../../../components/HeaderGroup';
 
 const AccountActions: React.FC = () => {
   const navigate = useNavigate();
   const setSelectedLogsAccount = useSetRecoilState(selectedLogsAccountAtom);
-  const selectedAccount = useRecoilValue(selectedAccountAtom);
-  const accounts = useRecoilValue(accountsAtom);
+  const account = useSelectedAccount();
 
   return (
     <Paper p="md">
@@ -24,7 +23,8 @@ const AccountActions: React.FC = () => {
             uppercase
             rightIcon={<FaExternalLinkAlt />}
             onClick={() => {
-              setSelectedLogsAccount(accounts[selectedAccount || 0].id);
+              if (!account) return;
+              setSelectedLogsAccount(account.id);
               navigate('/logs');
             }}
           >

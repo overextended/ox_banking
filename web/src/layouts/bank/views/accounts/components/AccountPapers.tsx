@@ -3,14 +3,14 @@ import SelectedAccount from './SelectedAccount';
 import AccountActions from './AccountActions';
 import AccountSettings from './AccountSettings';
 import AccountPermissions from './AccountPermissions';
-import { selectedAccountAtom } from '../../../../../atoms/account';
-import { useRecoilValue } from 'recoil';
+import { useSelectedAccount } from '../../../../../atoms/account';
 
 const AccountPapers: React.FC = () => {
-  const selectedAccount = useRecoilValue(selectedAccountAtom);
+  const account = useSelectedAccount();
+
   return (
     <Grid.Col span={2} sx={{ height: '100%' }}>
-      {selectedAccount !== null && (
+      {account !== null && (
         <Stack>
           <SelectedAccount />
           <AccountActions />

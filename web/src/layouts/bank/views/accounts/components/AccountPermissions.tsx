@@ -1,19 +1,17 @@
 import { Button, Paper, Stack, Text } from '@mantine/core';
-import { accountsAtom, selectedAccountAtom } from '../../../../../atoms/account';
-import { useRecoilValue } from 'recoil';
+import { useSelectedAccount } from '../../../../../atoms/account';
 import HeaderGroup from '../../../components/HeaderGroup';
 import { TbUsers } from 'react-icons/tb';
 
 const AccountPermissions: React.FC = () => {
-  const accounts = useRecoilValue(accountsAtom);
-  const selectedAccount = useRecoilValue(selectedAccountAtom);
+  const account = useSelectedAccount();
 
   return (
     <>
-      {selectedAccount !== null && (
+      {account !== null && (
         <>
-          {accounts[selectedAccount].type === 'group' ||
-            (accounts[selectedAccount].type === 'shared' && (
+          {account.type === 'group' ||
+            (account.type === 'shared' && (
               <Paper p="md">
                 <Stack>
                   <HeaderGroup header="Account Permissions" Icon={TbUsers} />
