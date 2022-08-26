@@ -1,4 +1,4 @@
-import { Paper, Select, Stack, Text } from '@mantine/core';
+import { Group, Paper, Select, Stack, Text } from '@mantine/core';
 import { TbCreditCard } from 'react-icons/tb';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { logsAccountsAtom, selectedLogsAccountAtom } from '../../../../../atoms/account';
@@ -16,7 +16,10 @@ const AccountSelect: React.FC = () => {
   return (
     <Paper p="md">
       <Stack>
-        <Text>Select account</Text>
+        <Group position="apart">
+          <Text>Select Account</Text>
+          <TbCreditCard size={24} />
+        </Group>
         <Select
           icon={<TbCreditCard size={20} />}
           searchable
