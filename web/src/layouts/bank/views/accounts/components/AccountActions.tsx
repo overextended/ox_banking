@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { selectedLogsAccountAtom, useSelectedAccount } from '../../../../../atoms/account';
 import HeaderGroup from '../../../components/HeaderGroup';
+import { openModal } from '@mantine/modals';
+import DepositWithdraw from './modals/DepositWithdraw';
 
 const AccountActions: React.FC = () => {
   const navigate = useNavigate();
@@ -16,8 +18,18 @@ const AccountActions: React.FC = () => {
       <Stack>
         <HeaderGroup header="Account Actions" Icon={TbCashBanknote} />
         <SimpleGrid cols={2}>
-          <Button uppercase>Withdraw</Button>
-          <Button uppercase>Deposit</Button>
+          <Button
+            uppercase
+            onClick={() => openModal({ title: 'Withdraw', children: <DepositWithdraw variant="withdraw" /> })}
+          >
+            Withdraw
+          </Button>
+          <Button
+            uppercase
+            onClick={() => openModal({ title: 'Deposit', children: <DepositWithdraw variant="deposit" /> })}
+          >
+            Deposit
+          </Button>
           <Button uppercase>Transfer</Button>
           <Button
             uppercase
