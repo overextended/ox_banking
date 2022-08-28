@@ -3,6 +3,7 @@ import { atmVisibilityAtom } from '../../atoms/visibility';
 import { useExitListener } from '../../hooks/useExitListener';
 import { TbCurrencyDollar } from 'react-icons/tb';
 import { useRecoilState } from 'recoil';
+import { formatNumber } from '../../utils/formatNumber';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -35,15 +36,16 @@ const ATM: React.FC = () => {
         <Box style={style} className={classes.wrapper}>
           <CloseButton className={classes.closeButton} onClick={() => setVisible(false)} />
           <Stack>
-            <Group position="apart">
-              <Box>
-                <Text size="xs">Available balance</Text>
-                <Text weight={700} size={28}>
-                  $92575
-                </Text>
-              </Box>
-            </Group>
-            <NumberInput placeholder="Amount" icon={<TbCurrencyDollar size={20} />} />
+            <Box>
+              <Text size="xs">Available Balance</Text>
+              <Text weight={700} size={28}>
+                {formatNumber(92575)}
+              </Text>
+            </Box>
+            <Box>
+              <Text size="xs">Cash Balance: {formatNumber(13225)}</Text>
+              <NumberInput placeholder="Amount" icon={<TbCurrencyDollar size={20} />} />
+            </Box>
             <Button uppercase>Withdraw</Button>
           </Stack>
         </Box>
