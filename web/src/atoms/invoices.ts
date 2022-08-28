@@ -7,6 +7,7 @@ interface Invoice {
   date: string;
   amount: number;
   description?: string;
+  isPaid: boolean;
 }
 
 export const invoicesAtom = selector<Invoice[] | undefined>({
@@ -17,9 +18,9 @@ export const invoicesAtom = selector<Invoice[] | undefined>({
       return invoices;
     } catch (e) {
       return [
-        { from: 'Karen', date: '01/01/1999', amount: 7500 },
-        { from: 'Jean', date: '01/01/1999', amount: 13500 },
-        { from: 'Christoph', date: '01/01/1999', amount: 28500 },
+        { from: 'Karen', date: '01/01/1999', amount: 7500, isPaid: false },
+        { from: 'Jean', date: '01/01/1999', amount: 13500, isPaid: true },
+        { from: 'Christoph', date: '01/01/1999', amount: 28500, isPaid: true },
       ];
     }
   },

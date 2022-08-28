@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Center,
   createStyles,
@@ -48,7 +49,10 @@ const InvoicesList: React.FC = () => {
                         <TbFileInvoice size={24} />
                       </ThemeIcon>
                       <Stack spacing={0}>
-                        <Text>{invoice.from}</Text>
+                        <Group spacing={5}>
+                          <Text>{invoice.from}</Text>
+                          <Badge color={invoice.isPaid ? 'teal' : 'red'}>{invoice.isPaid ? 'Paid' : 'Unpaid'}</Badge>
+                        </Group>
                         <Text size="xs" color="dark.2">
                           {invoice.date}
                         </Text>
