@@ -3,6 +3,8 @@ import { useSelectedAccount } from '../../../../../atoms/account';
 import { formatNumber } from '../../../../../utils/formatNumber';
 import HeaderGroup from '../../../components/HeaderGroup';
 import { TbCreditCard } from 'react-icons/tb';
+import { openModal } from '@mantine/modals';
+import RenameAccount from './modals/RenameAccount';
 
 const useStyles = createStyles((theme) => ({
   account: {
@@ -46,7 +48,17 @@ const SelectedAccount: React.FC = () => {
                   </Stack>
                 </Box>
                 <Stack spacing="sm">
-                  <Button uppercase variant="light">
+                  <Button
+                    uppercase
+                    variant="light"
+                    onClick={() => {
+                      openModal({
+                        title: 'Rename account',
+                        children: <RenameAccount />,
+                        size: 'xs',
+                      });
+                    }}
+                  >
                     Rename account
                   </Button>
                   <Button uppercase variant="light">
