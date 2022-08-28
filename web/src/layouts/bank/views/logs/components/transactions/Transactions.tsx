@@ -2,7 +2,7 @@ import { Paper, Stack, Center, Loader } from '@mantine/core';
 import { TbArrowsRightLeft } from 'react-icons/tb';
 import { Suspense } from 'react';
 import TransactionsList from './TransactionsList';
-import HeaderGroup from '../../../components/HeaderGroup';
+import HeaderGroup from '../../../../components/HeaderGroup';
 
 const Transactions: React.FC = () => {
   return (

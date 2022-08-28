@@ -2,7 +2,7 @@ import { selector } from 'recoil';
 import { fetchNui } from '../utils/fetchNui';
 import { selectedLogsAccountAtom } from './account';
 
-interface Transaction {
+export interface TransactionProps {
   type: 'inbound' | 'outbound';
   amount: number;
   account: string;
@@ -10,11 +10,11 @@ interface Transaction {
   message?: string;
 }
 
-export const transactionsAtom = selector<Transaction[] | undefined>({
+export const transactionsAtom = selector<TransactionProps[] | undefined>({
   key: 'accountTransactions',
   get: async ({ get }) => {
     try {
-      const { transactions } = await fetchNui<{ transactions: Transaction[] }>(
+      const { transactions } = await fetchNui<{ transactions: TransactionProps[] }>(
         'getAccountLogs',
         get(selectedLogsAccountAtom)
       );

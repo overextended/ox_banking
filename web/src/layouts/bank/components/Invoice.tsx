@@ -15,7 +15,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const InvoiceComponent: React.FC<InvoiceProps> = (invoice) => {
+const Invoice: React.FC<InvoiceProps> = (invoice) => {
   const { classes } = useStyles();
 
   return (
@@ -45,4 +45,4 @@ const InvoiceComponent: React.FC<InvoiceProps> = (invoice) => {
   );
 };
 
-export default InvoiceComponent;
+export default Invoice;

@@ -2,7 +2,7 @@ import { Center, Group, Loader, Paper, Stack, Text } from '@mantine/core';
 import { Suspense } from 'react';
 import InvoicesList from './InvoicesList';
 import { TbFileInvoice } from 'react-icons/tb';
-import HeaderGroup from '../../../components/HeaderGroup';
+import HeaderGroup from '../../../../components/HeaderGroup';
 
 const Invoices: React.FC = () => {
   return (

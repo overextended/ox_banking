@@ -1,6 +1,6 @@
 import { Stack, SimpleGrid } from '@mantine/core';
-import Invoices from './components/Invoices';
-import Transactions from './components/Transactions';
+import Invoices from './components/invoices/Invoices';
+import Transactions from './components/transactions/Transactions';
 import AccountSelect from './components/AccountSelect';
 
 const Logs: React.FC = () => {

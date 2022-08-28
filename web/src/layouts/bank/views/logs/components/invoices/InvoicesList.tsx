@@ -12,11 +12,11 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { TbArrowsRightLeft, TbFileInvoice, TbSearch } from 'react-icons/tb';
-import { formatNumber } from '../../../../../utils/formatNumber';
+import { formatNumber } from '../../../../../../utils/formatNumber';
 import { useRecoilValue } from 'recoil';
-import { invoicesAtom } from '../../../../../atoms/invoices';
-import NotFound from './NotFound';
-import Invoice from '../../../components/Invoice';
+import { invoicesAtom } from '../../../../../../atoms/invoices';
+import NotFound from '../NotFound';
+import Invoice from '../../../../components/Invoice';
 
 const useStyles = createStyles((theme) => ({
   invoice: {

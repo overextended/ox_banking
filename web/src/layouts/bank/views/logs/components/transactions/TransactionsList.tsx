@@ -1,9 +1,9 @@
 import { Box, Pagination, Stack, TextInput } from '@mantine/core';
 import { TbArrowsRightLeft, TbSearch } from 'react-icons/tb';
 import { useRecoilValue } from 'recoil';
-import { transactionsAtom } from '../../../../../atoms/transactions';
-import NotFound from './NotFound';
-import Transaction from '../../../components/Transaction';
+import { transactionsAtom } from '../../../../../../atoms/transactions';
+import NotFound from '../NotFound';
+import Transaction from '../../../../components/Transaction';
 
 const TransactionsList: React.FC = () => {
   const transactions = useRecoilValue(transactionsAtom);
