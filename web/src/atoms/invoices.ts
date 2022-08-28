@@ -2,7 +2,7 @@ import { selector } from 'recoil';
 import { fetchNui } from '../utils/fetchNui';
 import { selectedLogsAccountAtom } from './account';
 
-interface Invoice {
+export interface InvoiceProps {
   from: string;
   date: string;
   amount: number;
@@ -10,11 +10,11 @@ interface Invoice {
   isPaid: boolean;
 }
 
-export const invoicesAtom = selector<Invoice[] | undefined>({
+export const invoicesAtom = selector<InvoiceProps[] | undefined>({
   key: 'accountInvoices',
   get: async ({ get }) => {
     try {
-      const { invoices } = await fetchNui<{ invoices: Invoice[] }>('getAccountLogs', get(selectedLogsAccountAtom));
+      const { invoices } = await fetchNui<{ invoices: InvoiceProps[] }>('getAccountLogs', get(selectedLogsAccountAtom));
       return invoices;
     } catch (e) {
       return [

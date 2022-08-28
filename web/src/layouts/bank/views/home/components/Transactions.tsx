@@ -1,9 +1,10 @@
-import { Box, Button, createStyles, Group, Paper, Stack, Text, ThemeIcon } from '@mantine/core';
-import { TbArrowDownLeft, TbArrowUpRight, TbArrowsRightLeft } from 'react-icons/tb';
-import { formatNumber } from '../../../../../utils/formatNumber';
+import { Button, createStyles, Paper, Stack } from '@mantine/core';
+import { TbArrowsRightLeft } from 'react-icons/tb';
 import HeaderGroup from '../../../components/HeaderGroup';
+import Transaction from '../../../components/Transaction';
+import { TransactionProps } from '../../../../../atoms/transactions';
 
-const mockTransactions: { type: 'inbound' | 'outbound'; amount: number; account: string; date: string }[] = [
+const mockTransactions: TransactionProps[] = [
   { type: 'inbound', amount: 3500, account: 'Billy', date: '01/01/1999' },
   { type: 'outbound', amount: 7995, account: 'Bob', date: '19/08/2022' },
   { type: 'inbound', amount: 19120, account: 'Billy', date: '31/02/2000' },
@@ -35,30 +36,7 @@ const Transactions: React.FC = () => {
           <HeaderGroup header="Recent Transactions" Icon={TbArrowsRightLeft} />
           <Stack>
             {mockTransactions.map((transaction, index) => (
-              <Box className={classes.transactions} key={`transaction-${index}`}>
-                <Group position="apart">
-                  <Group>
-                    <ThemeIcon size="lg" color={transaction.type === 'inbound' ? 'teal' : 'red'} variant="light">
-                      {transaction.type === 'inbound' ? <TbArrowDownLeft size={24} /> : <TbArrowUpRight size={24} />}
-                    </ThemeIcon>
-                    <Stack spacing={0}>
-                      <Text>{transaction.account}</Text>
-                      <Text size="xs" color="dark.2">
-                        {transaction.date}
-                      </Text>
-                    </Stack>
-                  </Group>
-                  {transaction.type === 'inbound' ? (
-                    <Text color="teal" weight={700}>
-                      +{formatNumber(transaction.amount)}
-                    </Text>
-                  ) : (
-                    <Text color="red" weight={700}>
-                      -{formatNumber(transaction.amount)}
-                    </Text>
-                  )}
-                </Group>
-              </Box>
+              <Transaction {...transaction} key={`home-transaction-${index}`} />
             ))}
           </Stack>
         </Stack>

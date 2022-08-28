@@ -8,4 +8,7 @@ export default defineConfig({
   build: {
     outDir: 'build',
   },
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' },
+  },
 });

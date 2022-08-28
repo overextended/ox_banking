@@ -16,6 +16,7 @@ import { formatNumber } from '../../../../../utils/formatNumber';
 import { useRecoilValue } from 'recoil';
 import { invoicesAtom } from '../../../../../atoms/invoices';
 import NotFound from './NotFound';
+import Invoice from '../../../components/Invoice';
 
 const useStyles = createStyles((theme) => ({
   invoice: {
@@ -41,29 +42,7 @@ const InvoicesList: React.FC = () => {
           <TextInput placeholder="Search" icon={<TbSearch size={20} />} />
           <Stack justify="center">
             {invoices.map((invoice, index) => (
-              <Tooltip label="Click for details" withArrow transition="pop" key={`invoice-${index}`}>
-                <Box className={classes.invoice}>
-                  <Group position="apart">
-                    <Group>
-                      <ThemeIcon size="lg" color="cyan" variant="light">
-                        <TbFileInvoice size={24} />
-                      </ThemeIcon>
-                      <Stack spacing={0}>
-                        <Group spacing={5}>
-                          <Text>{invoice.from}</Text>
-                          <Badge color={invoice.isPaid ? 'teal' : 'red'}>{invoice.isPaid ? 'Paid' : 'Unpaid'}</Badge>
-                        </Group>
-                        <Text size="xs" color="dark.2">
-                          {invoice.date}
-                        </Text>
-                      </Stack>
-                    </Group>
-                    <Text color="cyan" weight={700}>
-                      {formatNumber(invoice.amount)}
-                    </Text>
-                  </Group>
-                </Box>
-              </Tooltip>
+              <Invoice {...invoice} key={`invoice-${index}`} />
             ))}
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
               <Pagination total={10} />

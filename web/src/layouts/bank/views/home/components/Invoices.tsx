@@ -2,6 +2,7 @@ import { Box, Button, createStyles, Group, Paper, Stack, Text, ThemeIcon } from 
 import { TbFileInvoice } from 'react-icons/tb';
 import { formatNumber } from '../../../../../utils/formatNumber';
 import HeaderGroup from '../../../components/HeaderGroup';
+import Invoice from '../../../components/Invoice';
 
 const useStyles = createStyles((theme) => ({
   paper: {
@@ -35,24 +36,7 @@ const Invoices: React.FC = () => {
           <HeaderGroup header="Recent Invoices" Icon={TbFileInvoice} />
           <Stack>
             {mockInvoices.map((invoice, index) => (
-              <Box className={classes.invoice} key={`invoice-${index}`}>
-                <Group position="apart">
-                  <Group>
-                    <ThemeIcon size="lg" color="cyan" variant="light">
-                      <TbFileInvoice size={24} />
-                    </ThemeIcon>
-                    <Stack spacing={0}>
-                      <Text>{invoice.from}</Text>
-                      <Text size="xs" color="dark.2">
-                        {invoice.date}
-                      </Text>
-                    </Stack>
-                  </Group>
-                  <Text color="cyan" weight={700}>
-                    {formatNumber(invoice.amount)}
-                  </Text>
-                </Group>
-              </Box>
+              <Invoice {...invoice} key={`home-invoice-${index}`} />
             ))}
           </Stack>
         </Stack>
