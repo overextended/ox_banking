@@ -6,7 +6,7 @@ import {
   accountsAtom,
   accountSearchAtom,
   selectedAccountAtom,
-  selectedAccountIndexAtom,
+  selectedAccountIdAtom,
   useAccounts,
 } from '../../../../../atoms/account';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -32,8 +32,7 @@ const useStyles = createStyles((theme) => ({
 const AccountList: React.FC = () => {
   const { classes } = useStyles();
   const accounts = useAccounts();
-  const [search, setSearch] = useRecoilState(accountSearchAtom);
-  const setSelectedAccountIndex = useSetRecoilState(selectedAccountIndexAtom);
+  const setSelectedAccountIndex = useSetRecoilState(selectedAccountIdAtom);
 
   return (
     <Grid.Col span={1}>
@@ -60,7 +59,7 @@ const AccountList: React.FC = () => {
                 <Box
                   className={classes.account}
                   key={`account-${index}`}
-                  onClick={() => setSelectedAccountIndex(index)}
+                  onClick={() => setSelectedAccountIndex(account.id)}
                 >
                   <Stack spacing="xl">
                     <Stack spacing={0}>

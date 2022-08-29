@@ -49,8 +49,6 @@ export const accountSearchAtom = atom<string>({
   default: '',
 });
 
-export const selectedAccountIndexAtom = atom<number | null>({ key: 'selectedAccountIndex', default: null });
-
 export const filteredAccountsAtom = selector({
   key: 'filteredAccounts',
   get: ({ get }) => {
@@ -70,18 +68,16 @@ export const filteredAccountsAtom = selector({
   },
 });
 
-export const useAccounts = () => useRecoilValue(filteredAccountsAtom);
+export const selectedAccountIdAtom = atom<string | null>({ key: 'selectedAccountIndex', default: null });
 
 export const selectedAccountAtom = selector({
   key: 'selectedAccount',
   get: ({ get }) => {
-    const index = get(selectedAccountIndexAtom);
-    if (index === null) return null;
-    return get(accountsAtom)[index];
+    const id = get(selectedAccountIdAtom);
+    const accounts = get(accountsAtom);
+    return accounts.find((account) => account.id === id) || null;
   },
 });
-
-export const useSelectedAccount = () => useRecoilValue(selectedAccountAtom);
 
 export const logsAccountsAtom = selector<{ label: string; value: string }[]>({
   key: 'logsAccounts',
@@ -115,3 +111,6 @@ export const defaultAccountAtom = selector({
     } as Account;
   },
 });
+
+export const useAccounts = () => useRecoilValue(filteredAccountsAtom);
+export const useSelectedAccount = () => useRecoilValue(selectedAccountAtom);
