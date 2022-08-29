@@ -23,7 +23,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <HashRouter>
       <MantineProvider withNormalizeCSS withGlobalStyles theme={customTheme}>
-        <ModalsProvider modalProps={{ centered: true, size: 'xs' }}>
+        <ModalsProvider modalProps={{ centered: true, size: 'xs', transition: 'slide-up' }}>
           <RecoilRoot>
             <App />
           </RecoilRoot>
