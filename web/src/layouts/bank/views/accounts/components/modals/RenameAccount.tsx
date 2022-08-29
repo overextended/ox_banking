@@ -1,14 +1,14 @@
 import { Button, Stack, TextInput } from '@mantine/core';
 import { closeAllModals } from '@mantine/modals';
 import { useState } from 'react';
-import { fetchNui } from '../../../../../../utils/fetchNui';
+import { useSelectedAccount } from '../../../../../../atoms/account';
 
 const RenameAccount: React.FC = () => {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(useSelectedAccount()!.name);
 
   return (
     <Stack>
-      <TextInput label="New account name" value={value} onChange={(e) => setValue(e.target.value)} />
+      <TextInput label="Account name" value={value} onChange={(e) => setValue(e.target.value)} />
       <Button
         fullWidth
         variant="light"

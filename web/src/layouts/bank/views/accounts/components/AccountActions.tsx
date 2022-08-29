@@ -37,7 +37,7 @@ const AccountActions: React.FC = () => {
             onClick={() =>
               openModal({
                 title: 'Transfer',
-                children: <Transfer accounts={accounts} />,
+                children: <Transfer />,
               })
             }
           >

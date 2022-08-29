@@ -5,8 +5,11 @@ import { formatNumber } from '../../../../../../utils/formatNumber';
 import { useState } from 'react';
 import { fetchNui } from '../../../../../../utils/fetchNui';
 import { isEnvBrowser } from '../../../../../../utils/misc';
+import { useRecoilValue } from 'recoil';
+import { logsAccountsAtom } from '../../../../../../atoms/account';
 
-const Transfer: React.FC<{ accounts: { label: string; value: string }[] }> = ({ accounts }) => {
+const Transfer: React.FC = () => {
+  const accounts = useRecoilValue(logsAccountsAtom);
   const [account, setAccount] = useState('');
   const [amount, setAmount] = useState<number | undefined>();
 

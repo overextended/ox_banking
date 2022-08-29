@@ -23,11 +23,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <HashRouter>
       <MantineProvider withNormalizeCSS withGlobalStyles theme={customTheme}>
-        <ModalsProvider modalProps={{ centered: true, size: 'xs', transition: 'slide-up' }}>
-          <RecoilRoot>
+        <RecoilRoot>
+          <ModalsProvider modalProps={{ centered: true, size: 'xs', transition: 'slide-up' }}>
             <App />
-          </RecoilRoot>
-        </ModalsProvider>
+          </ModalsProvider>
+        </RecoilRoot>
       </MantineProvider>
     </HashRouter>
   </React.StrictMode>
