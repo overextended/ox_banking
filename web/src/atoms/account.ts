@@ -67,8 +67,10 @@ export const logsAccountsAtom = selector<{ label: string; value: string }[]>({
 
 export const selectedLogsAccountAtom = atom<string | null>({
   key: 'selectedLogsAccount',
-  // TODO: set default to personal account
-  default: null,
+  default: selector({
+    key: 'defaultLogsAccount',
+    get: ({ get }) => get(logsAccountsAtom)[0].value,
+  }),
 });
 
 export const defaultAccountAtom = selector({
