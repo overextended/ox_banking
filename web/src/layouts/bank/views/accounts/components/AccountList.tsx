@@ -2,11 +2,18 @@ import { Box, Button, createStyles, Grid, Group, Paper, ScrollArea, Stack, Text,
 import { TbSearch } from 'react-icons/tb';
 import { openModal } from '@mantine/modals';
 import CreateAccount from './modals/CreateAccount';
-import { accountsAtom, selectedAccountAtom, selectedAccountIndexAtom } from '../../../../../atoms/account';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  accountsAtom,
+  accountSearchAtom,
+  selectedAccountAtom,
+  selectedAccountIndexAtom,
+  useAccounts,
+} from '../../../../../atoms/account';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { formatNumber } from '../../../../../utils/formatNumber';
 import { TbList } from 'react-icons/tb';
 import HeaderGroup from '../../../components/HeaderGroup';
+import AccountSearch from './AccountSearch';
 
 const useStyles = createStyles((theme) => ({
   account: {
@@ -24,7 +31,8 @@ const useStyles = createStyles((theme) => ({
 
 const AccountList: React.FC = () => {
   const { classes } = useStyles();
-  const accounts = useRecoilValue(accountsAtom);
+  const accounts = useAccounts();
+  const [search, setSearch] = useRecoilState(accountSearchAtom);
   const setSelectedAccountIndex = useSetRecoilState(selectedAccountIndexAtom);
 
   return (
@@ -32,7 +40,7 @@ const AccountList: React.FC = () => {
       <Paper p="md">
         <Stack>
           <HeaderGroup header="Available Accounts" Icon={TbList} />
-          <TextInput placeholder="Search" icon={<TbSearch size={20} />} />
+          <AccountSearch />
           <Button
             uppercase
             variant="light"
