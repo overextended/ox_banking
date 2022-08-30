@@ -2,6 +2,8 @@ import { Box, createStyles, Group, Stack, Text, ThemeIcon, Tooltip } from '@mant
 import { TbArrowDownLeft, TbArrowUpRight } from 'react-icons/tb';
 import { TransactionProps } from '../../../atoms/transactions';
 import { formatNumber } from '../../../utils/formatNumber';
+import { openContextModal, openModal } from '@mantine/modals';
+import TransactionModal from '../../../modals/TransactionModal';
 
 const useStyles = createStyles((theme) => ({
   transactions: {
@@ -20,7 +22,10 @@ const Transaction: React.FC<TransactionProps> = (transaction) => {
 
   return (
     <Tooltip label="Click for details" withArrow transition="pop">
-      <Box className={classes.transactions}>
+      <Box
+        className={classes.transactions}
+        onClick={() => openModal({ title: 'Transaction', children: <TransactionModal transaction={transaction} /> })}
+      >
         <Group position="apart">
           <Group>
             <ThemeIcon size="lg" color={transaction.type === 'inbound' ? 'teal' : 'red'} variant="light">

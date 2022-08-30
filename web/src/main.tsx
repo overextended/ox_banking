@@ -24,7 +24,15 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <HashRouter>
       <MantineProvider withNormalizeCSS withGlobalStyles theme={customTheme}>
         <RecoilRoot>
-          <ModalsProvider modalProps={{ centered: true, size: 'xs', transition: 'slide-up' }}>
+          <ModalsProvider
+            modalProps={{
+              centered: true,
+              size: 'xs',
+              transition: 'slide-up',
+              // Modals would overflow the page with slide-up transition
+              styles: { inner: { overflow: 'hidden' } },
+            }}
+          >
             <App />
           </ModalsProvider>
         </RecoilRoot>
