@@ -5,6 +5,8 @@ import HeaderGroup from '../../../components/HeaderGroup';
 import { TbCreditCard } from 'react-icons/tb';
 import { openModal } from '@mantine/modals';
 import RenameAccount from './modals/RenameAccount';
+import { useEffect, useState } from 'react';
+import { setClipboard } from '../../../../../utils/setClipboard';
 
 const useStyles = createStyles((theme) => ({
   account: {
@@ -23,6 +25,13 @@ const useStyles = createStyles((theme) => ({
 const SelectedAccount: React.FC = () => {
   const { classes } = useStyles();
   const account = useSelectedAccount();
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (copied) setCopied(false);
+    }, 2000);
+  }, [copied, setCopied]);
 
   return (
     <>
@@ -47,7 +56,7 @@ const SelectedAccount: React.FC = () => {
                     </Group>
                   </Stack>
                 </Box>
-                <Stack spacing="sm">
+                <Stack spacing="sm" sx={{ width: 250 }}>
                   <Button
                     uppercase
                     variant="light"
@@ -61,8 +70,16 @@ const SelectedAccount: React.FC = () => {
                   >
                     Rename account
                   </Button>
-                  <Button uppercase variant="light">
-                    Copy account number
+                  <Button
+                    uppercase
+                    variant="light"
+                    color={copied ? 'teal' : 'blue'}
+                    onClick={() => {
+                      setClipboard(account.id);
+                      setCopied(true);
+                    }}
+                  >
+                    {copied ? 'Copied' : 'Copy'} account number
                   </Button>
                 </Stack>
               </Group>
