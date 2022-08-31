@@ -5,9 +5,9 @@ import Transaction from '../../../components/Transaction';
 import { TransactionProps } from '../../../../../atoms/transactions';
 
 const mockTransactions: TransactionProps[] = [
-  { type: 'inbound', amount: 3500, account: 'Billy', date: '01/01/1999' },
-  { type: 'outbound', amount: 7995, account: 'Bob', date: '19/08/2022' },
-  { type: 'inbound', amount: 19120, account: 'Billy', date: '31/02/2000' },
+  { type: 'inbound', amount: 3500, accountOwner: 'Billy Smith', accountId: '3394379875902', date: '01/01/1999' },
+  { type: 'outbound', amount: 7995, accountOwner: 'Police', accountId: '3394379875902', date: '19/08/2022' },
+  { type: 'inbound', amount: 19120, accountOwner: 'Bob Jackson', accountId: '3394379875902', date: '31/02/2000' },
 ];
 
 const useStyles = createStyles((theme) => ({

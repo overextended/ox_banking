@@ -32,7 +32,7 @@ const Transaction: React.FC<TransactionProps> = (transaction) => {
               {transaction.type === 'inbound' ? <TbArrowDownLeft size={24} /> : <TbArrowUpRight size={24} />}
             </ThemeIcon>
             <Stack spacing={0}>
-              <Text>{transaction.account}</Text>
+              <Text>{transaction.accountOwner}</Text>
               <Text size="xs" color="dark.2">
                 {transaction.date}
               </Text>

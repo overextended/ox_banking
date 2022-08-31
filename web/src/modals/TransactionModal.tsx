@@ -9,11 +9,13 @@ const TransactionModal: React.FC<{ transaction: TransactionProps }> = ({ transac
       <Text size="xs">Date: {transaction.date}</Text>
       <Box>
         <Text size="xl">{transaction.type === 'inbound' ? 'From' : 'To'} account</Text>
-        <Text>{transaction.account}</Text>
+        <Text size="sm">
+          {transaction.accountOwner} - {transaction.accountId}
+        </Text>
       </Box>
       <Box>
         <Text size="xl">Money {transaction.type === 'inbound' ? 'received' : 'sent'}</Text>
-        <Text color={transaction.type === 'inbound' ? 'teal' : 'red'}>
+        <Text size="sm" color={transaction.type === 'inbound' ? 'teal' : 'red'}>
           {transaction.type === 'inbound' ? '+' : '-'}
           {formatNumber(transaction.amount)}
         </Text>
@@ -21,7 +23,7 @@ const TransactionModal: React.FC<{ transaction: TransactionProps }> = ({ transac
       {transaction.message && (
         <Box>
           <Text size="xl">Message</Text>
-          <Text size="md">{transaction.message}</Text>
+          <Text size="sm">{transaction.message}</Text>
         </Box>
       )}
     </Stack>

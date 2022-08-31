@@ -5,6 +5,7 @@ export interface Account {
   id: string;
   owner: string;
   name: string;
+  ownerName: string;
   balance: number;
   type: 'personal' | 'group' | 'shared';
   isDefault?: boolean;
@@ -15,6 +16,7 @@ const mockAccounts: Account[] = [
     id: '9261979951215',
     owner: '1',
     name: 'Personal',
+    ownerName: 'John Smith',
     balance: 163210,
     type: 'personal',
     isDefault: true,
@@ -23,6 +25,7 @@ const mockAccounts: Account[] = [
     id: '3261949632187',
     owner: '1',
     name: 'Paycheck',
+    ownerName: 'John Smith',
     balance: 0,
     type: 'personal',
   },
@@ -30,6 +33,7 @@ const mockAccounts: Account[] = [
     id: '1962134879551',
     owner: '10',
     name: 'SomeCompany LCC',
+    ownerName: 'Billy Bob',
     balance: 23650,
     type: 'shared',
   },
@@ -37,6 +41,7 @@ const mockAccounts: Account[] = [
     id: '5979846231541',
     owner: 'police',
     name: 'LSPD',
+    ownerName: 'Police',
     balance: 36400,
     type: 'group',
   },
