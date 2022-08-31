@@ -1,5 +1,5 @@
-import { Box, Autocomplete, Stack, Button, NumberInput, Text } from '@mantine/core';
-import { TbCreditCard, TbCurrencyDollar } from 'react-icons/tb';
+import { Box, Autocomplete, Stack, Button, Text } from '@mantine/core';
+import { TbCreditCard } from 'react-icons/tb';
 import { closeAllModals } from '@mantine/modals';
 import { formatNumber } from '../../../../../../utils/formatNumber';
 import { useState } from 'react';
@@ -7,6 +7,7 @@ import { fetchNui } from '../../../../../../utils/fetchNui';
 import { isEnvBrowser } from '../../../../../../utils/misc';
 import { useRecoilValue } from 'recoil';
 import { logsAccountsAtom } from '../../../../../../atoms/account';
+import FormattedInput from '../../../../components/FormattedInput';
 
 const Transfer: React.FC = () => {
   const accounts = useRecoilValue(logsAccountsAtom);
@@ -28,13 +29,7 @@ const Transfer: React.FC = () => {
         onChange={(value) => setAccount(value)}
         value={account}
       />
-      <NumberInput
-        icon={<TbCurrencyDollar size={20} />}
-        hideControls
-        placeholder="Amount"
-        onChange={(value) => setAmount(value)}
-        value={amount}
-      />
+      <FormattedInput value={amount} onChange={(value) => setAmount(value)} />
       <Button
         variant="light"
         uppercase

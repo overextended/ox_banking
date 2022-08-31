@@ -63,7 +63,6 @@ export const filteredAccountsAtom = selector({
 
     const searchedAccounts = accounts.filter((account) => {
       const regEx = new RegExp(search, 'gi');
-      console.log(!account.name.match(regEx));
       if (!account.name.match(regEx) && !account.id.match(regEx)) return false;
 
       return true;

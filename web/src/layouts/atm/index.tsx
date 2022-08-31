@@ -1,9 +1,10 @@
 import { Box, Button, CloseButton, createStyles, Group, NumberInput, Stack, Text, Transition } from '@mantine/core';
 import { atmVisibilityAtom } from '../../atoms/visibility';
 import { useExitListener } from '../../hooks/useExitListener';
-import { TbCurrencyDollar } from 'react-icons/tb';
 import { useRecoilState } from 'recoil';
 import { formatNumber } from '../../utils/formatNumber';
+import { useState } from 'react';
+import FormattedInput from '../bank/components/FormattedInput';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -27,6 +28,7 @@ const useStyles = createStyles((theme) => ({
 const ATM: React.FC = () => {
   const { classes } = useStyles();
   const [visible, setVisible] = useRecoilState(atmVisibilityAtom);
+  const [amount, setAmount] = useState<number | undefined>();
 
   useExitListener(setVisible);
 
@@ -44,7 +46,7 @@ const ATM: React.FC = () => {
             </Box>
             <Box>
               <Text size="xs">Cash Balance: {formatNumber(13225)}</Text>
-              <NumberInput placeholder="Amount" icon={<TbCurrencyDollar size={20} />} />
+              <FormattedInput value={amount} onChange={(value) => setAmount(value)} />
             </Box>
             <Button uppercase>Withdraw</Button>
           </Stack>

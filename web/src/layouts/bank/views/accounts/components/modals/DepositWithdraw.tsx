@@ -1,10 +1,10 @@
-import { Box, Button, NumberInput, Stack, Text } from '@mantine/core';
+import { Box, Button, Stack, Text } from '@mantine/core';
 import { formatNumber } from '../../../../../../utils/formatNumber';
 import { useState } from 'react';
 import { closeAllModals } from '@mantine/modals';
 import { fetchNui } from '../../../../../../utils/fetchNui';
-import { TbCurrencyDollar } from 'react-icons/tb';
 import { useSelectedAccount } from '../../../../../../atoms/account';
+import FormattedInput from '../../../../components/FormattedInput';
 
 const DepositWithdraw: React.FC<{ variant: 'deposit' | 'withdraw' }> = ({ variant }) => {
   const [value, setValue] = useState<number | undefined>(undefined);
@@ -23,12 +23,7 @@ const DepositWithdraw: React.FC<{ variant: 'deposit' | 'withdraw' }> = ({ varian
           {variant === 'withdraw' ? 'Cash' : 'Account'} Balance:{' '}
           {formatNumber(variant === 'withdraw' ? 9250 : account.balance)}
         </Text>
-        <NumberInput
-          onChange={(value) => setValue(value)}
-          value={value}
-          icon={<TbCurrencyDollar size={20} />}
-          hideControls
-        />
+        <FormattedInput value={value} onChange={(value) => setValue(value)} />
       </Box>
       <Button
         variant="light"
