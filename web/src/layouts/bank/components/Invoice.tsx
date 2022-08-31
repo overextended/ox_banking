@@ -2,6 +2,8 @@ import { Badge, Box, createStyles, Group, Stack, Text, ThemeIcon, Tooltip } from
 import { TbFileInvoice } from 'react-icons/tb';
 import { formatNumber } from '../../../utils/formatNumber';
 import { InvoiceProps } from '../../../atoms/invoices';
+import { openModal } from '@mantine/modals';
+import InvoiceModal from '../../../modals/InvoiceModal';
 
 const useStyles = createStyles((theme) => ({
   invoice: {
@@ -20,7 +22,10 @@ const Invoice: React.FC<InvoiceProps> = (invoice) => {
 
   return (
     <Tooltip label="Click for details" withArrow transition="pop">
-      <Box className={classes.invoice}>
+      <Box
+        className={classes.invoice}
+        onClick={() => openModal({ title: 'Invoice', children: <InvoiceModal invoice={invoice} /> })}
+      >
         <Group position="apart">
           <Group>
             <ThemeIcon size="lg" color="cyan" variant="light">

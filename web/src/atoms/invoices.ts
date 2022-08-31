@@ -6,7 +6,7 @@ export interface InvoiceProps {
   from: string;
   date: string;
   amount: number;
-  description?: string;
+  message?: string;
   isPaid: boolean;
 }
 
