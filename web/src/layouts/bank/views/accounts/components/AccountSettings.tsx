@@ -28,6 +28,17 @@ const AccountSettings: React.FC = () => {
                   variant="outline"
                   uppercase
                   disabled={account.type !== 'personal' || account.isDefault}
+                  onClick={() => {
+                    openConfirmModal({
+                      title: 'Convert account to shared',
+                      size: 'md',
+                      children: <Text>Are you sure you want to convert this account to be shared?</Text>,
+                      labels: { confirm: 'Confirm', cancel: 'Cancel' },
+                      confirmProps: { color: 'red' },
+                      onConfirm: () => closeAllModals(),
+                      onCancel: () => closeAllModals(),
+                    });
+                  }}
                 >
                   Convert to shared account
                 </Button>
