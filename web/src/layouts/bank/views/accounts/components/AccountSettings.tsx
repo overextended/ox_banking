@@ -1,7 +1,8 @@
-import { Button, Group, Paper, Stack } from '@mantine/core';
+import { Button, Group, Paper, Stack, Text } from '@mantine/core';
 import { useSelectedAccount } from '../../../../../atoms/account';
 import { TbSettings } from 'react-icons/all';
 import HeaderGroup from '../../../components/HeaderGroup';
+import { closeAllModals, openConfirmModal } from '@mantine/modals';
 
 const AccountSettings: React.FC = () => {
   const account = useSelectedAccount();
@@ -14,19 +15,40 @@ const AccountSettings: React.FC = () => {
             <HeaderGroup header="Account Settings" Icon={TbSettings} />
             <Stack>
               <Group grow>
-                <Button color="red" variant="outline" uppercase>
-                  Transfer Account
+                <Button
+                  color="red"
+                  variant="outline"
+                  uppercase
+                  disabled={account.type === 'group' || account.isDefault}
+                >
+                  Transfer Ownership
                 </Button>
                 <Button
                   color="red"
                   variant="outline"
                   uppercase
-                  disabled={account.type === 'shared' || account.type === 'group'}
+                  disabled={account.type !== 'personal' || account.isDefault}
                 >
                   Convert to shared account
                 </Button>
               </Group>
-              <Button color="red" variant="outline" uppercase>
+              <Button
+                color="red"
+                variant="outline"
+                uppercase
+                disabled={account.type === 'group' || account.isDefault}
+                onClick={() =>
+                  openConfirmModal({
+                    title: 'Confirm deletion',
+                    size: 'md',
+                    children: <Text>Are you sure you want to delete this account?</Text>,
+                    labels: { confirm: 'Delete', cancel: 'Cancel' },
+                    confirmProps: { color: 'red' },
+                    onConfirm: () => closeAllModals(),
+                    onCancel: () => closeAllModals(),
+                  })
+                }
+              >
                 Delete Account
               </Button>
             </Stack>
