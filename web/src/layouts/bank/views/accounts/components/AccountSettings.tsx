@@ -2,7 +2,8 @@ import { Button, Group, Paper, Stack, Text } from '@mantine/core';
 import { useSelectedAccount } from '../../../../../atoms/account';
 import { TbSettings } from 'react-icons/all';
 import HeaderGroup from '../../../components/HeaderGroup';
-import { closeAllModals, openConfirmModal } from '@mantine/modals';
+import { closeAllModals, openConfirmModal, openModal } from '@mantine/modals';
+import TransferOwnership from './modals/TransferOwnership';
 
 const AccountSettings: React.FC = () => {
   const account = useSelectedAccount();
@@ -20,6 +21,12 @@ const AccountSettings: React.FC = () => {
                   variant="outline"
                   uppercase
                   disabled={account.type === 'group' || account.isDefault}
+                  onClick={() =>
+                    openModal({
+                      title: 'Transfer account ownership',
+                      children: <TransferOwnership />,
+                    })
+                  }
                 >
                   Transfer Ownership
                 </Button>
@@ -34,7 +41,8 @@ const AccountSettings: React.FC = () => {
                       size: 'md',
                       children: <Text>Are you sure you want to convert this account to be shared?</Text>,
                       labels: { confirm: 'Confirm', cancel: 'Cancel' },
-                      confirmProps: { color: 'red' },
+                      confirmProps: { color: 'red', uppercase: true },
+                      cancelProps: { uppercase: true },
                       onConfirm: () => closeAllModals(),
                       onCancel: () => closeAllModals(),
                     });
@@ -54,7 +62,8 @@ const AccountSettings: React.FC = () => {
                     size: 'md',
                     children: <Text>Are you sure you want to delete this account?</Text>,
                     labels: { confirm: 'Delete', cancel: 'Cancel' },
-                    confirmProps: { color: 'red' },
+                    confirmProps: { color: 'red', uppercase: true },
+                    cancelProps: { uppercase: true },
                     onConfirm: () => closeAllModals(),
                     onCancel: () => closeAllModals(),
                   })
