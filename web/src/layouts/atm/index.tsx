@@ -5,6 +5,7 @@ import { useRecoilState } from 'recoil';
 import { formatNumber } from '../../utils/formatNumber';
 import { useState } from 'react';
 import FormattedInput from '../bank/components/FormattedInput';
+import { useNuiEvent } from '../../hooks/useNuiEvent';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -29,6 +30,10 @@ const ATM: React.FC = () => {
   const { classes } = useStyles();
   const [visible, setVisible] = useRecoilState(atmVisibilityAtom);
   const [amount, setAmount] = useState<number | undefined>();
+
+  useNuiEvent('setAtmVisible', () => {
+    setVisible(true);
+  });
 
   useExitListener(setVisible);
 
