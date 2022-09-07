@@ -12,7 +12,7 @@ import Transfer from './modals/Transfer';
 const AccountActions: React.FC = () => {
   const navigate = useNavigate();
   const setSelectedLogsAccount = useSetRecoilState(selectedLogsAccountAtom);
-  const account = useSelectedAccount();
+  const account = useSelectedAccount()!;
 
   return (
     <Paper p="md">
@@ -21,13 +21,20 @@ const AccountActions: React.FC = () => {
         <SimpleGrid cols={2}>
           <Button
             uppercase
-            onClick={() => openModal({ title: 'Withdraw', children: <DepositWithdraw variant="withdraw" /> })}
+            onClick={() =>
+              openModal({
+                title: 'Withdraw',
+                children: <DepositWithdraw variant="withdraw" balance={account.balance} />,
+              })
+            }
           >
             Withdraw
           </Button>
           <Button
             uppercase
-            onClick={() => openModal({ title: 'Deposit', children: <DepositWithdraw variant="deposit" /> })}
+            onClick={() =>
+              openModal({ title: 'Deposit', children: <DepositWithdraw variant="deposit" balance={account.balance} /> })
+            }
           >
             Deposit
           </Button>
@@ -36,7 +43,7 @@ const AccountActions: React.FC = () => {
             onClick={() =>
               openModal({
                 title: 'Transfer',
-                children: <Transfer />,
+                children: <Transfer balance={account.balance} />,
               })
             }
           >

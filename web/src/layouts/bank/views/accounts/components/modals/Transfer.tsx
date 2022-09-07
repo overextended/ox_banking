@@ -9,7 +9,7 @@ import { useRecoilValue } from 'recoil';
 import { logsAccountsAtom } from '../../../../../../atoms/account';
 import FormattedInput from '../../../../components/FormattedInput';
 
-const Transfer: React.FC = () => {
+const Transfer: React.FC<{ balance: number }> = ({ balance }) => {
   const accounts = useRecoilValue(logsAccountsAtom);
   const [account, setAccount] = useState('');
   const [amount, setAmount] = useState<number | undefined>();
@@ -19,15 +19,16 @@ const Transfer: React.FC = () => {
       <Box>
         <Text size="xs">Account Balance</Text>
         <Text weight={700} size={28}>
-          {formatNumber(92575)}
+          {formatNumber(balance)}
         </Text>
       </Box>
       <Autocomplete
-        placeholder="To account"
         data={accounts}
         icon={<TbCreditCard size={20} />}
         onChange={(value) => setAccount(value)}
         value={account}
+        label="Transfer to"
+        description="Select account or type in an account ID"
       />
       <FormattedInput value={amount} onChange={(value) => setAmount(value)} />
       <Button
