@@ -40,10 +40,12 @@ const InvoicesList: React.FC = () => {
       {invoices ? (
         <>
           <TextInput placeholder="Search" icon={<TbSearch size={20} />} />
-          <Stack justify="center">
-            {invoices.map((invoice, index) => (
-              <Invoice {...invoice} key={`invoice-${index}`} />
-            ))}
+          <Stack justify="space-between" sx={{ height: '100%' }}>
+            <Stack>
+              {invoices.map((invoice, index) => (
+                <Invoice {...invoice} key={`invoice-${index}`} />
+              ))}
+            </Stack>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
               <Pagination total={10} />
             </Box>

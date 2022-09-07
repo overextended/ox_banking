@@ -13,12 +13,16 @@ const TransactionsList: React.FC = () => {
       {transactions ? (
         <>
           <TextInput placeholder="Search" icon={<TbSearch size={20} />} />
-          {transactions.map((transaction, index) => (
-            <Transaction {...transaction} key={`transaction-${index}`} />
-          ))}
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Pagination total={10} />
-          </Box>
+          <Stack justify="space-between" sx={{ height: '100%' }}>
+            <Stack>
+              {transactions.map((transaction, index) => (
+                <Transaction {...transaction} key={`transaction-${index}`} />
+              ))}
+            </Stack>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <Pagination total={10} />
+            </Box>
+          </Stack>
         </>
       ) : (
         <NotFound Icon={TbArrowsRightLeft} label="No transactions found" />
