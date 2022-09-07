@@ -12,7 +12,6 @@ import Transfer from './modals/Transfer';
 const AccountActions: React.FC = () => {
   const navigate = useNavigate();
   const setSelectedLogsAccount = useSetRecoilState(selectedLogsAccountAtom);
-  const accounts = useRecoilValue(logsAccountsAtom);
   const account = useSelectedAccount();
 
   return (

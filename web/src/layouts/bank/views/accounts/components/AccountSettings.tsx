@@ -20,7 +20,7 @@ const AccountSettings: React.FC = () => {
                   color="red"
                   variant="outline"
                   uppercase
-                  disabled={account.type === 'group' || account.isDefault}
+                  disabled={account.type === 'group' || account.isDefault || account.isPaycheck}
                   onClick={() =>
                     openModal({
                       title: 'Transfer account ownership',
@@ -34,7 +34,7 @@ const AccountSettings: React.FC = () => {
                   color="red"
                   variant="outline"
                   uppercase
-                  disabled={account.type !== 'personal' || account.isDefault}
+                  disabled={account.type !== 'personal' || account.isDefault || account.isPaycheck}
                   onClick={() => {
                     openConfirmModal({
                       title: 'Convert account to shared',
@@ -55,7 +55,7 @@ const AccountSettings: React.FC = () => {
                 color="red"
                 variant="outline"
                 uppercase
-                disabled={account.type === 'group' || account.isDefault}
+                disabled={account.type === 'group' || account.isDefault || account.isPaycheck}
                 onClick={() =>
                   openConfirmModal({
                     title: 'Confirm deletion',

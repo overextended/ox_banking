@@ -9,6 +9,7 @@ export interface Account {
   balance: number;
   type: 'personal' | 'group' | 'shared';
   isDefault?: boolean;
+  isPaycheck?: boolean;
 }
 
 const mockAccounts: Account[] = [
@@ -28,6 +29,7 @@ const mockAccounts: Account[] = [
     ownerName: 'John Smith',
     balance: 0,
     type: 'personal',
+    isPaycheck: true,
   },
   {
     id: '1962134879551',
