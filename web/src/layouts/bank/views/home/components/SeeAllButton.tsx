@@ -1,12 +1,12 @@
 import { Button } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { defaultAccountAtom, selectedLogsAccountAtom } from '../../../../../atoms/account';
+import { useSetRecoilState } from 'recoil';
+import { selectedLogsAccountAtom, useDefaultAccount } from '../../../../../atoms/account';
 
 const SeeAllButton: React.FC = () => {
   const navigate = useNavigate();
   const setSelectedLogsAccount = useSetRecoilState(selectedLogsAccountAtom);
-  const defaultAccount = useRecoilValue(defaultAccountAtom);
+  const defaultAccount = useDefaultAccount();
 
   return (
     <Button

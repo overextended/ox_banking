@@ -4,11 +4,10 @@ import Invoices from './components/Invoices';
 import Transactions from './components/Transactions';
 import QuickActions from './components/QuickActions';
 import Balance from './components/Balance';
-import { defaultAccountAtom } from '../../../../atoms/account';
-import { useRecoilValue } from 'recoil';
+import { useDefaultAccount } from '../../../../atoms/account';
 
 const Home: React.FC = () => {
-  const account = useRecoilValue(defaultAccountAtom);
+  const account = useDefaultAccount();
 
   return (
     <SimpleGrid cols={2}>

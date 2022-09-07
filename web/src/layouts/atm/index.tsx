@@ -1,4 +1,4 @@
-import { Box, Button, CloseButton, createStyles, Group, NumberInput, Stack, Text, Transition } from '@mantine/core';
+import { Box, Button, CloseButton, createStyles, Stack, Text, Transition } from '@mantine/core';
 import { atmVisibilityAtom } from '../../atoms/visibility';
 import { useExitListener } from '../../hooks/useExitListener';
 import { useRecoilState } from 'recoil';
@@ -6,6 +6,7 @@ import { formatNumber } from '../../utils/formatNumber';
 import { useState } from 'react';
 import FormattedInput from '../bank/components/FormattedInput';
 import { useNuiEvent } from '../../hooks/useNuiEvent';
+import { useDefaultAccount } from '../../atoms/account';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -30,6 +31,7 @@ const ATM: React.FC = () => {
   const { classes } = useStyles();
   const [visible, setVisible] = useRecoilState(atmVisibilityAtom);
   const [amount, setAmount] = useState<number | undefined>();
+  const account = useDefaultAccount();
 
   useNuiEvent('setAtmVisible', () => {
     setVisible(true);
@@ -46,7 +48,7 @@ const ATM: React.FC = () => {
             <Box>
               <Text size="xs">Available Balance</Text>
               <Text weight={700} size={28}>
-                {formatNumber(92575)}
+                {formatNumber(account.balance)}
               </Text>
             </Box>
             <Box>

@@ -118,5 +118,6 @@ export const defaultAccountAtom = selector({
   },
 });
 
+export const useDefaultAccount = () => useRecoilValue(defaultAccountAtom);
 export const useAccounts = () => useRecoilValue(filteredAccountsAtom);
 export const useSelectedAccount = () => useRecoilValue(selectedAccountAtom);
