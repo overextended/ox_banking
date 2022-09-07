@@ -3,6 +3,7 @@ import { TbFileInvoice } from 'react-icons/tb';
 import { formatNumber } from '../../../../../utils/formatNumber';
 import HeaderGroup from '../../../components/HeaderGroup';
 import Invoice from '../../../components/Invoice';
+import SeeAllButton from './SeeAllButton';
 
 const useStyles = createStyles((theme) => ({
   paper: {
@@ -40,9 +41,7 @@ const Invoices: React.FC = () => {
             ))}
           </Stack>
         </Stack>
-        <Button uppercase color="blue">
-          See all
-        </Button>
+        <SeeAllButton />
       </Stack>
     </Paper>
   );
