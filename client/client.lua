@@ -20,8 +20,44 @@ local function createBankBlip(coords)
 end
 
 local function openUI(isATM)
+    local cash = exports.ox_inventory:Search('count', 'money')
     local accounts = lib.callback.await('ox_banking:getPlayerAccounts')
-    print(json.encode(accounts))
+    local formattedAccounts = {}
+    for k, v in pairs(accounts) do
+        formattedAccounts[#formattedAccounts + 1] = {
+            id = i,
+            owner = k,
+            name = 'Pogchamp',
+            ownerName = player.name,
+            balance = v,
+            type = 'personal',
+            isDefault = k == 'bank' and true or false,
+            isPaycheck = false,
+        }
+    end
+    if not isATM then
+        SendNUIMessage({
+            action = 'setBankVisible',
+            data = {
+                character = {
+                    cashBalance = cash,
+                    groups = player.groups
+                },
+                accounts = formattedAccounts
+            }
+        })
+    else
+        SendNUIMessage({
+            action = 'setAtmVisible',
+            data = {
+                character = {
+                    cashBalance = cash,
+                    groups = player.groups
+                },
+                accounts = formattedAccounts
+            }
+        })
+    end
     SetNuiFocus(true, true)
 end
 
@@ -99,3 +135,7 @@ else
         createBankBlip(targets[i].coords)
     end
 end
+
+RegisterNUICallback('exit', function()
+    SetNuiFocus(false, false)
+end)

@@ -1,12 +1,13 @@
 import { Box, Button, CloseButton, createStyles, Stack, Text, Transition } from '@mantine/core';
 import { atmVisibilityAtom } from '../../atoms/visibility';
 import { useExitListener } from '../../hooks/useExitListener';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { formatNumber } from '../../utils/formatNumber';
 import { useState } from 'react';
 import FormattedInput from '../bank/components/FormattedInput';
 import { useNuiEvent } from '../../hooks/useNuiEvent';
-import { useDefaultAccount } from '../../atoms/account';
+import { Account, accountsAtom, useDefaultAccount } from '../../atoms/account';
+import { Character, useCharacter, useCharacterState } from '../../atoms/character';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -32,9 +33,13 @@ const ATM: React.FC = () => {
   const [visible, setVisible] = useRecoilState(atmVisibilityAtom);
   const [amount, setAmount] = useState<number | undefined>();
   const account = useDefaultAccount();
+  const [character, setCharacter] = useCharacterState();
+  const setAccounts = useSetRecoilState(accountsAtom);
 
-  useNuiEvent('setAtmVisible', () => {
+  useNuiEvent('setAtmVisible', (data: { character: Character; accounts: Account[] }) => {
     setVisible(true);
+    setCharacter(data.character);
+    setAccounts(data.accounts);
   });
 
   useExitListener(setVisible);
@@ -52,7 +57,7 @@ const ATM: React.FC = () => {
               </Text>
             </Box>
             <Box>
-              <Text size="xs">Cash Balance: {formatNumber(13225)}</Text>
+              <Text size="xs">Cash Balance: {formatNumber(character.cashBalance)}</Text>
               <FormattedInput value={amount} onChange={(value) => setAmount(value)} />
             </Box>
             <Button uppercase>Withdraw</Button>

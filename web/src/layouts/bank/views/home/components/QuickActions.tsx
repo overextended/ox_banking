@@ -3,6 +3,7 @@ import { TbBolt } from 'react-icons/tb';
 import HeaderGroup from '../../../components/HeaderGroup';
 import FormattedInput from '../../../components/FormattedInput';
 import { useState } from 'react';
+import { fetchNui } from '../../../../../utils/fetchNui';
 
 const QuickActions: React.FC = () => {
   const [amount, setAmount] = useState<number | undefined>();
@@ -14,10 +15,10 @@ const QuickActions: React.FC = () => {
         <Stack justify="space-between" sx={{ height: '100%' }} spacing={0}>
           <FormattedInput value={amount} onChange={(value) => setAmount(value)} />
           <Stack>
-            <Button color="blue" uppercase>
+            <Button color="blue" uppercase onClick={() => fetchNui('quickAction', { type: 'deposit', amount })}>
               Deposit
             </Button>
-            <Button color="blue" uppercase>
+            <Button color="blue" uppercase onClick={() => fetchNui('quickActions', { type: 'withdraw', amount })}>
               Withdraw
             </Button>
             <Button color="blue" uppercase>

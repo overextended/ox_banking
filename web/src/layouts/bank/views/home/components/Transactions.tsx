@@ -6,6 +6,7 @@ import { TransactionProps } from '../../../../../atoms/transactions';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { defaultAccountAtom, selectedLogsAccountAtom } from '../../../../../atoms/account';
+import SeeAllButton from './SeeAllButton';
 
 const mockTransactions: TransactionProps[] = [
   { type: 'inbound', amount: 3500, accountOwner: 'Billy Smith', accountId: '3394379875902', date: '01/01/1999' },
@@ -31,9 +32,6 @@ const useStyles = createStyles((theme) => ({
 
 const Transactions: React.FC = () => {
   const { classes } = useStyles();
-  const navigate = useNavigate();
-  const setSelectedLogsAccount = useSetRecoilState(selectedLogsAccountAtom);
-  const defaultAccount = useRecoilValue(defaultAccountAtom);
 
   return (
     <Paper p="md" className={classes.paper}>
@@ -46,16 +44,7 @@ const Transactions: React.FC = () => {
             ))}
           </Stack>
         </Stack>
-        <Button
-          uppercase
-          color="blue"
-          onClick={() => {
-            navigate('/logs');
-            setSelectedLogsAccount(defaultAccount.id);
-          }}
-        >
-          See all
-        </Button>
+        <SeeAllButton/>
       </Stack>
     </Paper>
   );

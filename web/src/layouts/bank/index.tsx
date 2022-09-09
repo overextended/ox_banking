@@ -8,7 +8,9 @@ import Logs from './views/logs';
 import { bankVisibilityAtom } from '../../atoms/visibility';
 import { useNuiEvent } from '../../hooks/useNuiEvent';
 import { useExitListener } from '../../hooks/useExitListener';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { Account, accountsAtom } from '../../atoms/account';
+import { Character, useSetCharacter } from '../../atoms/character';
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -23,9 +25,13 @@ const useStyles = createStyles((theme) => ({
 const Bank: React.FC = () => {
   const { classes } = useStyles();
   const [visible, setVisible] = useRecoilState(bankVisibilityAtom);
+  const setAccounts = useSetRecoilState(accountsAtom);
+  const setCharacter = useSetCharacter();
 
-  useNuiEvent('setBankVisible', () => {
+  useNuiEvent('setBankVisible', (data: { accounts: Account[]; character: Character }) => {
     setVisible(true);
+    setAccounts(data.accounts);
+    setCharacter(data.character);
   });
 
   useExitListener(setVisible);
