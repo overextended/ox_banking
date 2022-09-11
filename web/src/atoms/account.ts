@@ -14,7 +14,7 @@ export interface Account {
 
 const mockAccounts: Account[] = [
   {
-    id: '9261979951215',
+    id: '926197995121',
     owner: '1',
     name: 'Personal',
     ownerName: 'John Smith',
@@ -23,7 +23,7 @@ const mockAccounts: Account[] = [
     isDefault: true,
   },
   {
-    id: '3261949632187',
+    id: '326194963218',
     owner: '1',
     name: 'Paycheck',
     ownerName: 'John Smith',
@@ -32,7 +32,7 @@ const mockAccounts: Account[] = [
     isPaycheck: true,
   },
   {
-    id: '1962134879551',
+    id: '196213487955',
     owner: '10',
     name: 'SomeCompany LCC',
     ownerName: 'Billy Bob',
@@ -40,7 +40,7 @@ const mockAccounts: Account[] = [
     type: 'shared',
   },
   {
-    id: '5979846231541',
+    id: '597984623154',
     owner: 'police',
     name: 'LSPD',
     ownerName: 'Police',
@@ -108,7 +108,7 @@ export const defaultAccountAtom = selector({
     if (account) return account;
     // debug data for web
     return {
-      id: '9261979951215',
+      id: '926197995121',
       owner: '1',
       name: 'Personal',
       balance: 163210,
