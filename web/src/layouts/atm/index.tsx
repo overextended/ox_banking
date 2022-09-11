@@ -57,8 +57,11 @@ const ATM: React.FC = () => {
               </Text>
             </Box>
             <Box>
-              <Text size="xs">Cash Balance: {formatNumber(character.cashBalance)}</Text>
-              <FormattedInput value={amount} onChange={(value) => setAmount(value)} />
+              <FormattedInput
+                value={amount}
+                onChange={(value) => setAmount(value)}
+                description={`Cash Balance: ${formatNumber(character.cashBalance)}`}
+              />
             </Box>
             <Button uppercase>Withdraw</Button>
           </Stack>
