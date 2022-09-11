@@ -5,23 +5,28 @@ import { closeAllModals } from '@mantine/modals';
 import { fetchNui } from '../../../../../../utils/fetchNui';
 import { useSelectedAccount } from '../../../../../../atoms/account';
 import FormattedInput from '../../../../components/FormattedInput';
+import { useCharacter } from '../../../../../../atoms/character';
 
 const DepositWithdraw: React.FC<{ variant: 'deposit' | 'withdraw'; balance: number }> = ({ variant, balance }) => {
   const [value, setValue] = useState<number | undefined>(undefined);
+  const character = useCharacter();
 
   return (
     <Stack>
       <Box>
         <Text size="xs">{variant === 'withdraw' ? 'Account' : 'Cash'} Balance</Text>
         <Text weight={700} size={28}>
-          {formatNumber(variant === 'withdraw' ? balance : 9250)}
+          {formatNumber(variant === 'withdraw' ? balance : character.cashBalance)}
         </Text>
       </Box>
       <Box>
-        <Text size="xs">
-          {variant === 'withdraw' ? 'Cash' : 'Account'} Balance: {formatNumber(variant === 'withdraw' ? 9250 : balance)}
-        </Text>
-        <FormattedInput value={value} onChange={(value) => setValue(value)} />
+        <FormattedInput
+          value={value}
+          onChange={(value) => setValue(value)}
+          description={`${variant === 'withdraw' ? 'Cash' : 'Account'} Balance: ${formatNumber(
+            variant === 'withdraw' ? character.cashBalance : balance
+          )}`}
+        />
       </Box>
       <Button
         variant="light"
