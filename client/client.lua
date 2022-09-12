@@ -22,19 +22,6 @@ end
 local function openUI(isATM)
     local cash = exports.ox_inventory:Search('count', 'money')
     local accounts = lib.callback.await('ox_banking:getPlayerAccounts')
-    local formattedAccounts = {}
-    for k, v in pairs(accounts) do
-        formattedAccounts[#formattedAccounts + 1] = {
-            id = i,
-            owner = k,
-            name = 'Pogchamp',
-            ownerName = player.name,
-            balance = v,
-            type = 'personal',
-            isDefault = k == 'bank' and true or false,
-            isPaycheck = false,
-        }
-    end
     if not isATM then
         SendNUIMessage({
             action = 'setBankVisible',
@@ -43,7 +30,7 @@ local function openUI(isATM)
                     cashBalance = cash,
                     groups = player.groups
                 },
-                accounts = formattedAccounts
+                accounts = accounts
             }
         })
     else
@@ -54,7 +41,7 @@ local function openUI(isATM)
                     cashBalance = cash,
                     groups = player.groups
                 },
-                accounts = formattedAccounts
+                accounts = accounts
             }
         })
     end
