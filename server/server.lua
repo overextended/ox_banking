@@ -57,7 +57,7 @@ lib.callback.register('ox_banking:getPlayerAccounts', function()
 
     playerAccounts = accounts[player.charid]
 
-    for k, _ in pairs(player.groups) do
+    for k, _ in pairs(player.get('groups')) do
         local playerGroup = k
         if not accounts[playerGroup] then
             createGroupAccount(playerGroup)
