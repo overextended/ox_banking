@@ -5,6 +5,7 @@ import './index.css';
 import { HashRouter } from 'react-router-dom';
 import { isEnvBrowser } from './utils/misc';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 if (isEnvBrowser()) {
   const root = document.getElementById('root');
@@ -20,7 +21,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <HashRouter>
       <ThemeProvider defaultTheme='dark' storageKey='ox_banking-theme'>
-        <App />
+        <TooltipProvider disableHoverableContent delayDuration={0}>
+          <App />
+        </TooltipProvider>
       </ThemeProvider>
     </HashRouter>
   </React.StrictMode>,

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Bar, LineChart, Line, ResponsiveContainer, XAxis, YAxis } from 'recharts';
 
-
 const data = [
   {
     day: 'Mon',
@@ -40,27 +39,20 @@ const data = [
   },
 ];
 
-
 const OverviewChart: React.FC = () => {
   return (
-    <ResponsiveContainer width='100%' height={120}>
+    <ResponsiveContainer width="100%">
       <LineChart data={data}>
-        <XAxis
-          dataKey='day'
-          stroke='#888888'
-          fontSize={12}
-          tickLine={false}
-          axisLine={false}
-        />
+        <XAxis dataKey="day" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
         <YAxis
-          stroke='#888888'
+          stroke="#888888"
           fontSize={12}
           tickLine={false}
           axisLine={false}
           tickFormatter={(value) => `$${value}`}
         />
-        <Line type='monotone' dataKey='income' stroke='hsl(var(--primary))' dot={false} />
-        <Line type='monotone' dataKey='expenses' stroke='hsl(var(--destructive))' dot={false} />
+        <Line type="monotone" dataKey="income" stroke="hsl(var(--primary))" dot={false} />
+        <Line type="monotone" dataKey="expenses" stroke="hsl(var(--destructive))" dot={false} />
       </LineChart>
     </ResponsiveContainer>
   );
