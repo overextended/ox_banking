@@ -1,6 +1,7 @@
 import React from 'react';
-import { LucideIcon, PiggyBank } from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 import { formatNumber } from '@/utils/formatNumber';
+import BaseCard from '@/layouts/bank/components/BaseCard';
 
 interface Props {
   label: string;
@@ -10,13 +11,9 @@ interface Props {
 
 const AccountCard: React.FC<Props> = (props) => {
   return (
-    <div className='border flex flex-1 flex-col gap-4 p-4 rounded-lg shadow'>
-      <div className='flex justify-between items-center text-muted-foreground'>
-        <h2 className='font-bold'>{props.label}</h2>
-        <props.icon />
-      </div>
+    <BaseCard icon={props.icon} title={props.label} className='flex-1'>
       <p className='text-3xl'>{formatNumber(props.amount)}</p>
-    </div>
+    </BaseCard>
   );
 };
 
