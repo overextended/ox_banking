@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bar, LineChart, Line, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+import { Bar, LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
 
 const data = [
   {
@@ -41,18 +41,19 @@ const data = [
 
 const OverviewChart: React.FC = () => {
   return (
-    <ResponsiveContainer width="100%">
+    <ResponsiveContainer width='100%'>
       <LineChart data={data}>
-        <XAxis dataKey="day" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+        <XAxis dataKey='day' stroke='#888888' fontSize={12} tickLine={false} axisLine={false} />
         <YAxis
-          stroke="#888888"
+          stroke='#888888'
           fontSize={12}
           tickLine={false}
           axisLine={false}
           tickFormatter={(value) => `$${value}`}
         />
-        <Line type="monotone" dataKey="income" stroke="hsl(var(--primary))" dot={false} />
-        <Line type="monotone" dataKey="expenses" stroke="hsl(var(--destructive))" dot={false} />
+        <Tooltip animationDuration={100} />
+        <Line type='monotone' dataKey='income' stroke='hsl(var(--primary))' strokeWidth={3} dot={false} />
+        <Line type='monotone' dataKey='expenses' stroke='hsl(var(--destructive))' strokeWidth={3} dot={false} />
       </LineChart>
     </ResponsiveContainer>
   );
