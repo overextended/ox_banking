@@ -28,6 +28,7 @@ import { useModal } from '@/components/ModalsProvider';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import WithdrawModal from '@/layouts/bank/pages/accounts/modals/WithdrawModal';
+import CreateAccountModal from './modals/CreateAccountModal';
 
 const Accounts: React.FC = () => {
   const modal = useModal();
@@ -40,7 +41,15 @@ const Accounts: React.FC = () => {
             <ChevronLeft />
           </Button>
           <div className="flex flex-1 justify-center gap-4">
-            <div className="flex w-[250px] flex-col items-center justify-center rounded-lg border border-dashed bg-background p-4 shadow transition-all hover:-translate-y-1 hover:scale-105 hover:cursor-pointer hover:bg-secondary">
+            <div
+              onClick={() =>
+                modal.open({
+                  title: 'Create account',
+                  children: <CreateAccountModal />,
+                })
+              }
+              className="flex w-[250px] flex-col items-center justify-center rounded-lg border border-dashed bg-background p-4 shadow transition-all hover:-translate-y-1 hover:scale-105 hover:cursor-pointer hover:bg-secondary"
+            >
               <Plus />
             </div>
             <AccountCard
