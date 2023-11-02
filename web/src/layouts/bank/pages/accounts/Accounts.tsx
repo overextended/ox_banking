@@ -91,7 +91,7 @@ const Accounts: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <p>{Math.trunc(Math.random() * 1000000)}</p>
                   <Tooltip delayDuration={200}>
-                    <TooltipTrigger>
+                    <TooltipTrigger asChild>
                       <button className="flex items-center">
                         <Copy size={14} />
                       </button>
