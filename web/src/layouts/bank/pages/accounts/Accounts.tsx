@@ -3,14 +3,11 @@ import BaseCard from '@/layouts/bank/components/BaseCard';
 import {
   ChevronLeft,
   ChevronRight,
-  Coins,
   CreditCard,
   Plus,
   ScanText,
   Settings,
   Wallet,
-  Percent,
-  PiggyBank,
   Repeat,
   Landmark,
   Copy,
@@ -20,14 +17,21 @@ import {
   Pencil,
   Shield,
   Trash,
+  Check,
 } from 'lucide-react';
 import AccountCard from '@/layouts/bank/pages/accounts/components/AccountCard';
 import { Button } from '@/components/ui/button';
 import { formatNumber } from '@/utils/formatNumber';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import AccountButton from '@/layouts/bank/pages/accounts/components/AccountButton';
+import { useModal } from '@/components/ModalsProvider';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import WithdrawModal from '@/layouts/bank/pages/accounts/modals/WithdrawModal';
 
 const Accounts: React.FC = () => {
+  const modal = useModal();
+
   return (
     <div className="flex h-full w-full flex-col gap-2 overflow-hidden p-2">
       <BaseCard title="Accounts" icon={CreditCard} className="overflow-visible">
@@ -107,7 +111,16 @@ const Accounts: React.FC = () => {
             </div>
           </div>
           <div className="flex h-full flex-col gap-2">
-            <AccountButton label="Withdraw" icon={Wallet} />
+            <AccountButton
+              label="Withdraw"
+              icon={Wallet}
+              onClick={() =>
+                modal.open({
+                  title: 'Withdraw',
+                  children: <WithdrawModal />,
+                })
+              }
+            />
             <AccountButton label="Deposit" icon={Landmark} />
             <AccountButton label="Transfer" icon={Repeat} />
             <AccountButton label="Logs" icon={History} />

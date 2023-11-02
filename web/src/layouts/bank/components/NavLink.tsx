@@ -14,8 +14,12 @@ const NavLink: React.FC<Props> = ({ icon, path, label }) => {
   const location = useLocation();
 
   return (
-    <NavItem icon={icon} label={label} onClick={() => navigate(path)}
-             variant={location.pathname === path ? 'default' : 'ghost'} />
+    <NavItem
+      icon={icon}
+      label={label}
+      onClick={() => navigate(path)}
+      variant={location.pathname === path ? 'default' : 'ghost'}
+    />
   );
 };
 
