@@ -52,7 +52,7 @@ const CreateAccountModal: React.FC = () => {
               </FormControl>
               <div className="flex flex-col gap-1 leading-none">
                 <FormLabel>Shared account</FormLabel>
-                <FormDescription>Enables the ability to give people access to the account</FormDescription>
+                <FormDescription>Allow selected people access to the account</FormDescription>
               </div>
             </FormItem>
           )}

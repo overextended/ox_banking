@@ -5,9 +5,39 @@ import CreateAccountModal from '@/layouts/bank/pages/accounts/modals/CreateAccou
 import AccountCard from '@/layouts/bank/pages/accounts/components/AccountCard';
 import BaseCard from '@/layouts/bank/components/BaseCard';
 import { useModal } from '@/components/ModalsProvider';
+import { useActiveAccountId } from '@/state/accounts/accounts';
+
+type Account = {
+  name: string;
+  id: number;
+  amount: number;
+  type: 'personal' | 'shared' | 'group';
+};
+
+const DEBUG_ACCOUNTS: Account[] = [
+  {
+    amount: Math.trunc(Math.random() * 1000000),
+    id: Math.trunc(Math.random() * 1000000),
+    name: 'Personal',
+    type: 'personal',
+  },
+  {
+    amount: Math.trunc(Math.random() * 1000000),
+    id: Math.trunc(Math.random() * 1000000),
+    name: 'The bois',
+    type: 'shared',
+  },
+  {
+    amount: Math.trunc(Math.random() * 1000000),
+    id: Math.trunc(Math.random() * 1000000),
+    name: 'LSPD',
+    type: 'shared',
+  },
+];
 
 const CharacterAccounts: React.FC = () => {
   const modal = useModal();
+  const activeAccountId = useActiveAccountId();
 
   return (
     <BaseCard title="Accounts" icon={CreditCard} className="overflow-visible">
@@ -27,24 +57,9 @@ const CharacterAccounts: React.FC = () => {
           >
             <Plus />
           </div>
-          <AccountCard
-            amount={Math.trunc(Math.random() * 1000000)}
-            id={Math.trunc(Math.random() * 1000000)}
-            name="Personal"
-            type="personal"
-          />
-          <AccountCard
-            amount={Math.trunc(Math.random() * 1000000)}
-            id={Math.trunc(Math.random() * 1000000)}
-            name="Personal"
-            type="personal"
-          />
-          <AccountCard
-            amount={Math.trunc(Math.random() * 1000000)}
-            id={Math.trunc(Math.random() * 1000000)}
-            name="Personal"
-            type="personal"
-          />
+          {DEBUG_ACCOUNTS.map((account) => (
+            <AccountCard key={account.id} {...account} active={account.id === activeAccountId} />
+          ))}
         </div>
         <Button size="icon" className="rounded-full">
           <ChevronRight />
