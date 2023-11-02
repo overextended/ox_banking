@@ -7,7 +7,7 @@ const Modal: React.FC = () => {
   const container = useModalContainer();
 
   return (
-    <Dialog open={modal.open} onOpenChange={() => setModal((prev) => ({ ...prev, open: false }))}>
+    <Dialog open={modal.open} onOpenChange={() => setModal((prev) => ({ ...prev, open: false }))} modal>
       <DialogContent container={container} className="max-w-sm">
         <DialogHeader>
           <DialogTitle>{modal.title}</DialogTitle>
