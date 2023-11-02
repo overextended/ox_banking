@@ -20,11 +20,11 @@ if (isEnvBrowser()) {
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <HashRouter>
-      <ThemeProvider defaultTheme='dark' storageKey='ox_banking-theme'>
+      <ThemeProvider defaultTheme="dark" storageKey="ox_banking-theme">
         <TooltipProvider disableHoverableContent delayDuration={0}>
           <App />
         </TooltipProvider>
       </ThemeProvider>
     </HashRouter>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

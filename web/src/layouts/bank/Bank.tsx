@@ -3,15 +3,21 @@ import Navbar from '@/layouts/bank/components/Navbar';
 import { Route, Routes } from 'react-router-dom';
 import Dashboard from '@/layouts/bank/pages/dashboard/Dashboard';
 import Accounts from '@/layouts/bank/pages/accounts/Accounts';
+import ModalsProvider from '@/components/ModalsProvider';
+import { useSetModalContainer } from '@/state/modals';
 
 const Bank: React.FC = () => {
+  const setContainer = useSetModalContainer();
+
   return (
-    <div className='w-[1280px] h-[768px] bg-background rounded-lg flex'>
-      <Navbar />
-      <Routes>
-        <Route path='/' element={<Dashboard />} />
-        <Route path='/accounts' element={<Accounts />} />
-      </Routes>
+    <div className="relative flex h-[768px] w-[1280px] rounded-lg bg-background" id="bank-container" ref={setContainer}>
+      <ModalsProvider>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/accounts" element={<Accounts />} />
+        </Routes>
+      </ModalsProvider>
     </div>
   );
 };
