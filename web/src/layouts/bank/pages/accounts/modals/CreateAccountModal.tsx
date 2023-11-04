@@ -9,6 +9,7 @@ import { useModal } from '@/components/ModalsProvider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { fetchNui } from '@/utils/fetchNui';
 import SpinningLoader from '@/components/SpinningLoader';
+import locales from '@/locales';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name must have at least 1 character'),
@@ -39,7 +40,7 @@ const CreateAccountModal: React.FC = () => {
         <FormField
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Account name</FormLabel>
+              <FormLabel>{locales.account_name}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -56,14 +57,14 @@ const CreateAccountModal: React.FC = () => {
                 <Checkbox checked={field.value} onCheckedChange={field.onChange} />
               </FormControl>
               <div className="flex flex-col gap-1 leading-none">
-                <FormLabel>Shared account</FormLabel>
-                <FormDescription>Allow selected people access to the account</FormDescription>
+                <FormLabel>{locales.shared_account}</FormLabel>
+                <FormDescription>{locales.shared_account_description}</FormDescription>
               </div>
             </FormItem>
           )}
         />
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? <SpinningLoader /> : 'Confirm'}
+          {isLoading ? <SpinningLoader /> : locales.confirm}
         </Button>
       </form>
     </Form>

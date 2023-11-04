@@ -7,6 +7,7 @@ import WithdrawModal from '@/layouts/bank/pages/accounts/modals/WithdrawModal';
 import BaseCard from '@/layouts/bank/components/BaseCard';
 import { useModal } from '@/components/ModalsProvider';
 import { useActiveAccountId } from '@/state/accounts/accounts';
+import locales from '@/locales';
 
 const AccountDetails: React.FC = () => {
   const modal = useModal();
@@ -17,17 +18,17 @@ const AccountDetails: React.FC = () => {
       <div className="flex justify-between">
         <div className="flex flex-col gap-4">
           <div className="flex flex-col">
-            <p className="text-xs text-muted-foreground">Account name</p>
+            <p className="text-xs text-muted-foreground">{locales.account_name}</p>
             <p>Personal</p>
           </div>
           <div className="flex flex-col">
-            <p className="text-xs text-muted-foreground">Account type</p>
-            <p>Personal account</p>
+            <p className="text-xs text-muted-foreground">{locales.account_type}</p>
+            <p>{locales.personal_account}</p>
           </div>
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col">
-            <p className="text-xs text-muted-foreground">Account number</p>
+            <p className="text-xs text-muted-foreground">{locales.account_number}</p>
             <div className="flex items-center gap-2">
               <p>{Math.trunc(Math.random() * 1000000)}</p>
               <Tooltip delayDuration={200}>
@@ -36,34 +37,34 @@ const AccountDetails: React.FC = () => {
                     <Copy size={14} />
                   </button>
                 </TooltipTrigger>
-                <TooltipContent>Copy</TooltipContent>
+                <TooltipContent>{locales.copy}</TooltipContent>
               </Tooltip>
             </div>
           </div>
           <div className="flex flex-col">
-            <p className="text-xs text-muted-foreground">Disposable amount</p>
+            <p className="text-xs text-muted-foreground">{locales.disposable_amount}</p>
             <p>{formatNumber(Math.trunc(Math.random() * 1000000))}</p>
           </div>
         </div>
         <div className="flex flex-col">
-          <p className="text-xs text-muted-foreground">Account owner</p>
+          <p className="text-xs text-muted-foreground">{locales.account_owner}</p>
           <p>Jack Sparrow</p>
         </div>
       </div>
       <div className="flex h-full flex-col gap-2">
         <AccountButton
-          label="Withdraw"
+          label={locales.withdraw}
           icon={Wallet}
           onClick={() =>
             modal.open({
-              title: 'Withdraw',
+              title: locales.withdraw,
               children: <WithdrawModal accountId={accountId} />,
             })
           }
         />
-        <AccountButton label="Deposit" icon={Landmark} />
-        <AccountButton label="Transfer" icon={Repeat} />
-        <AccountButton label="Logs" icon={History} />
+        <AccountButton label={locales.deposit} icon={Landmark} />
+        <AccountButton label={locales.transfer} icon={Repeat} />
+        <AccountButton label={locales.logs} icon={History} />
       </div>
     </BaseCard>
   );

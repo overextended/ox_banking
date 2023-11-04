@@ -3,6 +3,7 @@ import { formatNumber } from '@/utils/formatNumber';
 import { cn } from '@/lib/utils';
 import { useSetActiveAccountId } from '@/state/accounts/accounts';
 import { Account } from '@/typings/accounts';
+import locales from '@/locales';
 
 interface Props {
   account: Account;
@@ -21,9 +22,13 @@ const AccountCard: React.FC<Props> = ({ account, active }) => {
       )}
     >
       <h2>{account.owner}</h2>
-      <p className="mb-4 text-sm text-muted-foreground">{`${
-        account.type === 'personal' ? 'Personal' : account.type === 'shared' ? 'Shared' : 'Group'
-      } account`}</p>
+      <p className="mb-4 text-sm text-muted-foreground">
+        {account.type === 'personal'
+          ? locales.personal_account
+          : account.type === 'shared'
+          ? locales.shared_account
+          : locales.group_account}
+      </p>
       <div className="flex items-center justify-between">
         <p className="text-xs text-muted-foreground">{formatNumber(account.balance)}</p>
         <p className="text-xs text-muted-foreground">{account.id}</p>

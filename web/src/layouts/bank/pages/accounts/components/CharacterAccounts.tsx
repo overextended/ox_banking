@@ -7,6 +7,7 @@ import BaseCard from '@/layouts/bank/components/BaseCard';
 import { useModal } from '@/components/ModalsProvider';
 import { useAccounts, useActiveAccountId } from '@/state/accounts/accounts';
 import { cn } from '@/lib/utils';
+import locales from '@/locales';
 
 const CharacterAccounts: React.FC = () => {
   const modal = useModal();
@@ -17,7 +18,7 @@ const CharacterAccounts: React.FC = () => {
   const MAX_ITEMS = React.useMemo(() => (page === 0 ? 3 : 4), [page]);
 
   return (
-    <BaseCard title="Accounts" icon={CreditCard} className="overflow-visible">
+    <BaseCard title={locales.accounts} icon={CreditCard} className="overflow-visible">
       <div className="flex w-full items-center justify-center gap-4">
         <Button size="icon" className="rounded-full" disabled={page === 0} onClick={() => setPage((prev) => --prev)}>
           <ChevronLeft />
@@ -27,7 +28,7 @@ const CharacterAccounts: React.FC = () => {
             <div
               onClick={() =>
                 modal.open({
-                  title: 'Create account',
+                  title: locales.create_account,
                   children: <CreateAccountModal />,
                 })
               }
