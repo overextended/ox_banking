@@ -12,7 +12,9 @@ const Accounts: React.FC = () => {
 
   return (
     <div className="flex h-full w-full flex-col gap-2 overflow-hidden p-2">
-      <CharacterAccounts />
+      <React.Suspense fallback={<p>Loading...</p>}>
+        <CharacterAccounts />
+      </React.Suspense>
       {activeAccountId ? (
         <div className="flex w-full gap-2">
           <AccountDetails />

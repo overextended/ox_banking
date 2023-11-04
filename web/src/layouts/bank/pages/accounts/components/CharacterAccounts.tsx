@@ -8,41 +8,11 @@ import { useModal } from '@/components/ModalsProvider';
 import { useAccounts, useActiveAccountId } from '@/state/accounts/accounts';
 import { cn } from '@/lib/utils';
 
-type Account = {
-  name: string;
-  id: number;
-  amount: number;
-  type: 'personal' | 'shared' | 'group';
-};
-
-const DEBUG_ACCOUNTS: Account[] = [
-  {
-    amount: Math.trunc(Math.random() * 1000000),
-    id: Math.trunc(Math.random() * 1000000),
-    name: 'Personal',
-    type: 'personal',
-  },
-  {
-    amount: Math.trunc(Math.random() * 1000000),
-    id: Math.trunc(Math.random() * 1000000),
-    name: 'The bois',
-    type: 'shared',
-  },
-  {
-    amount: Math.trunc(Math.random() * 1000000),
-    id: Math.trunc(Math.random() * 1000000),
-    name: 'LSPD',
-    type: 'shared',
-  },
-];
-
 const CharacterAccounts: React.FC = () => {
   const modal = useModal();
   const activeAccountId = useActiveAccountId();
   const accountsData = useAccounts();
   const [page, setPage] = React.useState(0);
-
-  React.useEffect(() => console.log(page), [page]);
 
   const MAX_ITEMS = React.useMemo(() => (page === 0 ? 3 : 4), [page]);
 

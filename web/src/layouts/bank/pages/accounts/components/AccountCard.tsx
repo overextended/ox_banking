@@ -1,7 +1,6 @@
 import React from 'react';
 import { formatNumber } from '@/utils/formatNumber';
 import { cn } from '@/lib/utils';
-import { useSearchParams } from 'react-router-dom';
 import { useSetActiveAccountId } from '@/state/accounts/accounts';
 import { Account } from '@/typings/accounts';
 
