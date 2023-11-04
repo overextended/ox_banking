@@ -5,7 +5,8 @@ import CreateAccountModal from '@/layouts/bank/pages/accounts/modals/CreateAccou
 import AccountCard from '@/layouts/bank/pages/accounts/components/AccountCard';
 import BaseCard from '@/layouts/bank/components/BaseCard';
 import { useModal } from '@/components/ModalsProvider';
-import { useActiveAccountId } from '@/state/accounts/accounts';
+import { useAccounts, useActiveAccountId } from '@/state/accounts/accounts';
+import { cn } from '@/lib/utils';
 
 type Account = {
   name: string;
@@ -38,37 +39,58 @@ const DEBUG_ACCOUNTS: Account[] = [
 const CharacterAccounts: React.FC = () => {
   const modal = useModal();
   const activeAccountId = useActiveAccountId();
+  const accountsData = useAccounts();
+  const [page, setPage] = React.useState(0);
+
+  React.useEffect(() => console.log(page), [page]);
+
+  const MAX_ITEMS = React.useMemo(() => (page === 0 ? 3 : 4), [page]);
 
   return (
     <BaseCard title="Accounts" icon={CreditCard} className="overflow-visible">
       <div className="flex w-full items-center justify-center gap-4">
-        <Button size="icon" className="rounded-full" disabled>
+        <Button size="icon" className="rounded-full" disabled={page === 0} onClick={() => setPage((prev) => --prev)}>
           <ChevronLeft />
         </Button>
-        <div className="flex flex-1 justify-center gap-4">
-          <div
-            onClick={() =>
-              modal.open({
-                title: 'Create account',
-                children: <CreateAccountModal />,
-              })
-            }
-            className="flex w-[250px] flex-col items-center justify-center rounded-lg border border-dashed bg-background p-4 shadow transition-all hover:-translate-y-1 hover:scale-105 hover:cursor-pointer hover:bg-secondary"
-          >
-            <Plus />
-          </div>
-          {DEBUG_ACCOUNTS.map((account) => (
-            <AccountCard key={account.id} {...account} active={account.id === activeAccountId} />
-          ))}
+        <div className="flex flex-1 justify-start gap-4">
+          {page === 0 && (
+            <div
+              onClick={() =>
+                modal.open({
+                  title: 'Create account',
+                  children: <CreateAccountModal />,
+                })
+              }
+              className="flex w-[250px] flex-col items-center justify-center rounded-lg border border-dashed bg-background p-4 shadow transition-all hover:-translate-y-1 hover:scale-105 hover:cursor-pointer hover:bg-secondary"
+            >
+              <Plus />
+            </div>
+          )}
+          {accountsData.accounts
+            .slice(page * (MAX_ITEMS === 3 ? MAX_ITEMS : MAX_ITEMS - 1), page * MAX_ITEMS + MAX_ITEMS)
+            .map((account) => (
+              <AccountCard key={account.id} account={account} active={account.id === activeAccountId} />
+            ))}
         </div>
-        <Button size="icon" className="rounded-full">
+        <Button
+          size="icon"
+          className="rounded-full"
+          disabled={page + 1 >= accountsData.numberOfPages}
+          onClick={() => setPage((prev) => ++prev)}
+        >
           <ChevronRight />
         </Button>
       </div>
       <div className="flex w-full items-center justify-center gap-2">
-        <div className="h-[5px] w-[5px] rounded-full bg-primary" />
-        <div className="h-[5px] w-[5px] rounded-full bg-muted" />
-        <div className="h-[5px] w-[5px] rounded-full bg-muted" />
+        {[...Array(accountsData.numberOfPages)].map((_, index) => (
+          <div
+            key={index}
+            className={cn(
+              'h-[5px] w-[5px] rounded-full bg-muted transition-colors duration-500',
+              page === index && 'bg-primary'
+            )}
+          />
+        ))}
       </div>
     </BaseCard>
   );

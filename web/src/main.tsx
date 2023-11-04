@@ -6,6 +6,7 @@ import { HashRouter } from 'react-router-dom';
 import { isEnvBrowser } from './utils/misc';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 if (isEnvBrowser()) {
   const root = document.getElementById('root');
@@ -17,14 +18,18 @@ if (isEnvBrowser()) {
   root!.style.backgroundPosition = 'center';
 }
 
+export const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <HashRouter>
-      <ThemeProvider defaultTheme="dark" storageKey="ox_banking-theme">
-        <TooltipProvider disableHoverableContent delayDuration={0}>
-          <App />
-        </TooltipProvider>
-      </ThemeProvider>
-    </HashRouter>
+    <QueryClientProvider client={queryClient}>
+      <HashRouter>
+        <ThemeProvider defaultTheme="dark" storageKey="ox_banking-theme">
+          <TooltipProvider disableHoverableContent delayDuration={0}>
+            <App />
+          </TooltipProvider>
+        </ThemeProvider>
+      </HashRouter>
+    </QueryClientProvider>
   </React.StrictMode>
 );

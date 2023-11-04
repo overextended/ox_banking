@@ -35,6 +35,12 @@ dependencies:
   '@radix-ui/react-tooltip':
     specifier: ^1.0.7
     version: 1.0.7(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
+  '@tanstack/query-core':
+    specifier: ^5.4.3
+    version: 5.4.3
+  '@tanstack/react-query':
+    specifier: ^5.4.3
+    version: 5.4.3(react-dom@18.2.0)(react@18.2.0)
   '@types/node':
     specifier: ^20.8.9
     version: 20.8.9
@@ -47,6 +53,9 @@ dependencies:
   jotai:
     specifier: ^2.5.0
     version: 2.5.0(@types/react@18.0.17)(react@18.2.0)
+  jotai-tanstack-query:
+    specifier: ^0.7.2
+    version: 0.7.2(@tanstack/query-core@5.4.3)(jotai@2.5.0)
   lucide-react:
     specifier: ^0.290.0
     version: 0.290.0(react@18.2.0)
@@ -1260,6 +1269,27 @@ packages:
       picomatch: 2.3.1
     dev: true
 
+  /@tanstack/query-core@5.4.3:
+    resolution: {integrity: sha512-fnI9ORjcuLGm1sNrKatKIosRQUpuqcD4SV7RqRSVmj8JSicX2aoMyKryHEBpVQvf6N4PaBVgBxQomjsbsGPssQ==}
+    dev: false
+
+  /@tanstack/react-query@5.4.3(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-4aSOrRNa6yEmf7mws5QPTVMn8Lp7L38tFoTZ0c1ZmhIvbr8GIA0WT7X5N3yz/nuK8hUtjw9cAzBr4BPDZZ+tzA==}
+    peerDependencies:
+      react: ^18.0.0
+      react-dom: ^18.0.0
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      '@tanstack/query-core': 5.4.3
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
   /@types/d3-array@3.0.9:
     resolution: {integrity: sha512-mZowFN3p64ajCJJ4riVYlOjNlBJv3hctgAY01pjw3qTnJePD8s9DZmYDzhHKvzfCYvdjwylkU38+Vdt7Cu2FDA==}
     dev: false
@@ -1872,6 +1902,16 @@ packages:
   /jiti@1.20.0:
     resolution: {integrity: sha512-3TV69ZbrvV6U5DfQimop50jE9Dl6J8O1ja1dvBbMba/sZ3YBEQqJ2VZRoQPVnhlzjNtU1vaXRZVrVjU4qtm8yA==}
     hasBin: true
+
+  /jotai-tanstack-query@0.7.2(@tanstack/query-core@5.4.3)(jotai@2.5.0):
+    resolution: {integrity: sha512-acwJJf4HKgs4c0mtgRJEvdL7jqQnKcT0ARvs33weGysLpQ8L1S3SqPPoMeHuLDz6vREcocsVFRZ5RsB7rJJHZQ==}
+    peerDependencies:
+      '@tanstack/query-core': '*'
+      jotai: '>=1.11.0'
+    dependencies:
+      '@tanstack/query-core': 5.4.3
+      jotai: 2.5.0(@types/react@18.0.17)(react@18.2.0)
+    dev: false
 
   /jotai@2.5.0(@types/react@18.0.17)(react@18.2.0):
     resolution: {integrity: sha512-iPJDFrhNw3KU4o4SSAESeZoW+nM1L/76VULXZWF23qmivBEcbAQjiF5n1W4Hn5dXAol4tmtEYe4HH7d9emEz0Q==}
