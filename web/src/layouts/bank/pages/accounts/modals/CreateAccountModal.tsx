@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useModal } from '@/components/ModalsProvider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { fetchNui } from '@/utils/fetchNui';
-import { Loader2 } from 'lucide-react';
+import SpinningLoader from '@/components/SpinningLoader';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name must have at least 1 character'),
@@ -63,7 +63,7 @@ const CreateAccountModal: React.FC = () => {
           )}
         />
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? <Loader2 className="animate-spin" /> : 'Confirm'}
+          {isLoading ? <SpinningLoader /> : 'Confirm'}
         </Button>
       </form>
     </Form>

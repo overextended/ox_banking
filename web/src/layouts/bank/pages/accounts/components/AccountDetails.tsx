@@ -6,9 +6,11 @@ import AccountButton from '@/layouts/bank/pages/accounts/components/AccountButto
 import WithdrawModal from '@/layouts/bank/pages/accounts/modals/WithdrawModal';
 import BaseCard from '@/layouts/bank/components/BaseCard';
 import { useModal } from '@/components/ModalsProvider';
+import { useActiveAccountId } from '@/state/accounts/accounts';
 
 const AccountDetails: React.FC = () => {
   const modal = useModal();
+  const accountId = useActiveAccountId()!;
 
   return (
     <BaseCard title="Details" icon={ScanText} className="flex-1">
@@ -55,7 +57,7 @@ const AccountDetails: React.FC = () => {
           onClick={() =>
             modal.open({
               title: 'Withdraw',
-              children: <WithdrawModal />,
+              children: <WithdrawModal accountId={accountId} />,
             })
           }
         />
