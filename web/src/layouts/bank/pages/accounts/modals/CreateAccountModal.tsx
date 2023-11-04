@@ -7,6 +7,8 @@ import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useModal } from '@/components/ModalsProvider';
 import { Checkbox } from '@/components/ui/checkbox';
+import { fetchNui } from '@/utils/fetchNui';
+import { Loader2 } from 'lucide-react';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name must have at least 1 character'),
@@ -14,6 +16,7 @@ const formSchema = z.object({
 });
 
 const CreateAccountModal: React.FC = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
   const modal = useModal();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -23,8 +26,10 @@ const CreateAccountModal: React.FC = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
+    await fetchNui('createAccount', values, { data: true, delay: 1500 });
+    setIsLoading(false);
     modal.close();
   };
 
@@ -57,8 +62,8 @@ const CreateAccountModal: React.FC = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
-          Confirm
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? <Loader2 className="animate-spin" /> : 'Confirm'}
         </Button>
       </form>
     </Form>
