@@ -1,28 +1,12 @@
-import { Box, createStyles } from '@mantine/core';
-import ATM from './layouts/atm';
-import Bank from './layouts/bank';
-import Dev from './layouts/dev';
-import { isEnvBrowser } from './utils/misc';
-
-const useStyles = createStyles((theme) => ({
-  container: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-}));
+import React from 'react';
+import Bank from '@/layouts/bank/Bank';
 
 const App: React.FC = () => {
-  const { classes } = useStyles();
 
   return (
-    <Box className={classes.container}>
+    <div className='flex w-full h-full items-center justify-center'>
       <Bank />
-      <ATM />
-      {isEnvBrowser() && <Dev />}
-    </Box>
+    </div>
   );
 };
 

@@ -1,13 +1,12 @@
-import { MantineProvider } from '@mantine/core';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
-import { customTheme } from './theme';
 import { HashRouter } from 'react-router-dom';
 import { isEnvBrowser } from './utils/misc';
-import { ModalsProvider } from '@mantine/modals';
-import { RecoilRoot } from 'recoil';
+import { ThemeProvider } from '@/components/ThemeProvider';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 if (isEnvBrowser()) {
   const root = document.getElementById('root');
@@ -19,24 +18,18 @@ if (isEnvBrowser()) {
   root!.style.backgroundPosition = 'center';
 }
 
+export const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <HashRouter>
-      <MantineProvider withNormalizeCSS withGlobalStyles theme={customTheme}>
-        <RecoilRoot>
-          <ModalsProvider
-            modalProps={{
-              centered: true,
-              size: 'xs',
-              transition: 'slide-up',
-              // Modals would overflow the page with slide-up transition
-              styles: { inner: { overflow: 'hidden' } },
-            }}
-          >
+    <QueryClientProvider client={queryClient}>
+      <HashRouter>
+        <ThemeProvider defaultTheme="dark" storageKey="ox_banking-theme">
+          <TooltipProvider disableHoverableContent delayDuration={0}>
             <App />
-          </ModalsProvider>
-        </RecoilRoot>
-      </MantineProvider>
-    </HashRouter>
+          </TooltipProvider>
+        </ThemeProvider>
+      </HashRouter>
+    </QueryClientProvider>
   </React.StrictMode>
 );
