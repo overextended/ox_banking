@@ -4,8 +4,11 @@ import ThemeSwitcher from '@/layouts/bank/components/ThemeSwitcher';
 import NavLink from '@/layouts/bank/components/NavLink';
 import NavItem from '@/layouts/bank/components/NavItem';
 import locales from '@/locales';
+import { useSetBankVisibility } from '@/state/visibility';
 
 const Navbar: React.FC = () => {
+  const setBankVisibility = useSetBankVisibility();
+
   return (
     <nav className="flex shrink-0 flex-col items-center justify-between border-r border-r-border p-2">
       <div className="flex flex-col items-center justify-center">
@@ -16,7 +19,7 @@ const Navbar: React.FC = () => {
 
       <div className="flex flex-col items-center justify-center">
         <ThemeSwitcher />
-        <NavItem exit label={locales.exit} icon={LogOut} onClick={() => {}} variant="ghost" />
+        <NavItem exit label={locales.exit} icon={LogOut} onClick={() => setBankVisibility(false)} variant="ghost" />
       </div>
     </nav>
   );
