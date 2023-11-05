@@ -51,7 +51,7 @@ const OverviewChart: React.FC = () => {
           axisLine={false}
           tickFormatter={(value) => `$${value}`}
         />
-        <Tooltip animationDuration={100} contentStyle = {{ backgroundColor: "hsl(var(--background)/0.95)", borderRadius: "1em", border: "1px solid hsl(var(--foreground)/0.1)" }}/>
+        <Tooltip animationDuration={100} contentStyle = {{ backgroundColor: "hsl(var(--background)/0.8)", borderRadius: "1em", border: "1px solid hsl(var(--foreground)/0.1)", backdropFilter: "blur(4px)" }}/>
         <Line type='monotone' dataKey='income' stroke='hsl(var(--primary))' strokeWidth={3} dot={false} />
         <Line type='monotone' dataKey='expenses' stroke='hsl(var(--destructive))' strokeWidth={3} dot={false} />
       </LineChart>
