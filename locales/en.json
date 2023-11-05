@@ -30,5 +30,15 @@
   "convert_to_shared": "Convert to shared",
   "rename": "Rename",
   "manage_access": "Manage access",
-  "delete_account": "Delete account"
+  "delete_account": "Delete account",
+  "amount": "Amount",
+  "amount_greater_than_zero": "Amount should be a number greater than 0",
+  "field_required": "%s is required",
+  "available_balance": "Available balance: %s",
+  "available_cash": "Available cash: %s",
+  "target": "Target",
+  "invalid_account_number": "Invalid account number",
+  "account": "Account",
+  "person": "Person",
+  "transfer_to": "Transfer to"
 }

@@ -10,15 +10,15 @@ import { fetchNui } from '@/utils/fetchNui';
 import SpinningLoader from '@/components/SpinningLoader';
 import { formatNumber } from '@/utils/formatNumber';
 import { Account } from '@/typings/accounts';
+import locales from '@/locales';
 
 const formSchema = z.object({
   amount: z
     .string({
       coerce: true,
-      invalid_type_error: 'Amount must be a number',
-      required_error: 'Amount is required',
+      required_error: locales.field_required.format(locales.amount),
     })
-    .min(1, 'Amount should be a number greater than 0'),
+    .min(1, locales.amount_greater_than_zero),
 });
 
 const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> = ({ account, isDeposit }) => {
@@ -37,7 +37,7 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
     if (!schema.safeParse(+values.amount).success)
       return form.setError('amount', {
         type: 'value',
-        message: 'Amount should be a number greater than 0',
+        message: locales.amount_greater_than_zero,
       });
 
     setIsLoading(true);
@@ -60,11 +60,11 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
         <FormField
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Amount</FormLabel>
+              <FormLabel>{locales.amount}</FormLabel>
               <FormDescription>
                 {!isDeposit
-                  ? `Available balance: ${formatNumber(account.balance)}`
-                  : `Available cash: ${formatNumber(2400)}`}
+                  ? locales.available_balance.format(formatNumber(account.balance))
+                  : locales.available_cash.format(formatNumber(13200))}
               </FormDescription>
               <FormControl>
                 <Input {...field} />
@@ -75,7 +75,7 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
           name="amount"
         />
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? <SpinningLoader /> : 'Confirm'}
+          {isLoading ? <SpinningLoader /> : locales.confirm}
         </Button>
       </form>
     </Form>

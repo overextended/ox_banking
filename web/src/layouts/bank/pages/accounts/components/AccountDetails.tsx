@@ -73,7 +73,11 @@ const AccountDetails: React.FC = () => {
             })
           }
         />
-        <AccountButton label={locales.transfer} icon={Repeat} />
+        <AccountButton
+          label={locales.transfer}
+          icon={Repeat}
+          onClick={() => modal.open({ title: locales.transfer, children: <TransferModal account={account} /> })}
+        />
         <AccountButton label={locales.logs} icon={History} />
       </div>
     </BaseCard>
