@@ -26,7 +26,27 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
     []
   );
 
+  const originalBalance: number = isDeposit ? 0 : account.balance;
+  const [balanceLeft, setBalanceLeft] = React.useState<number>(originalBalance);
+  const [balanceInput, setBalanceInput] = React.useState<number>(0);
   const [isLoading, setIsLoading] = React.useState(false);
+  
+  const handleEnterValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBalanceInput(Number(event.target.value.replace(/[^0-9]/g, '')));
+  };
+
+  React.useEffect(() => {
+    const recalculateBalanceLeft = () => {
+      setBalanceLeft(originalBalance - balanceInput);
+    }
+
+    const debounceTimeout = setTimeout(recalculateBalanceLeft, 100);
+
+    return () => {
+      clearTimeout(debounceTimeout);
+    };
+  }, [balanceInput, setBalanceInput]);
+
   const modal = useModal();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -67,18 +87,19 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
               <FormLabel>{locales.amount}</FormLabel>
               <FormDescription>
                 {!isDeposit
-                  ? locales.available_balance.format(formatNumber(account.balance))
-                  : locales.available_cash.format(formatNumber(13200))}
+                  ? locales.available_balance.format(formatNumber(balanceLeft))
+                  : locales.available_cash.format(formatNumber(balanceLeft))}
               </FormDescription>
-              <FormControl>
-                <Input {...field} />
+              <FormControl onChange={handleEnterValue}>
+              <Input className={`${balanceLeft < 0 && 'focus-visible:border-destructive'}`} {...field} />
+
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
           name="amount"
         />
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button type="submit" disabled={isDeposit ? balanceLeft <= 0 : balanceLeft < 0 || isLoading} className="w-full">
           {isLoading ? <SpinningLoader /> : locales.confirm}
         </Button>
       </form>
