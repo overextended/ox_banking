@@ -4,8 +4,6 @@ import { Account } from '@/typings/accounts';
 import { queryClient } from '@/main';
 import { fetchNui } from '@/utils/fetchNui';
 
-const activeAccountIdAtom = atom<number | null>(null);
-
 const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Account[] }>(
   () => ({
     queryKey: ['accounts'],
@@ -80,6 +78,8 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
   () => queryClient
 );
 
+const activeAccountAtom = atom<Account | null>(null);
+
 export const useAccounts = () => useAtomValue(accountsDataAtom);
-export const useActiveAccountId = () => useAtomValue(activeAccountIdAtom);
-export const useSetActiveAccountId = () => useSetAtom(activeAccountIdAtom);
+export const useActiveAccount = () => useAtomValue(activeAccountAtom);
+export const useSetActiveAccount = () => useSetAtom(activeAccountAtom);

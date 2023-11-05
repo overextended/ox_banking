@@ -6,12 +6,12 @@ import AccountButton from '@/layouts/bank/pages/accounts/components/AccountButto
 import WithdrawModal from '@/layouts/bank/pages/accounts/modals/WithdrawModal';
 import BaseCard from '@/layouts/bank/components/BaseCard';
 import { useModal } from '@/components/ModalsProvider';
-import { useActiveAccountId } from '@/state/accounts/accounts';
+import { useActiveAccount } from '@/state/accounts/accounts';
 import locales from '@/locales';
 
 const AccountDetails: React.FC = () => {
   const modal = useModal();
-  const accountId = useActiveAccountId()!;
+  const account = useActiveAccount()!;
 
   return (
     <BaseCard title="Details" icon={ScanText} className="flex-1">
@@ -19,7 +19,7 @@ const AccountDetails: React.FC = () => {
         <div className="flex flex-col gap-4">
           <div className="flex flex-col">
             <p className="text-xs text-muted-foreground">{locales.account_name}</p>
-            <p>Personal</p>
+            <p>{account.label}</p>
           </div>
           <div className="flex flex-col">
             <p className="text-xs text-muted-foreground">{locales.account_type}</p>
@@ -30,7 +30,7 @@ const AccountDetails: React.FC = () => {
           <div className="flex flex-col">
             <p className="text-xs text-muted-foreground">{locales.account_number}</p>
             <div className="flex items-center gap-2">
-              <p>{Math.trunc(Math.random() * 1000000)}</p>
+              <p>{account.id}</p>
               <Tooltip delayDuration={200}>
                 <TooltipTrigger asChild>
                   <button className="flex items-center">
@@ -43,12 +43,12 @@ const AccountDetails: React.FC = () => {
           </div>
           <div className="flex flex-col">
             <p className="text-xs text-muted-foreground">{locales.disposable_amount}</p>
-            <p>{formatNumber(Math.trunc(Math.random() * 1000000))}</p>
+            <p>{formatNumber(account.balance)}</p>
           </div>
         </div>
         <div className="flex flex-col">
           <p className="text-xs text-muted-foreground">{locales.account_owner}</p>
-          <p>Jack Sparrow</p>
+          <p>{account.owner}</p>
         </div>
       </div>
       <div className="flex h-full flex-col gap-2">
@@ -58,7 +58,7 @@ const AccountDetails: React.FC = () => {
           onClick={() =>
             modal.open({
               title: locales.withdraw,
-              children: <WithdrawModal accountId={accountId} />,
+              children: <WithdrawModal accountId={account.id} />,
             })
           }
         />
