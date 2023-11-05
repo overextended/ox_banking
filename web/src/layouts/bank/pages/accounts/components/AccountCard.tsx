@@ -21,11 +21,11 @@ const AccountCard: React.FC<Props> = ({ account, active }) => {
       className={cn(
         'flex w-[250px] flex-col rounded-lg border bg-background p-4 shadow transition-all hover:-translate-y-1 hover:scale-105 hover:cursor-pointer hover:bg-secondary',
         active &&
-          'border-transparent bg-primary/20 text-primary-foreground hover:transform-none hover:cursor-auto hover:bg-primary/20'
+          'border-transparent bg-primary text-primary-foreground hover:transform-none hover:cursor-auto hover:bg-primary dark:bg-primary/20'
       )}
     >
       <h2>{account.label}</h2>
-      <p className="mb-4 text-sm text-muted-foreground">
+      <p className={cn('mb-4 text-sm text-muted-foreground', active && 'text-primary-foreground')}>
         {account.type === 'personal'
           ? locales.personal_account
           : account.type === 'shared'
@@ -33,8 +33,10 @@ const AccountCard: React.FC<Props> = ({ account, active }) => {
           : locales.group_account}
       </p>
       <div className="flex items-center justify-between">
-        <p className="text-xs text-muted-foreground">{formatNumber(account.balance)}</p>
-        <p className="text-xs text-muted-foreground">{account.id}</p>
+        <p className={cn('text-xs text-muted-foreground', active && 'text-primary-foreground')}>
+          {formatNumber(account.balance)}
+        </p>
+        <p className={cn('text-xs text-muted-foreground', active && 'text-primary-foreground')}>{account.id}</p>
       </div>
     </div>
   );
