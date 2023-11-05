@@ -5,6 +5,7 @@ import NavLink from '@/layouts/bank/components/NavLink';
 import NavItem from '@/layouts/bank/components/NavItem';
 import locales from '@/locales';
 import { useSetBankVisibility } from '@/state/visibility';
+import { fetchNui } from '@/utils/fetchNui';
 
 const Navbar: React.FC = () => {
   const setBankVisibility = useSetBankVisibility();
@@ -19,7 +20,16 @@ const Navbar: React.FC = () => {
 
       <div className="flex flex-col items-center justify-center">
         <ThemeSwitcher />
-        <NavItem exit label={locales.exit} icon={LogOut} onClick={() => setBankVisibility(false)} variant="ghost" />
+        <NavItem
+          exit
+          label={locales.exit}
+          icon={LogOut}
+          onClick={() => {
+            setBankVisibility(false);
+            fetchNui('exit');
+          }}
+          variant="ghost"
+        />
       </div>
     </nav>
   );

@@ -1,4 +1,7 @@
 local oxTarget = GetConvar('ox_enableTarget', 'false') == 'true'
+local hasLoadedUi = false
+
+lib.locale()
 
 local ATMProps = {
 	`prop_atm_01`,
@@ -19,31 +22,62 @@ local function createBankBlip(coords)
     EndTextCommandSetBlipName(blip)
 end
 
+RegisterNUICallback('getAccounts', function(data, cb)
+    cb({
+        {
+            id = 932122,
+            balance = 24921,
+            isDefault = true,
+            label = 'Personal',
+            owner = 'Svetozar Miletić',
+            type = 'personal',
+            },
+            {
+            id = 192211,
+            balance = 3500,
+            isDefault = true,
+            label = 'Paycheck',
+            owner = 'Svetozar Miletić',
+            type = 'personal',
+            },
+            {
+            id = 523116,
+            balance = 142391,
+            isDefault = false,
+            label = 'LSPD',
+            owner = 'LSPD',
+            type = 'group',
+            },
+    })
+end)
+
 local function openUI(isATM)
-    local cash = exports.ox_inventory:Search('count', 'money')
-    local accounts = lib.callback.await('ox_banking:getPlayerAccounts')
+    if not hasLoadedUi then
+        SendNUIMessage{
+            action = 'setInitData',
+            data = {
+                locales = lib.getLocales()
+            }
+        }
+        hasLoadedUi = true
+    end
+
     if not isATM then
         SendNUIMessage({
-            action = 'setBankVisible',
-            data = {
-                character = {
-                    cashBalance = cash,
-                    groups = player.groups
-                },
-                accounts = accounts
-            }
+            action = 'openBank',
+            data = {}
         })
     else
-        SendNUIMessage({
-            action = 'setAtmVisible',
-            data = {
-                character = {
-                    cashBalance = cash,
-                    groups = player.groups
-                },
-                accounts = accounts
-            }
-        })
+        -- SendNUIMessage({
+        --     action = 'setAtmVisible',
+        --     data = {
+        --         character = {
+        --             cashBalance = cash,
+        --             groups = player.groups
+        --         },
+        --         accounts = accounts
+        --     }
+        -- })
     end
     SetNuiFocus(true, true)
 end

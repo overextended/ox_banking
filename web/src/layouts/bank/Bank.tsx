@@ -7,21 +7,27 @@ import ModalsProvider from '@/components/ModalsProvider';
 import { useSetModalContainer } from '@/state/modals';
 import { useBankVisibility, useSetBankVisibility } from '@/state/visibility';
 import { useNuiEvent } from '@/hooks/useNuiEvent';
-import { debugData } from '@/utils/debugData';
+import { default as locales, setLocale } from '../../locales';
+import { fetchNui } from '@/utils/fetchNui';
 
 const Bank: React.FC = () => {
   const setContainer = useSetModalContainer();
   const visible = useBankVisibility();
   const setVisible = useSetBankVisibility();
 
-  useNuiEvent('openBank', () => {
+  useNuiEvent('setInitData', (data: { locales: typeof locales }) => {
+    console.log('set');
+    setLocale(data.locales);
+  });
+
+  useNuiEvent('openBank', (data) => {
     setVisible(true);
   });
 
   const handleESC = (e: KeyboardEvent) => {
-    console.log(e.key);
     if (e.key !== 'Escape') return;
     setVisible(false);
+    fetchNui('exit');
   };
 
   React.useEffect(() => {

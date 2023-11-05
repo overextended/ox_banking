@@ -13,13 +13,16 @@ import locales from '@/locales';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Account } from '@/typings/accounts';
 
-const formSchema = z.object({
-  transferType: z.string(),
-  target: z.string().min(1, locales.field_required.format(locales.target)),
-  amount: z.string().min(1, locales.field_required.format(locales.amount)),
-});
-
 const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
+  const formSchema = React.useMemo(
+    () =>
+      z.object({
+        transferType: z.string(),
+        target: z.string().min(1, locales.field_required.format(locales.target)),
+        amount: z.string().min(1, locales.field_required.format(locales.amount)),
+      }),
+    []
+  );
   const [isLoading, setIsLoading] = React.useState(false);
   const modal = useModal();
 

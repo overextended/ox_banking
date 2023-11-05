@@ -1,0 +1,18 @@
+{
+  "type": "module",
+  "scripts": {
+    "build": "node build.js --mode=production",
+    "watch": "node build.js"
+  },
+  "devDependencies": {
+    "@citizenfx/client": "latest",
+    "@citizenfx/server": "latest",
+    "@types/node": "^16.18.46",
+    "esbuild": "^0.14.54"
+  },
+  "dependencies": {
+    "@overextended/ox_core": "latest",
+    "@overextended/ox_lib": "^3.9.0",
+    "@overextended/oxmysql": "latest"
+  }
+}

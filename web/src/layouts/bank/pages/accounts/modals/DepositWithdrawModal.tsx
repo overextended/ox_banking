@@ -12,16 +12,20 @@ import { formatNumber } from '@/utils/formatNumber';
 import { Account } from '@/typings/accounts';
 import locales from '@/locales';
 
-const formSchema = z.object({
-  amount: z
-    .string({
-      coerce: true,
-      required_error: locales.field_required.format(locales.amount),
-    })
-    .min(1, locales.amount_greater_than_zero),
-});
-
 const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> = ({ account, isDeposit }) => {
+  const formSchema = React.useMemo(
+    () =>
+      z.object({
+        amount: z
+          .string({
+            coerce: true,
+            required_error: locales.field_required.format(locales.amount),
+          })
+          .min(1, locales.amount_greater_than_zero),
+      }),
+    []
+  );
+
   const [isLoading, setIsLoading] = React.useState(false);
   const modal = useModal();
   const form = useForm<z.infer<typeof formSchema>>({

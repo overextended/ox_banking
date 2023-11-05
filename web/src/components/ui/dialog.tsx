@@ -20,7 +20,7 @@ const DialogOverlay = React.forwardRef<
     ref={ref}
     forceMount
     className={cn(
-      'absolute z-50 h-full w-full rounded-lg bg-background/80 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+      'absolute z-50 h-full w-full rounded-lg bg-background/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
       className
     )}
     {...props}
