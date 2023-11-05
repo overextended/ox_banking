@@ -8,6 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useModal } from '@/components/ModalsProvider';
 import { fetchNui } from '@/utils/fetchNui';
 import SpinningLoader from '@/components/SpinningLoader';
+import { formatNumber } from '@/utils/formatNumber';
+import { Account } from '@/typings/accounts';
 
 const formSchema = z.object({
   amount: z
@@ -19,7 +21,7 @@ const formSchema = z.object({
     .min(1, 'Amount should be a number greater than 0'),
 });
 
-const WithdrawModal: React.FC<{ accountId: number }> = ({ accountId }) => {
+const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> = ({ account, isDeposit }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const modal = useModal();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -39,7 +41,14 @@ const WithdrawModal: React.FC<{ accountId: number }> = ({ accountId }) => {
       });
 
     setIsLoading(true);
-    await fetchNui('withdrawMoney', { accountId, amount: values.amount }, { data: true, delay: 1500 });
+    await fetchNui(
+      !isDeposit ? 'withdrawMoney' : 'depositMoney',
+      { accountId: account.id, amount: values.amount },
+      {
+        data: true,
+        delay: 1500,
+      }
+    );
     setIsLoading(false);
     console.log(values);
     modal.close();
@@ -52,7 +61,11 @@ const WithdrawModal: React.FC<{ accountId: number }> = ({ accountId }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Amount</FormLabel>
-              <FormDescription>Available cash: $1,300</FormDescription>
+              <FormDescription>
+                {!isDeposit
+                  ? `Available balance: ${formatNumber(account.balance)}`
+                  : `Available cash: ${formatNumber(2400)}`}
+              </FormDescription>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -69,4 +82,4 @@ const WithdrawModal: React.FC<{ accountId: number }> = ({ accountId }) => {
   );
 };
 
-export default WithdrawModal;
+export default DepositWithdrawModal;

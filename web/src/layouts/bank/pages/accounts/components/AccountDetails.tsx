@@ -3,11 +3,12 @@ import { Copy, History, Landmark, Repeat, ScanText, Wallet } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { formatNumber } from '@/utils/formatNumber';
 import AccountButton from '@/layouts/bank/pages/accounts/components/AccountButton';
-import WithdrawModal from '@/layouts/bank/pages/accounts/modals/WithdrawModal';
+import DepositWithdrawModal from '@/layouts/bank/pages/accounts/modals/DepositWithdrawModal';
 import BaseCard from '@/layouts/bank/components/BaseCard';
 import { useModal } from '@/components/ModalsProvider';
 import { useActiveAccount } from '@/state/accounts/accounts';
 import locales from '@/locales';
+import TransferModal from '@/layouts/bank/pages/accounts/modals/TransferModal';
 
 const AccountDetails: React.FC = () => {
   const modal = useModal();
@@ -58,11 +59,20 @@ const AccountDetails: React.FC = () => {
           onClick={() =>
             modal.open({
               title: locales.withdraw,
-              children: <WithdrawModal accountId={account.id} />,
+              children: <DepositWithdrawModal account={account} />,
             })
           }
         />
-        <AccountButton label={locales.deposit} icon={Landmark} />
+        <AccountButton
+          label={locales.deposit}
+          icon={Landmark}
+          onClick={() =>
+            modal.open({
+              title: locales.deposit,
+              children: <DepositWithdrawModal account={account} isDeposit={true} />,
+            })
+          }
+        />
         <AccountButton label={locales.transfer} icon={Repeat} />
         <AccountButton label={locales.logs} icon={History} />
       </div>
