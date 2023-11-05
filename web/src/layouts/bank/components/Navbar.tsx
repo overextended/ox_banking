@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
   const setBankVisibility = useSetBankVisibility();
 
   return (
-    <nav className="flex shrink-0 flex-col items-center justify-between border-r border-r-border p-2">
+    <nav className="flex shrink-0 flex-col items-center justify-between rounded-bl-lg rounded-tl-lg bg-card p-2">
       <div className="flex flex-col items-center justify-center">
         <NavLink icon={LayoutDashboard} label={locales.dashboard} path="/" />
         <NavLink icon={CreditCard} label={locales.accounts} path="/accounts" />

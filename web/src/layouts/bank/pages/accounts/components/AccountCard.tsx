@@ -20,7 +20,8 @@ const AccountCard: React.FC<Props> = ({ account, active }) => {
       }}
       className={cn(
         'flex w-[250px] flex-col rounded-lg border bg-background p-4 shadow transition-all hover:-translate-y-1 hover:scale-105 hover:cursor-pointer hover:bg-secondary',
-        active && 'bg-primary text-primary-foreground hover:transform-none hover:cursor-auto hover:bg-primary'
+        active &&
+          'border-transparent bg-primary/20 text-primary-foreground hover:transform-none hover:cursor-auto hover:bg-primary/20'
       )}
     >
       <h2>{account.label}</h2>
