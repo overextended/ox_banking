@@ -2,7 +2,7 @@ import React from 'react';
 import { formatNumber } from '@/utils/formatNumber';
 import { cn } from '@/lib/utils';
 import { useSetActiveAccount } from '@/state/accounts';
-import { Account } from '@/typings/accounts';
+import { Account } from '@/typings';
 import locales from '@/locales';
 
 interface Props {

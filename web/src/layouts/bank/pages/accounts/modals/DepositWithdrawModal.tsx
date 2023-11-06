@@ -9,7 +9,7 @@ import { useModal } from '@/components/ModalsProvider';
 import { fetchNui } from '@/utils/fetchNui';
 import SpinningLoader from '@/components/SpinningLoader';
 import { formatNumber } from '@/utils/formatNumber';
-import { Account } from '@/typings/accounts';
+import { Account } from '@/typings';
 import locales from '@/locales';
 
 const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> = ({ account, isDeposit }) => {

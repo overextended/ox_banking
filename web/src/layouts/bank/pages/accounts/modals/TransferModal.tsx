@@ -11,7 +11,7 @@ import { fetchNui } from '@/utils/fetchNui';
 import { useModal } from '@/components/ModalsProvider';
 import locales from '@/locales';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Account } from '@/typings/accounts';
+import { Account } from '@/typings';
 
 const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
   const formSchema = React.useMemo(

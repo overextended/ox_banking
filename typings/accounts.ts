@@ -5,5 +5,5 @@ export interface Account {
   group?: string;
   balance: number;
   isDefault: boolean;
-  type: 'personal' | 'shared' | 'group';
+  type: "personal" | "shared" | "group";
 }

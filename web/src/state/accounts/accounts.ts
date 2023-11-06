@@ -1,6 +1,6 @@
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { atomsWithQuery } from 'jotai-tanstack-query';
-import { Account } from '@/typings/accounts';
+import { Account } from '@/typings';
 import { queryClient } from '@/main';
 import { fetchNui } from '@/utils/fetchNui';
 

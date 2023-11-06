@@ -41,6 +41,7 @@ ui_page 'web/build/index.html'
 
 files {
     'locales/*.json',
+    'data/*.json',
     'web/build/index.html',
     'web/build/**/*',
 }
