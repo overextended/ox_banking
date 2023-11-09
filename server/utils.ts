@@ -7,7 +7,7 @@ export const generateAccountNumber = () => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-export const createDefaultAccount = async (charId: number) => {
+export const getAvailableAccountId = async () => {
   while (true) {
     const accountNumber = generateAccountNumber();
 
@@ -15,9 +15,20 @@ export const createDefaultAccount = async (charId: number) => {
 
     if (isNumberTaken) continue;
 
-    // todo: locale for label
-    await oxmysql.prepare<number>('INSERT INTO `accounts` (`accountId`, `label` `owner`, `balance`, `isDefault`) VALUES (?, ?, ?, ?)', [accountNumber, 'Personal', charId, 0, true]);
-
-    break;
+    return accountNumber;
   }
+};
+
+export const createDefaultAccount = async (charId: number) => {
+  const accountId = await getAvailableAccountId();
+
+  await oxmysql.prepare<number>('INSERT INTO `accounts` (`accountId`, `label`, `owner`, `isDefault`) VALUES (?, ?, ?, ?)', [accountId, 'Personal', charId, true]);
+};
+
+export const createNewAccount = async (charId: number, name: string) => {
+  const accountId = await getAvailableAccountId();
+
+  await oxmysql.prepare('INSERT INTO `accounts` (`accountId`, `label`, `owner`) VALUES (?, ?, ?)', [accountId, name, charId]);
+
+  return accountId;
 };

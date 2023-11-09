@@ -1,6 +1,6 @@
 import { onClientCallback } from '@overextended/ox_lib/server';
 import type { Account, DatabaseAccount } from '../typings';
-import { createDefaultAccount } from './utils';
+import { createDefaultAccount, createNewAccount } from './utils';
 import { oxmysql } from '@overextended/oxmysql';
 import { GetPlayer } from '@overextended/ox_core/server';
 
@@ -32,6 +32,16 @@ onClientCallback('getAccounts', async (playerId): Promise<Account[]> => {
   }));
 
   return accounts;
+});
+
+onClientCallback('createAccount', async (playerId: number, data: { name: string; shared: boolean }) => {
+  const player = GetPlayer(playerId);
+
+  if (!player) return;
+
+  const { name, shared } = data;
+
+  return await createNewAccount(player.charId, name);
 });
 
 on('ox:playerLoaded', async (source: number, userId: number, charId: number) => {

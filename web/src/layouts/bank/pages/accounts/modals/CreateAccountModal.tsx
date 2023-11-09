@@ -10,6 +10,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { fetchNui } from '@/utils/fetchNui';
 import SpinningLoader from '@/components/SpinningLoader';
 import locales from '@/locales';
+import { queryClient } from '@/main';
+import { Account } from '../../../../../../../typings';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name must have at least 1 character'),
@@ -29,7 +31,9 @@ const CreateAccountModal: React.FC = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
-    await fetchNui('createAccount', values, { data: true, delay: 1500 });
+    const accountId = await fetchNui<number | false>('createAccount', values, { data: 313221, delay: 1500 });
+    // todo: probably setQueriesData rather than invalidate
+    await queryClient.invalidateQueries({ queryKey: ['accounts'] });
     setIsLoading(false);
     modal.close();
   };

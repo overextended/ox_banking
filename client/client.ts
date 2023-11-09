@@ -77,3 +77,4 @@ RegisterNuiCallback('exit', () => {
 });
 
 serverNuiCallback('getAccounts');
+serverNuiCallback('createAccount');
