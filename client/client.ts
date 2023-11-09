@@ -78,3 +78,4 @@ RegisterNuiCallback('exit', () => {
 
 serverNuiCallback('getAccounts');
 serverNuiCallback('createAccount');
+serverNuiCallback('deleteAccount');

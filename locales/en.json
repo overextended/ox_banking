@@ -1,5 +1,6 @@
 {
   "confirm": "Confirm",
+  "cancel": "Cancel",
   "dashboard": "Dashboard",
   "accounts": "Accounts",
   "logs": "Logs",
@@ -40,5 +41,7 @@
   "invalid_account_number": "Invalid account number",
   "account": "Account",
   "person": "Person",
-  "transfer_to": "Transfer to"
+  "transfer_to": "Transfer to",
+  "delete_account_message": "Are you sure you want to delete the \"%s\" account?",
+  "delete_account_warning": "This action is irreversible and the funds will be transferred to your main account."
 }

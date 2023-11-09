@@ -44,6 +44,20 @@ onClientCallback('createAccount', async (playerId: number, data: { name: string;
   return await createNewAccount(player.charId, name);
 });
 
+onClientCallback('deleteAccount', async (playerId: number, accountId: number) => {
+  const player = GetPlayer(playerId);
+
+  if (!player) return;
+
+  const account = await oxmysql.prepare('SELECT 1 FROM `accounts` WHERE `accountId` = ? AND `owner` = ?', [accountId, player.charId]);
+
+  if (!account) return;
+
+  await oxmysql.prepare('DELETE FROM `accounts` WHERE accountId = ?', [accountId]);
+
+  return true;
+});
+
 on('ox:playerLoaded', async (source: number, userId: number, charId: number) => {
   const charAccounts: DatabaseAccount[] = await exports.ox_core.GetCharacterAccounts(charId);
   const defaultAccounts = charAccounts.filter(account => account.isDefault);
