@@ -47,7 +47,7 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
     setIsLoading(true);
     await fetchNui(
       !isDeposit ? 'withdrawMoney' : 'depositMoney',
-      { accountId: account.id, amount: values.amount },
+      { accountId: account.accountId, amount: values.amount },
       {
         data: true,
         delay: 1500,

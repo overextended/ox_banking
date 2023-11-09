@@ -36,7 +36,7 @@ const AccountCard: React.FC<Props> = ({ account, active }) => {
         <p className={cn('text-xs text-muted-foreground', active && 'text-primary-foreground')}>
           {formatNumber(account.balance)}
         </p>
-        <p className={cn('text-xs text-muted-foreground', active && 'text-primary-foreground')}>{account.id}</p>
+        <p className={cn('text-xs text-muted-foreground', active && 'text-primary-foreground')}>{account.accountId}</p>
       </div>
     </div>
   );

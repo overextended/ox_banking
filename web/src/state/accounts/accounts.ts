@@ -11,7 +11,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
       const accounts = await fetchNui<Account[]>('getAccounts', null, {
         data: [
           {
-            id: 932122,
+            accountId: 932122,
             balance: 132032,
             isDefault: true,
             label: 'Some name',
@@ -19,7 +19,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             type: 'personal',
           },
           {
-            id: 932123,
+            accountId: 932123,
             balance: 132032,
             isDefault: true,
             label: 'Some name',
@@ -27,7 +27,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             type: 'personal',
           },
           {
-            id: 932124,
+            accountId: 932124,
             balance: 132032,
             isDefault: true,
             label: 'Some name',
@@ -35,7 +35,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             type: 'personal',
           },
           {
-            id: 932125,
+            accountId: 932125,
             balance: 132032,
             isDefault: true,
             label: 'Some name',
@@ -43,7 +43,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             type: 'personal',
           },
           {
-            id: 932126,
+            accountId: 932126,
             balance: 132032,
             isDefault: true,
             label: 'Some name',
@@ -51,7 +51,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             type: 'personal',
           },
           {
-            id: 932127,
+            accountId: 932127,
             balance: 132032,
             isDefault: true,
             label: 'Some name',
@@ -59,7 +59,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             type: 'personal',
           },
           {
-            id: 932128,
+            accountId: 932128,
             balance: 132032,
             isDefault: true,
             label: 'Some name',
@@ -68,6 +68,8 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
           },
         ],
       });
+
+      console.log(JSON.stringify(accounts, null, 2));
 
       return {
         accounts,
