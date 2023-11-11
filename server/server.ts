@@ -58,6 +58,24 @@ onClientCallback('deleteAccount', async (playerId: number, accountId: number) =>
   return true;
 });
 
+onClientCallback('depositMoney', async (playerId: number, data: { accountId: number; amount: number }) => {
+  const player = GetPlayer(playerId);
+
+  if (!player) return;
+
+  const { accountId, amount } = data;
+  const playerCash: number = exports.ox_inventory.Search(playerId, 'count', 'money'); // todo: make inventory an optional dep?
+
+  if (amount > playerCash) return;
+
+  const account = await oxmysql.prepare('SELECT 1 FROM `accounts` WHERE `id` = ? AND `owner` = ?', [accountId, player.charId]);
+
+  if (!account) return;
+
+  return await exports.ox_core.AddAccountBalance(accountId, amount);
+});
+
+
 on('ox:playerLoaded', async (source: number, userId: number, charId: number) => {
   const charAccounts: DatabaseAccount[] = await exports.ox_core.GetCharacterAccounts(charId);
   const defaultAccounts = charAccounts.filter(account => account.isDefault);
