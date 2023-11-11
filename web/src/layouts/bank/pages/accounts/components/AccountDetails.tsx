@@ -31,7 +31,7 @@ const AccountDetails: React.FC = () => {
           <div className="flex flex-col">
             <p className="text-xs text-muted-foreground">{locales.account_number}</p>
             <div className="flex items-center gap-2">
-              <p>{account.accountId}</p>
+              <p>{account.id}</p>
               <Tooltip delayDuration={200}>
                 <TooltipTrigger asChild>
                   <button className="flex items-center">

@@ -1,5 +1,5 @@
 export interface Account {
-  accountId: number;
+  id: number;
   label: string;
   owner?: string;
   group?: string;
@@ -10,7 +10,6 @@ export interface Account {
 
 export type DatabaseAccount = {
   id: number
-  accountId: number
   balance: number
   isDefault: boolean
   label: string

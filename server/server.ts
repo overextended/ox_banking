@@ -5,7 +5,7 @@ import { oxmysql } from '@overextended/oxmysql';
 import { GetPlayer } from '@overextended/ox_core/server';
 
 type GetAccountsReponse = {
-  accountId: Account['accountId'],
+  id: Account['id'],
   label?: Account['label'],
   group?: Account['group'],
   balance: Account['balance'],
@@ -19,11 +19,11 @@ onClientCallback('getAccounts', async (playerId): Promise<Account[]> => {
 
   if (!player) return;
 
-  const dbAccounts = await oxmysql.rawExecute<GetAccountsReponse[]>('SELECT a.accountId, a.label, a.group, a.balance, a.isDefault, b.firstName, b.lastName  FROM `accounts` a LEFT JOIN `characters` b ON a.owner = b.charId WHERE charId = ?', [player.charId]);
+  const dbAccounts = await oxmysql.rawExecute<GetAccountsReponse[]>('SELECT a.id, a.label, a.group, a.balance, a.isDefault, b.firstName, b.lastName  FROM `accounts` a LEFT JOIN `characters` b ON a.owner = b.charId WHERE charId = ?', [player.charId]);
 
   const accounts: Account[] = dbAccounts.map(account => ({
     group: account.group,
-    accountId: account.accountId,
+    id: account.id,
     label: account.label,
     isDefault: account.isDefault,
     balance: account.balance,
@@ -49,11 +49,11 @@ onClientCallback('deleteAccount', async (playerId: number, accountId: number) =>
 
   if (!player) return;
 
-  const account = await oxmysql.prepare('SELECT 1 FROM `accounts` WHERE `accountId` = ? AND `owner` = ?', [accountId, player.charId]);
+  const account = await oxmysql.prepare('SELECT 1 FROM `accounts` WHERE `id` = ? AND `owner` = ?', [accountId, player.charId]);
 
   if (!account) return;
 
-  await oxmysql.prepare('DELETE FROM `accounts` WHERE accountId = ?', [accountId]);
+  await oxmysql.prepare('DELETE FROM `accounts` WHERE id = ?', [accountId]);
 
   return true;
 });

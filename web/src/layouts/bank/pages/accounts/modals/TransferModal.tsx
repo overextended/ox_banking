@@ -60,7 +60,7 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
     >(
       'transferMoney',
       {
-        fromAccountId: account.accountId,
+        fromAccountId: account.id,
         target: values.target,
         transferType: values.transferType,
         amount: values.amount,

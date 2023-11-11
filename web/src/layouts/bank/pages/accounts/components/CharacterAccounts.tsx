@@ -40,11 +40,7 @@ const CharacterAccounts: React.FC = () => {
           {accountsData.accounts
             .slice(page * (MAX_ITEMS === 3 ? MAX_ITEMS : MAX_ITEMS - 1), page * MAX_ITEMS + MAX_ITEMS)
             .map((account) => (
-              <AccountCard
-                key={account.accountId}
-                account={account}
-                active={account.accountId === activeAccount?.accountId}
-              />
+              <AccountCard key={account.id} account={account} active={account.id === activeAccount?.id} />
             ))}
         </div>
         <Button

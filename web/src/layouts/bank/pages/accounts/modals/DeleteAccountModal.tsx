@@ -30,7 +30,7 @@ const DeleteAccountModal: React.FC<Props> = ({ account }) => {
           disabled={isLoading}
           onClick={async () => {
             setIsLoading(true);
-            await fetchNui('deleteAccount', account.accountId, { data: true, delay: 1500 });
+            await fetchNui('deleteAccount', account.id, { data: true, delay: 1500 });
             await queryClient.invalidateQueries({ queryKey: ['accounts'] });
             setActiveAccount(null);
             setIsLoading(false);

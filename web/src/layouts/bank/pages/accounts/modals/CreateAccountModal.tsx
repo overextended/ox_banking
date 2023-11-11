@@ -11,7 +11,6 @@ import { fetchNui } from '@/utils/fetchNui';
 import SpinningLoader from '@/components/SpinningLoader';
 import locales from '@/locales';
 import { queryClient } from '@/main';
-import { Account } from '../../../../../../../typings';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name must have at least 1 character'),

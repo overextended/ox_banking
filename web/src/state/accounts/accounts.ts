@@ -11,7 +11,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
       const accounts = await fetchNui<Account[]>('getAccounts', null, {
         data: [
           {
-            accountId: 932122,
+            id: 932122,
             balance: 132032,
             isDefault: true,
             label: 'Some name',
@@ -19,7 +19,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             type: 'personal',
           },
           {
-            accountId: 932123,
+            id: 932123,
             balance: 132032,
             isDefault: true,
             label: 'Some name',
@@ -27,7 +27,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             type: 'personal',
           },
           {
-            accountId: 932124,
+            id: 932124,
             balance: 132032,
             isDefault: true,
             label: 'Some name',
@@ -35,7 +35,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             type: 'personal',
           },
           {
-            accountId: 932125,
+            id: 932125,
             balance: 132032,
             isDefault: true,
             label: 'Some name',
@@ -43,7 +43,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             type: 'personal',
           },
           {
-            accountId: 932126,
+            id: 932126,
             balance: 132032,
             isDefault: true,
             label: 'Some name',
@@ -51,7 +51,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             type: 'personal',
           },
           {
-            accountId: 932127,
+            id: 932127,
             balance: 132032,
             isDefault: true,
             label: 'Some name',
@@ -59,7 +59,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             type: 'personal',
           },
           {
-            accountId: 932128,
+            id: 932128,
             balance: 132032,
             isDefault: true,
             label: 'Some name',
