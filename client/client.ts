@@ -2,8 +2,12 @@ import type { Vector3 } from '../typings';
 import targets from '../data/targets.json';
 import locations from '../data/locations.json';
 import { serverNuiCallback } from 'utils';
+import { getLocales, initLocale } from '@overextended/ox_lib/shared';
+
+initLocale();
 
 const usingTarget = GetConvar('ox_enableTarget', 'false') == 'true';
+let hasLoadedUi = false;
 
 const ATM_PROPS = [
   GetHashKey(`prop_atm_01`),
@@ -13,6 +17,27 @@ const ATM_PROPS = [
   GetHashKey(`v_5_b_atm1`),
   GetHashKey(`v_5_b_atm`),
 ];
+
+const openBank = () => {
+  if (!hasLoadedUi) {
+    SendNUIMessage({
+      action: 'setInitData',
+      data: {
+        locales: getLocales(),
+      },
+    });
+
+    hasLoadedUi = true;
+  }
+
+  SendNUIMessage({
+    action: 'openBank',
+    data: {},
+  });
+  SetNuiFocus(true, true);
+};
+
+exports('openBank', openBank);
 
 const createBankBlip = (coords: Vector3) => {
   const blip = AddBlipForCoord(coords.x, coords.y, coords.z);
@@ -39,7 +64,8 @@ if (usingTarget) {
       icon: 'fa-solid fa-money-check',
       label: 'Access ATM',
       onSelect: () => {
-        console.log('OPEN UI');
+        // todo: open atm
+        openBank();
       },
     },
   ]);
@@ -61,7 +87,7 @@ if (usingTarget) {
           icon: 'fa-solid fa-dollar-sign',
           label: 'Access bank',
           onSelect: () => {
-            console.log('Open UI');
+            openBank();
           },
         },
       ],

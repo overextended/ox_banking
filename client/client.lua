@@ -1,7 +1,4 @@
-local hasLoadedUi = false
 local locations = json.decode(LoadResourceFile(cache.resource, '/data/locations.json'))
-
-lib.locale()
 
 local ATMProps = {
     `prop_atm_01`,
@@ -11,24 +8,6 @@ local ATMProps = {
     `v_5_b_atm1`,
     `v_5_b_atm`,
 }
-
-local function openUI()
-    if not hasLoadedUi then
-        SendNUIMessage {
-            action = 'setInitData',
-            data = {
-                locales = lib.getLocales()
-            }
-        }
-        hasLoadedUi = true
-    end
-
-    SendNUIMessage({
-        action = 'openBank',
-        data = {}
-    })
-    SetNuiFocus(true, true)
-end
 
 if GetConvar('ox_enableTarget', 'false') == 'true' then return end
 
@@ -43,7 +22,7 @@ for i = 1, #locations do
     end
     function point:nearby()
         if self.currentDistance <= 1.5 and IsControlJustPressed(0, 38) then
-            openUI()
+            exports.ox_banking.openBank()
         end
     end
 end
@@ -64,7 +43,8 @@ CreateThread(function()
                             break
                         end
                         if IsControlJustPressed(0, 38) then
-                            openUI()
+                            -- todo: open atm
+                            exports.ox_banking.openBank()
                         end
                     until distance > 1.5
                     lib.hideTextUI()
