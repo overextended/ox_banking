@@ -106,3 +106,4 @@ serverNuiCallback('getAccounts');
 serverNuiCallback('createAccount');
 serverNuiCallback('deleteAccount');
 serverNuiCallback('depositMoney');
+serverNuiCallback('withdrawMoney');

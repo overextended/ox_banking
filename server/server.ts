@@ -64,7 +64,7 @@ onClientCallback('depositMoney', async (playerId: number, data: { accountId: num
   if (!player) return;
 
   const { accountId, amount } = data;
-  const playerCash: number = exports.ox_inventory.Search(playerId, 'count', 'money'); // todo: make inventory an optional dep?
+  const playerCash: number = exports.ox_inventory.Search(playerId, 'count', 'money');
 
   if (amount > playerCash) return;
 
@@ -73,6 +73,28 @@ onClientCallback('depositMoney', async (playerId: number, data: { accountId: num
   if (!account) return;
 
   return await exports.ox_core.AddAccountBalance(accountId, amount);
+});
+
+onClientCallback('withdrawMoney', async (playerId: number, data: { accountId: number; amount: number }) => {
+  const player = GetPlayer(playerId);
+
+  if (!player) return;
+
+  const { accountId, amount } = data;
+
+  const balance = await oxmysql.prepare<number>('SELECT `balance` FROM `accounts` WHERE `id` = ? AND `owner` = ?', [accountId, player.charId]);
+
+  if (balance === undefined || balance === null) return;
+
+  if (amount > balance) return;
+
+  const success = await exports.ox_core.RemoveAccountBalance(accountId, amount);
+
+  if (!success) return;
+
+  exports.ox_inventory.AddItem(playerId, 'money', amount);
+
+  return true;
 });
 
 
