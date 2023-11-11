@@ -72,7 +72,11 @@ onClientCallback('depositMoney', async (playerId: number, data: { accountId: num
 
   if (!account) return;
 
-  return await exports.ox_core.AddAccountBalance(accountId, amount);
+  const success = await exports.ox_core.AddAccountBalance(accountId, amount);
+
+  if (!success) return;
+
+  exports.ox_inventory.RemoveItem(playerId, 'money', amount);
 });
 
 onClientCallback('withdrawMoney', async (playerId: number, data: { accountId: number; amount: number }) => {
