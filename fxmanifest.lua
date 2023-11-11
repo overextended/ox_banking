@@ -23,17 +23,12 @@ shared_scripts {
 }
 
 client_scripts {
-    '@ox_core/imports/client.lua',
-    'data/locations.lua',
-    'data/targets.lua',
     'client/client.lua',
     'dist/client.js'
 }
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
-    '@ox_core/imports/server.lua',
-    'server/server.lua',
     'dist/server.js'
 }
 
