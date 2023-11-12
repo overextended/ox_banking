@@ -1,6 +1,6 @@
 import { onClientCallback } from '@overextended/ox_lib/server';
 import type { Account, DatabaseAccount } from '../typings';
-import { createDefaultAccount, createNewAccount } from './utils';
+import { createDefaultAccount, createNewAccount, isAccountOwner } from './utils';
 import { oxmysql } from '@overextended/oxmysql';
 import { GetPlayer } from '@overextended/ox_core/server';
 
@@ -50,9 +50,7 @@ onClientCallback('deleteAccount', async (playerId: number, accountId: number) =>
 
   if (!player) return;
 
-  const account = await oxmysql.prepare('SELECT 1 FROM `accounts` WHERE `id` = ? AND `owner` = ?', [accountId, player.charId]);
-
-  if (!account) return;
+  if (!await isAccountOwner(accountId, player.charId)) return;
 
   await oxmysql.prepare('DELETE FROM `accounts` WHERE id = ?', [accountId]);
 
@@ -69,9 +67,7 @@ onClientCallback('depositMoney', async (playerId: number, data: { accountId: num
 
   if (amount > playerCash) return;
 
-  const account = await oxmysql.prepare('SELECT 1 FROM `accounts` WHERE `id` = ? AND `owner` = ?', [accountId, player.charId]);
-
-  if (!account) return;
+  if (!await isAccountOwner(accountId, player.charId)) return;
 
   const success = await exports.ox_core.AddAccountBalance(accountId, amount);
 
