@@ -14,14 +14,18 @@ const AccountSettings: React.FC = () => {
   return (
     <BaseCard title={locales.settings} icon={Settings} className="h-fit flex-[0.75]">
       <div className="flex flex-col gap-2">
-        <AccountButton label={locales.transfer_ownership} icon={ArrowRight} />
+        <AccountButton
+          label={locales.transfer_ownership}
+          icon={ArrowRight}
+          disabled={account.type === 'personal' || account.type === 'group'}
+        />
         <AccountButton
           label={locales.convert_to_shared}
           icon={Users}
-          disabled={account.type === 'shared' || account.type === 'group'}
+          disabled={account.type === 'shared' || account.type === 'group' || account.isDefault}
         />
         <AccountButton label={locales.rename} icon={Pencil} />
-        <AccountButton label={locales.manage_access} icon={Shield} />
+        <AccountButton label={locales.manage_access} icon={Shield} disabled={account.type === 'personal'} />
         <AccountButton
           label={locales.delete_account}
           icon={Trash}
