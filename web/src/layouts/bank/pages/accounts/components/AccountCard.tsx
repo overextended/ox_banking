@@ -24,7 +24,7 @@ const AccountCard: React.FC<Props> = ({ account, active }) => {
           'border-transparent bg-primary text-primary-foreground hover:transform-none hover:cursor-auto hover:bg-primary dark:bg-primary/20'
       )}
     >
-      <h2>{account.label}</h2>
+      <h2 className="line-clamp-1">{account.label}</h2>
       <p className={cn('mb-4 text-sm text-muted-foreground', active && 'text-primary-foreground')}>
         {account.type === 'personal'
           ? locales.personal_account

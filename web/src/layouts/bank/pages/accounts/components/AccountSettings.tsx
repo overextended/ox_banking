@@ -15,7 +15,11 @@ const AccountSettings: React.FC = () => {
     <BaseCard title={locales.settings} icon={Settings} className="h-fit flex-[0.75]">
       <div className="flex flex-col gap-2">
         <AccountButton label={locales.transfer_ownership} icon={ArrowRight} />
-        <AccountButton label={locales.convert_to_shared} icon={Users} />
+        <AccountButton
+          label={locales.convert_to_shared}
+          icon={Users}
+          disabled={account.type === 'shared' || account.type === 'group'}
+        />
         <AccountButton label={locales.rename} icon={Pencil} />
         <AccountButton label={locales.manage_access} icon={Shield} />
         <AccountButton

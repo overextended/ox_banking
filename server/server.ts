@@ -10,6 +10,7 @@ type GetAccountsReponse = {
   group?: Account['group'],
   balance: Account['balance'],
   isDefault?: Account['isDefault'],
+  type: Account['type']
   firstName: string;
   lastName: string;
 }
@@ -19,7 +20,7 @@ onClientCallback('getAccounts', async (playerId): Promise<Account[]> => {
 
   if (!player) return;
 
-  const dbAccounts = await oxmysql.rawExecute<GetAccountsReponse[]>('SELECT a.id, a.label, a.group, a.balance, a.isDefault, b.firstName, b.lastName  FROM `accounts` a LEFT JOIN `characters` b ON a.owner = b.charId WHERE charId = ?', [player.charId]);
+  const dbAccounts = await oxmysql.rawExecute<GetAccountsReponse[]>('SELECT a.id, a.label, a.group, a.balance, a.isDefault, a.type, b.firstName, b.lastName  FROM `accounts` a LEFT JOIN `characters` b ON a.owner = b.charId WHERE charId = ?', [player.charId]);
 
   const accounts: Account[] = dbAccounts.map(account => ({
     group: account.group,
@@ -27,7 +28,7 @@ onClientCallback('getAccounts', async (playerId): Promise<Account[]> => {
     label: account.label,
     isDefault: account.isDefault,
     balance: account.balance,
-    type: 'personal',
+    type: account.type,
     owner: `${account.firstName} ${account.lastName}`,
   }));
 
@@ -41,7 +42,7 @@ onClientCallback('createAccount', async (playerId: number, data: { name: string;
 
   const { name, shared } = data;
 
-  return await createNewAccount(player.charId, name);
+  return await createNewAccount(player.charId, name, shared);
 });
 
 onClientCallback('deleteAccount', async (playerId: number, accountId: number) => {
