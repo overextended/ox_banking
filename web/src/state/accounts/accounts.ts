@@ -21,7 +21,6 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
           {
             id: 932123,
             balance: 132032,
-            isDefault: true,
             label: 'Some name',
             owner: 'Some owner',
             type: 'personal',
@@ -29,7 +28,6 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
           {
             id: 932124,
             balance: 132032,
-            isDefault: true,
             label: 'Some name',
             owner: 'Some owner',
             type: 'personal',
@@ -37,7 +35,6 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
           {
             id: 932125,
             balance: 132032,
-            isDefault: true,
             label: 'Some name',
             owner: 'Some owner',
             type: 'personal',
@@ -45,7 +42,6 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
           {
             id: 932126,
             balance: 132032,
-            isDefault: true,
             label: 'Some name',
             owner: 'Some owner',
             type: 'personal',
@@ -53,7 +49,6 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
           {
             id: 932127,
             balance: 132032,
-            isDefault: true,
             label: 'Some name',
             owner: 'Some owner',
             type: 'personal',
@@ -61,7 +56,6 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
           {
             id: 932128,
             balance: 132032,
-            isDefault: true,
             label: 'Some name',
             owner: 'Some owner',
             type: 'personal',

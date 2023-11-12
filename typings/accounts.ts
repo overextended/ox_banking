@@ -4,7 +4,7 @@ export interface Account {
   owner?: string;
   group?: string;
   balance: number;
-  isDefault: boolean;
+  isDefault?: boolean;
   type: 'personal' | 'shared' | 'group';
 }
 

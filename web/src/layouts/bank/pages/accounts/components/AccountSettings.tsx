@@ -22,6 +22,7 @@ const AccountSettings: React.FC = () => {
           label={locales.delete_account}
           icon={Trash}
           variant="destructive"
+          disabled={account.isDefault}
           onClick={() =>
             modal.open({
               title: locales.delete_account,
