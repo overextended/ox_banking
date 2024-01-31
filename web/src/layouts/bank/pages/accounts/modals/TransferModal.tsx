@@ -12,6 +12,7 @@ import { useModal } from '@/components/ModalsProvider';
 import locales from '@/locales';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Account } from '@/typings';
+import { Switch } from '@/components/ui/switch';
 
 const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
   const formSchema = React.useMemo(
@@ -23,6 +24,7 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
       }),
     []
   );
+  const [internalTransfer, setInternalTransfer] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const modal = useModal();
 
@@ -108,13 +110,39 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
             </FormItem>
           )}
         />
+        {form.getValues('transferType') === 'account' && (
+          <div className="flex items-center gap-2">
+            <Switch
+              id="internal-transfer"
+              checked={internalTransfer}
+              onCheckedChange={() => setInternalTransfer((prev) => !prev)}
+            />
+            <label htmlFor="internal-transfer">Internal transfer</label>
+          </div>
+        )}
         <FormField
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{form.getValues('transferType') === 'person' ? 'State ID' : 'Account number'}</FormLabel>
-              <FormDescription></FormDescription>
+              <FormLabel>
+                {form.getValues('transferType') === 'person'
+                  ? 'State ID'
+                  : internalTransfer
+                  ? 'Account'
+                  : 'Account number'}
+              </FormLabel>
               <FormControl>
-                <Input {...field} />
+                {form.getValues('transferType') === 'account' && internalTransfer ? (
+                  <Select defaultValue={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={'322142'}>Personal</SelectItem>
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Input {...field} />
+                )}
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -125,8 +153,8 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>{locales.amount}</FormLabel>
-              <FormDescription></FormDescription>
               <FormControl>
+                {}
                 <Input {...field} />
               </FormControl>
               <FormMessage />

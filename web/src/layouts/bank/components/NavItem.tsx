@@ -2,12 +2,13 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { LucideIcon } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
 interface Props {
   icon: LucideIcon;
   label: string;
   onClick: () => void;
-  variant?: 'default' | 'ghost';
+  active?: boolean;
   exit?: boolean;
 }
 
@@ -15,15 +16,16 @@ const NavItem: React.FC<Props> = (props) => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button size='icon' variant={props.variant}
-                className='w-[50px] h-[50px]'
-                onClick={() => props.onClick()}>
+        <Button
+          size="icon"
+          variant={props.active ? 'default' : 'ghost'}
+          className={cn('h-[50px] w-[50px]', !props.active && 'hover:bg-secondary')}
+          onClick={() => props.onClick()}
+        >
           <props.icon color={props.exit ? 'hsl(var(--destructive))' : undefined} />
         </Button>
       </TooltipTrigger>
-      <TooltipContent side='right'>
-        {props.label}
-      </TooltipContent>
+      <TooltipContent side="right">{props.label}</TooltipContent>
     </Tooltip>
   );
 };
