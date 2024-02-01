@@ -11,7 +11,6 @@ const ThemeSwitcher: React.FC = () => {
     <NavItem
       icon={theme === 'dark' ? Sun : Moon}
       label={locales.change_theme}
-      variant="ghost"
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
     />
   );

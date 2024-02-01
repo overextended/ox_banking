@@ -28,7 +28,6 @@ const Navbar: React.FC = () => {
             setBankVisibility(false);
             fetchNui('exit');
           }}
-          variant="ghost"
         />
       </div>
     </nav>
