@@ -8,7 +8,8 @@
     "@citizenfx/client": "latest",
     "@citizenfx/server": "latest",
     "@types/node": "^16.18.46",
-    "esbuild": "^0.14.54"
+    "esbuild": "^0.14.54",
+    "prettier": "^3.2.4"
   },
   "dependencies": {
     "@overextended/ox_core": "latest",

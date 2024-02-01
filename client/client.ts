@@ -96,8 +96,6 @@ if (usingTarget) {
     createBankBlip({ x, y, z });
   }
 }
-;
-
 RegisterNuiCallback('exit', () => {
   SetNuiFocus(false, false);
 });

@@ -1,4 +1,4 @@
-type AccountType = 'personal' | 'shared' | 'group'
+type AccountType = 'personal' | 'shared' | 'group';
 
 export interface Account {
   id: number;
@@ -11,11 +11,11 @@ export interface Account {
 }
 
 export type DatabaseAccount = {
-  id: number
-  balance: number
-  isDefault?: boolean
-  label: string
-  owner?: number
-  group?: string
-  type: AccountType
-}
+  id: number;
+  balance: number;
+  isDefault?: boolean;
+  label: string;
+  owner?: number;
+  group?: string;
+  type: AccountType;
+};

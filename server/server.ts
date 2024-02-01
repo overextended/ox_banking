@@ -5,24 +5,27 @@ import { oxmysql } from '@overextended/oxmysql';
 import { GetPlayer } from '@overextended/ox_core/server';
 
 type GetAccountsReponse = {
-  id: Account['id'],
-  label?: Account['label'],
-  group?: Account['group'],
-  balance: Account['balance'],
-  isDefault?: Account['isDefault'],
-  type: Account['type']
+  id: Account['id'];
+  label?: Account['label'];
+  group?: Account['group'];
+  balance: Account['balance'];
+  isDefault?: Account['isDefault'];
+  type: Account['type'];
   firstName: string;
   lastName: string;
-}
+};
 
 onClientCallback('getAccounts', async (playerId): Promise<Account[]> => {
   const player = GetPlayer(playerId);
 
   if (!player) return;
 
-  const dbAccounts = await oxmysql.rawExecute<GetAccountsReponse[]>('SELECT a.id, a.label, a.group, a.balance, a.isDefault, a.type, b.firstName, b.lastName  FROM `accounts` a LEFT JOIN `characters` b ON a.owner = b.charId WHERE charId = ?', [player.charId]);
+  const dbAccounts = await oxmysql.rawExecute<GetAccountsReponse[]>(
+    'SELECT a.id, a.label, a.group, a.balance, a.isDefault, a.type, b.firstName, b.lastName  FROM `accounts` a LEFT JOIN `characters` b ON a.owner = b.charId WHERE charId = ?',
+    [player.charId]
+  );
 
-  const accounts: Account[] = dbAccounts.map(account => ({
+  const accounts: Account[] = dbAccounts.map((account) => ({
     group: account.group,
     id: account.id,
     label: account.label,
@@ -50,7 +53,7 @@ onClientCallback('deleteAccount', async (playerId: number, accountId: number) =>
 
   if (!player) return;
 
-  if (!await isAccountOwner(accountId, player.charId)) return;
+  if (!(await isAccountOwner(accountId, player.charId))) return;
 
   await oxmysql.prepare('DELETE FROM `accounts` WHERE id = ?', [accountId]);
 
@@ -67,7 +70,7 @@ onClientCallback('depositMoney', async (playerId: number, data: { accountId: num
 
   if (amount > playerCash) return;
 
-  if (!await isAccountOwner(accountId, player.charId)) return;
+  if (!(await isAccountOwner(accountId, player.charId))) return;
 
   const success = await exports.ox_core.AddAccountBalance(accountId, amount);
 
@@ -83,7 +86,10 @@ onClientCallback('withdrawMoney', async (playerId: number, data: { accountId: nu
 
   const { accountId, amount } = data;
 
-  const balance = await oxmysql.prepare<number>('SELECT `balance` FROM `accounts` WHERE `id` = ? AND `owner` = ?', [accountId, player.charId]);
+  const balance = await oxmysql.prepare<number>('SELECT `balance` FROM `accounts` WHERE `id` = ? AND `owner` = ?', [
+    accountId,
+    player.charId,
+  ]);
 
   if (balance === undefined || balance === null) return;
 
@@ -98,10 +104,9 @@ onClientCallback('withdrawMoney', async (playerId: number, data: { accountId: nu
   return true;
 });
 
-
 on('ox:playerLoaded', async (source: number, userId: number, charId: number) => {
   const charAccounts: DatabaseAccount[] = await exports.ox_core.GetCharacterAccounts(charId);
-  const defaultAccounts = charAccounts.filter(account => account.isDefault);
+  const defaultAccounts = charAccounts.filter((account) => account.isDefault);
 
   if (defaultAccounts.length > 0) return;
 
