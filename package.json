@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@overextended/ox_core": "latest",
-    "@overextended/ox_lib": "^3.12.0",
+    "@overextended/ox_lib": "^3.16.2",
     "@overextended/oxmysql": "latest"
   }
 }

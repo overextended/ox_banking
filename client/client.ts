@@ -2,9 +2,7 @@ import type { Vector3 } from '../typings';
 import targets from '../data/targets.json';
 import locations from '../data/locations.json';
 import { serverNuiCallback } from 'utils';
-import { getLocales, initLocale } from '@overextended/ox_lib/shared';
-
-initLocale();
+import { getLocales } from '@overextended/ox_lib/shared';
 
 const usingTarget = GetConvar('ox_enableTarget', 'false') == 'true';
 let hasLoadedUi = false;
