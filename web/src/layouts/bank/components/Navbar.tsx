@@ -15,7 +15,6 @@ const Navbar: React.FC = () => {
       <div className="flex flex-col items-center justify-center">
         <NavLink icon={LayoutDashboard} label={locales.dashboard} path="/" />
         <NavLink icon={CreditCard} label={locales.accounts} path="/accounts" />
-        <NavLink icon={HistoryIcon} label={locales.logs} path="/logs" />
       </div>
 
       <div className="flex flex-col items-center justify-center">
