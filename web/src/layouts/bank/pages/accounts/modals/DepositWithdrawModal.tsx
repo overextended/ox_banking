@@ -11,8 +11,11 @@ import SpinningLoader from '@/components/SpinningLoader';
 import { formatNumber } from '@/utils/formatNumber';
 import { Account } from '@/typings';
 import locales from '@/locales';
+import { useSetActiveAccount } from '@/state/accounts';
+import { queryClient } from '@/main';
 
 const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> = ({ account, isDeposit }) => {
+  const setActiveAccount = useSetActiveAccount();
   const formSchema = React.useMemo(
     () =>
       z.object({
@@ -53,6 +56,40 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
         delay: 1500,
       }
     );
+
+    queryClient.setQueryData(['accounts'], (data: { numberOfPages: number; accounts: Account[] } | undefined) => {
+      if (!data) return;
+
+      const targetAccountIndex = data.accounts.findIndex((acc) => acc.id === account.id);
+
+      if (targetAccountIndex === -1) return data;
+
+      const targetAccount = data.accounts[targetAccountIndex];
+      const amount = +values.amount;
+      const newBalance = isDeposit ? targetAccount.balance + amount : targetAccount.balance - amount;
+
+      const accounts = [...data.accounts];
+      accounts[targetAccountIndex] = {
+        ...targetAccount,
+        balance: newBalance,
+      };
+
+      setActiveAccount((prev) => {
+        if (!prev) return prev;
+        if (prev.id !== targetAccount.id) return prev;
+
+        return {
+          ...prev,
+          balance: newBalance,
+        };
+      });
+
+      return {
+        ...data,
+        accounts,
+      };
+    });
+
     setIsLoading(false);
     console.log(values);
     modal.close();
