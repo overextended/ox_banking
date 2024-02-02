@@ -14,6 +14,8 @@ import locales from '@/locales';
 import { useSetActiveAccount } from '@/state/accounts';
 import { queryClient } from '@/main';
 
+const PLACEHOLDER_CASH = 13200;
+
 const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> = ({ account, isDeposit }) => {
   const setActiveAccount = useSetActiveAccount();
   const formSchema = React.useMemo(
@@ -45,6 +47,20 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
       return form.setError('amount', {
         type: 'value',
         message: locales.amount_greater_than_zero,
+      });
+
+    const amount = +values.amount;
+
+    if (isDeposit && PLACEHOLDER_CASH < amount)
+      return form.setError('amount', {
+        type: 'value',
+        message: locales.amount_greater_than_cash,
+      });
+
+    if (!isDeposit && account.balance < amount)
+      return form.setError('amount', {
+        type: 'value',
+        message: locales.amount_greater_than_balance
       });
 
     setIsLoading(true);
