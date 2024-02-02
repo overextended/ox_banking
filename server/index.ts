@@ -106,9 +106,13 @@ onClientCallback('withdrawMoney', async (playerId, { accountId, amount }: Update
 onClientCallback(
   'transferMoney',
   async (playerId, { fromAccountId, target, transferType, amount }: TransferBalance) => {
-    const targetAccountId = transferType === 'account' ? target : null; //@todo get account by stateid;
+    const targetAccountId =
+      transferType === 'account' ? target : (await exports.ox_core.GetCharacterAccount(target))?.id;
 
-    if (targetAccountId) return exports.ox_core.TransferAccountBalance(fromAccountId, target, amount);
+    if (targetAccountId) {
+      //@todo notify
+      return await exports.ox_core.TransferAccountBalance(fromAccountId, targetAccountId, amount);
+    }
   }
 );
 
