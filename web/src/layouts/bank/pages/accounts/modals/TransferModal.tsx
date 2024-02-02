@@ -52,6 +52,14 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
         message: locales.amount_greater_than_zero,
       });
 
+    const amount = +values.amount;
+
+    if (amount > account.balance)
+      return form.setError('amount', {
+        type: 'value',
+        message: locales.amount_greater_than_balance
+      })
+
     setIsLoading(true);
     const resp = await fetchNui<
       | true
@@ -153,8 +161,8 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>{locales.amount}</FormLabel>
+              <FormDescription>{locales.available_balance.format(formatNumber(account.balance))}</FormDescription>
               <FormControl>
-                {}
                 <Input {...field} />
               </FormControl>
               <FormMessage />
