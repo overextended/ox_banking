@@ -38,17 +38,15 @@ onClientCallback('getAccounts', async (playerId): Promise<Account[]> => {
   return accounts;
 });
 
-onClientCallback('createAccount', async (playerId: number, data: { name: string; shared: boolean }) => {
+onClientCallback('createAccount', async (playerId, { name, shared }: { name: string; shared: boolean }) => {
   const player = GetPlayer(playerId);
 
   if (!player) return;
 
-  const { name, shared } = data;
-
   return await createNewAccount(player.charId, name, shared);
 });
 
-onClientCallback('deleteAccount', async (playerId: number, accountId: number) => {
+onClientCallback('deleteAccount', async (playerId, accountId: number) => {
   const player = GetPlayer(playerId);
 
   if (!player) return;
@@ -60,49 +58,59 @@ onClientCallback('deleteAccount', async (playerId: number, accountId: number) =>
   return true;
 });
 
-onClientCallback('depositMoney', async (playerId: number, data: { accountId: number; amount: number }) => {
+interface UpdateBalance {
+  accountId: number;
+  amount: number;
+}
+
+interface TransferBalance {
+  fromAccountId: number;
+  target: string | number;
+  transferType: 'account' | 'person';
+  amount: number;
+}
+
+onClientCallback('depositMoney', async (playerId, { accountId, amount }: UpdateBalance) => {
   const player = GetPlayer(playerId);
 
   if (!player) return;
-
-  const { accountId, amount } = data;
-  const playerCash: number = exports.ox_inventory.Search(playerId, 'count', 'money');
-
-  if (amount > playerCash) return;
 
   if (!(await isAccountOwner(accountId, player.charId))) return;
 
-  const success = await exports.ox_core.AddAccountBalance(accountId, amount);
+  if (amount > exports.ox_inventory.GetItemCount(playerId, 'money')) return;
 
-  if (!success) return;
+  if (!(await exports.ox_core.AddAccountBalance(accountId, amount))) return;
 
-  exports.ox_inventory.RemoveItem(playerId, 'money', amount);
+  return exports.ox_inventory.RemoveItem(playerId, 'money', amount) ? true : false;
 });
 
-onClientCallback('withdrawMoney', async (playerId: number, data: { accountId: number; amount: number }) => {
+onClientCallback('withdrawMoney', async (playerId, { accountId, amount }: UpdateBalance) => {
   const player = GetPlayer(playerId);
 
   if (!player) return;
-
-  const { accountId, amount } = data;
 
   const balance = await oxmysql.prepare<number>('SELECT `balance` FROM `accounts` WHERE `id` = ? AND `owner` = ?', [
     accountId,
     player.charId,
   ]);
 
-  if (balance === undefined || balance === null) return;
+  if (balance == null) return;
 
   if (amount > balance) return;
 
-  const success = await exports.ox_core.RemoveAccountBalance(accountId, amount);
+  if (!(await exports.ox_core.RemoveAccountBalance(accountId, amount))) return;
 
-  if (!success) return;
-
-  exports.ox_inventory.AddItem(playerId, 'money', amount);
-
-  return true;
+  return exports.ox_inventory.AddItem(playerId, 'money', amount) ? true : false;
 });
+
+onClientCallback(
+  'transferMoney',
+  async (playerId, { fromAccountId, target, transferType, amount }: TransferBalance) => {
+    const targetAccountId = transferType === 'account' ? target : null; //@todo get account by stateid;
+
+    if (targetAccountId) return exports.ox_core.TransferAccountBalance(fromAccountId, target, amount);
+  }
+);
 
 on('ox:playerLoaded', async (source: number, userId: number, charId: number) => {
   const charAccounts: DatabaseAccount[] = await exports.ox_core.GetCharacterAccounts(charId);
