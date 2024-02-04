@@ -6,3 +6,10 @@ export const serverNuiCallback = (event: string) => {
     cb(response);
   });
 };
+
+export function SendTypedNUIMessage<T = any>(action: string, data: T) {
+  SendNUIMessage({
+    action,
+    data,
+  });
+}

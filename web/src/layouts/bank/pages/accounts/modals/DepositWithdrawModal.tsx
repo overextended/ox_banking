@@ -13,10 +13,10 @@ import { Account } from '@/typings';
 import locales from '@/locales';
 import { useSetActiveAccount } from '@/state/accounts';
 import { queryClient } from '@/main';
-
-const PLACEHOLDER_CASH = 13200;
+import { useCharacterState } from '@/state/character';
 
 const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> = ({ account, isDeposit }) => {
+  const [character, setCharacter] = useCharacterState()
   const setActiveAccount = useSetActiveAccount();
   const formSchema = React.useMemo(
     () =>
@@ -51,7 +51,7 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
 
     const amount = +values.amount;
 
-    if (isDeposit && PLACEHOLDER_CASH < amount)
+    if (isDeposit && character.cash < amount)
       return form.setError('amount', {
         type: 'value',
         message: locales.amount_greater_than_cash,
@@ -72,6 +72,8 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
         delay: 1500,
       }
     );
+
+    setCharacter(prev => ({...prev, cash: isDeposit ? prev.cash - amount : prev.cash + amount}))
 
     queryClient.setQueryData(['accounts'], (data: { numberOfPages: number; accounts: Account[] } | undefined) => {
       if (!data) return;
@@ -121,7 +123,7 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
               <FormDescription>
                 {!isDeposit
                   ? locales.available_balance.format(formatNumber(account.balance))
-                  : locales.available_cash.format(formatNumber(13200))}
+                  : locales.available_cash.format(formatNumber(character.cash))}
               </FormDescription>
               <FormControl>
                 <Input {...field} />

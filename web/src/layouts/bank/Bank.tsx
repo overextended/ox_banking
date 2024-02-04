@@ -9,8 +9,11 @@ import { useBankVisibility, useSetBankVisibility } from '@/state/visibility';
 import { useNuiEvent } from '@/hooks/useNuiEvent';
 import { default as locales, setLocale } from '../../locales';
 import { fetchNui } from '@/utils/fetchNui';
+import { Character } from '~/typings';
+import { useSetCharacter } from '@/state/character';
 
 const Bank: React.FC = () => {
+  const setCharacter = useSetCharacter()
   const setContainer = useSetModalContainer();
   const visible = useBankVisibility();
   const setVisible = useSetBankVisibility();
@@ -20,8 +23,9 @@ const Bank: React.FC = () => {
     setLocale(data.locales);
   });
 
-  useNuiEvent('openBank', (data) => {
+  useNuiEvent('openBank', (data: Character) => {
     setVisible(true);
+    setCharacter(data)
   });
 
   const handleESC = (e: KeyboardEvent) => {

@@ -1,7 +1,7 @@
-import type { Vector3 } from '../typings';
+import type { Character, Vector3 } from '../typings';
 import targets from '../data/targets.json';
 import locations from '../data/locations.json';
-import { serverNuiCallback } from 'utils';
+import { SendTypedNUIMessage, serverNuiCallback } from 'utils';
 import { getLocales } from '@overextended/ox_lib/shared';
 
 const usingTarget = GetConvar('ox_enableTarget', 'false') == 'true';
@@ -28,10 +28,9 @@ const openBank = () => {
     hasLoadedUi = true;
   }
 
-  SendNUIMessage({
-    action: 'openBank',
-    data: {},
-  });
+  const playerCash: number = exports.ox_inventory.Search('count', 'money');
+  SendTypedNUIMessage<Character>('openBank', { cash: playerCash });
+
   SetNuiFocus(true, true);
 };
 
