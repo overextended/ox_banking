@@ -6,6 +6,7 @@ import { getLocales } from '@overextended/ox_lib/shared';
 
 const usingTarget = GetConvar('ox_enableTarget', 'false') == 'true';
 let hasLoadedUi = false;
+let isUiOpen = false;
 
 const ATM_PROPS = [
   GetHashKey(`prop_atm_01`),
@@ -28,9 +29,10 @@ const openBank = () => {
     hasLoadedUi = true;
   }
 
-  const playerCash: number = exports.ox_inventory.Search('count', 'money');
-  SendTypedNUIMessage<Character>('openBank', { cash: playerCash });
+  const playerCash: number = exports.ox_inventory.GetItemCount('money');
+  isUiOpen = true;
 
+  SendTypedNUIMessage<Character>('openBank', { cash: playerCash });
   SetNuiFocus(true, true);
 };
 
@@ -93,8 +95,17 @@ if (usingTarget) {
     createBankBlip({ x, y, z });
   }
 }
+
 RegisterNuiCallback('exit', () => {
+  isUiOpen = false;
+
   SetNuiFocus(false, false);
+});
+
+on('ox_inventory:itemCount', (itemName: string, count: number) => {
+  if (!isUiOpen || itemName !== 'money') return;
+
+  SendTypedNUIMessage<Character>('openBank', { cash: count });
 });
 
 serverNuiCallback('getAccounts');
