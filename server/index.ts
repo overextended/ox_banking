@@ -1,5 +1,5 @@
 import { onClientCallback } from '@overextended/ox_lib/server';
-import type { Account, DatabaseAccount } from '../typings';
+import type { Account, DashboardData, DatabaseAccount } from '../typings';
 import { oxmysql } from '@overextended/oxmysql';
 import { GetPlayer } from '@overextended/ox_core/server';
 
@@ -85,3 +85,16 @@ onClientCallback(
     }
   }
 );
+
+onClientCallback('getDashboardData', async (playerId): Promise<DashboardData> => {
+  const playerAccount = await exports.ox_core.GetPlayerAccount(playerId);
+
+  if (!playerAccount) return;
+
+  return {
+    balance: playerAccount.balance,
+    overview: [],
+    transactions: [],
+    invoices: [],
+  };
+});

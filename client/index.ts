@@ -108,6 +108,7 @@ on('ox_inventory:itemCount', (itemName: string, count: number) => {
   SendTypedNUIMessage<Character>('openBank', { cash: count });
 });
 
+serverNuiCallback('getDashboardData');
 serverNuiCallback('getAccounts');
 serverNuiCallback('createAccount');
 serverNuiCallback('deleteAccount');
