@@ -1,8 +1,13 @@
 import React from 'react';
 import { Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-const SpinningLoader: React.FC = () => {
-  return <Loader2 className="animate-spin" />;
+interface Props {
+  variant?: 'primary';
+}
+
+const SpinningLoader: React.FC<Props> = ({ variant }) => {
+  return <Loader2 className={cn('animate-spin', variant === 'primary' && 'text-primary')} />;
 };
 
 export default SpinningLoader;

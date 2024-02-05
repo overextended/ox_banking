@@ -10,6 +10,7 @@ import { useCharacter } from '@/state/character';
 import { useQuery } from '@tanstack/react-query';
 import { fetchNui } from '@/utils/fetchNui';
 import type { DashboardData } from '~/typings';
+import LoadingDashboard from '@/layouts/bank/pages/dashboard/components/LoadingDashboard';
 
 const MOCK_DASHBOARD: DashboardData = {
   balance: 56320,
@@ -98,27 +99,28 @@ const Dashboard: React.FC = () => {
     queryFn: async () => {
       const resp = await fetchNui<DashboardData>('getDashboardData', null, {
         data: MOCK_DASHBOARD,
+        delay: 1500,
       });
 
       return resp;
     },
   });
 
+  if (isLoading) return <LoadingDashboard />;
+
   if (!data) return null;
 
-  if (isLoading) return <>Loading...</>;
-
   return (
-    <div className="flex h-full w-full flex-col gap-2 p-2">
-      <div className="flex justify-between gap-2">
+    <div className='flex h-full w-full flex-col gap-2 p-2'>
+      <div className='flex justify-between gap-2'>
         <AccountCard label={locales.account_money} amount={data.balance} icon={PiggyBank} />
         <AccountCard label={locales.cash_balance} amount={character.cash} icon={Banknote} />
       </div>
       <BaseCard title={locales.weekly_overview} icon={LineChart}>
         <OverviewChart data={data?.overview} />
       </BaseCard>
-      <div className="flex flex-1 gap-2">
-        <BaseCard title={locales.recent_transactions} icon={Repeat} className="flex-1">
+      <div className='flex flex-1 gap-2'>
+        <BaseCard title={locales.recent_transactions} icon={Repeat} className='flex-1'>
           {data.transactions?.map((transaction) => (
             <TransactionItem
               key={`${transaction.firstName}-${transaction.date}`}
@@ -130,7 +132,7 @@ const Dashboard: React.FC = () => {
             />
           ))}
         </BaseCard>
-        <BaseCard title={locales.recent_invoices} icon={FileStack} className="flex-1">
+        <BaseCard title={locales.recent_invoices} icon={FileStack} className='flex-1'>
           {data.invoices?.map((invoice) => (
             <InvoiceItem
               // Potentially duplicate key, need to convert date to timestamp
