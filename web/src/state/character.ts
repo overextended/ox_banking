@@ -1,9 +1,12 @@
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { Character } from '~/typings';
+import { isEnvBrowser } from '@/utils/misc';
 
-const characterAtom = atom<Character>({
-  cash: 0
-})
+const DEBUG_CHARACTER: Character = {
+  cash: 3500
+}
+
+const characterAtom = atom<Character>(isEnvBrowser() ? DEBUG_CHARACTER : {cash: 0})
 
 export const useCharacter = () => useAtomValue(characterAtom)
 export const useSetCharacter = () => useSetAtom(characterAtom)

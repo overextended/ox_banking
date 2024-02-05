@@ -1,18 +1,21 @@
 import React from 'react';
-import { Briefcase, FileStack, LineChart, PiggyBank, Repeat } from 'lucide-react';
+import { Banknote, FileStack, LineChart, PiggyBank, Repeat } from 'lucide-react';
 import AccountCard from '@/layouts/bank/pages/dashboard/components/AccountCard';
 import OverviewChart from '@/layouts/bank/pages/dashboard/components/OverviewChart';
 import TransactionItem from '@/layouts/bank/pages/dashboard/components/TransactionItem';
 import InvoiceItem from '@/layouts/bank/pages/dashboard/components/InvoiceItem';
 import BaseCard from '@/layouts/bank/components/BaseCard';
 import locales from '@/locales';
+import { useCharacter } from '@/state/character';
 
 const Dashboard: React.FC = () => {
+  const character = useCharacter()
+
   return (
     <div className="flex h-full w-full flex-col gap-2 p-2">
       <div className="flex justify-between gap-2">
         <AccountCard label={locales.account_money} amount={150000} icon={PiggyBank} />
-        <AccountCard label={locales.paycheck_money} amount={14872} icon={Briefcase} />
+        <AccountCard label={locales.cash_balance} amount={character.cash} icon={Banknote} />
       </div>
       <BaseCard title={locales.weekly_overview} icon={LineChart} className="h-full">
         <OverviewChart />
