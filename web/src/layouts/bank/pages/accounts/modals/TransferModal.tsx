@@ -10,11 +10,23 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { fetchNui } from '@/utils/fetchNui';
 import { useModal } from '@/components/ModalsProvider';
 import locales from '@/locales';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Account } from '@/typings';
 import { Switch } from '@/components/ui/switch';
+import { useAccounts } from '@/state/accounts';
+import { queryClient } from '@/main';
 
 const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
+  const { accounts } = useAccounts();
+
   const formSchema = React.useMemo(
     () =>
       z.object({
@@ -22,7 +34,7 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
         target: z.string().min(1, locales.field_required.format(locales.target)),
         amount: z.string().min(1, locales.field_required.format(locales.amount)),
       }),
-    []
+    [],
   );
   const [internalTransfer, setInternalTransfer] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -57,16 +69,16 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
     if (amount > account.balance)
       return form.setError('amount', {
         type: 'value',
-        message: locales.amount_greater_than_balance
-      })
+        message: locales.amount_greater_than_balance,
+      });
 
     setIsLoading(true);
     const resp = await fetchNui<
       | true
       | {
-          field: 'transferType' | 'target' | 'amount';
-          error: string;
-        }
+      field: 'transferType' | 'target' | 'amount';
+      error: string;
+    }
     >(
       'transferMoney',
       {
@@ -78,7 +90,7 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
       {
         data: true,
         delay: 1500,
-      }
+      },
     );
 
     if (typeof resp === 'object' && resp.error) {
@@ -89,6 +101,11 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
       });
     }
 
+    // if the user has access to the account, refresh them
+    if (accounts.find(acc => acc.id === +values.target)) {
+      await queryClient.invalidateQueries({ queryKey: ['accounts'] });
+    }
+
     setIsLoading(false);
     console.log(values);
     modal.close();
@@ -96,10 +113,10 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
         <FormField
           control={form.control}
-          name="transferType"
+          name='transferType'
           render={({ field }) => (
             <FormItem>
               <FormLabel>{locales.transfer_to}</FormLabel>
@@ -110,8 +127,8 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="person">{locales.person}</SelectItem>
-                  <SelectItem value="account">{locales.account}</SelectItem>
+                  <SelectItem value='person'>{locales.person}</SelectItem>
+                  <SelectItem value='account'>{locales.account}</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -119,13 +136,13 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
           )}
         />
         {form.getValues('transferType') === 'account' && (
-          <div className="flex items-center gap-2">
+          <div className='flex items-center gap-2'>
             <Switch
-              id="internal-transfer"
+              id='internal-transfer'
               checked={internalTransfer}
               onCheckedChange={() => setInternalTransfer((prev) => !prev)}
             />
-            <label htmlFor="internal-transfer">Internal transfer</label>
+            <label htmlFor='internal-transfer'>Internal transfer</label>
           </div>
         )}
         <FormField
@@ -135,8 +152,8 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
                 {form.getValues('transferType') === 'person'
                   ? 'State ID'
                   : internalTransfer
-                  ? 'Account'
-                  : 'Account number'}
+                    ? 'Account'
+                    : 'Account number'}
               </FormLabel>
               <FormControl>
                 {form.getValues('transferType') === 'account' && internalTransfer ? (
@@ -144,8 +161,10 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={'322142'}>Personal</SelectItem>
+                    <SelectContent className='max-h-[150px]'>
+                      {accounts.map(account => (
+                        <SelectItem key={account.id} value={account.id.toString()}>{account.label}</SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 ) : (
@@ -155,7 +174,7 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
               <FormMessage />
             </FormItem>
           )}
-          name="target"
+          name='target'
         />
         <FormField
           render={({ field }) => (
@@ -168,9 +187,9 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
               <FormMessage />
             </FormItem>
           )}
-          name="amount"
+          name='amount'
         />
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button type='submit' className='w-full' disabled={isLoading}>
           {isLoading ? <SpinningLoader /> : locales.confirm}
         </Button>
       </form>
