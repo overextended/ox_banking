@@ -23,7 +23,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             balance: 132032,
             label: 'Some name',
             owner: 'Some owner',
-            type: 'personal',
+            type: 'shared',
           },
           {
             id: 932124,
@@ -71,7 +71,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
       };
     },
   }),
-  () => queryClient
+  () => queryClient,
 );
 
 const activeAccountAtom = atom<Account | null>(null);

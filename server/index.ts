@@ -1,5 +1,5 @@
 import { onClientCallback } from '@overextended/ox_lib/server';
-import type { Account, DashboardData } from '../typings';
+import type { AccessTableData, Account, DashboardData } from '../typings';
 import { oxmysql } from '@overextended/oxmysql';
 import { GetPlayer } from '@overextended/ox_core/server';
 
@@ -42,7 +42,17 @@ onClientCallback('createAccount', async (playerId, { name, shared }: { name: str
 
   if (!player) return;
 
-  return await exports.ox_core.CreateAccount(player.charId, name, shared);
+  const accountId: number = await exports.ox_core.CreateAccount(player.charId, name, shared);
+
+  if (shared) {
+    await oxmysql.prepare('INSERT INTO `ox_banking_accounts_access` (`accountId`, `stateId`, `role`) VALUE (?, ?, ?)', [
+      accountId,
+      player.stateId,
+      'owner',
+    ]);
+  }
+
+  return true;
 });
 
 onClientCallback('deleteAccount', async (playerId, accountId: number) => {
@@ -97,4 +107,33 @@ onClientCallback('getDashboardData', async (playerId): Promise<DashboardData> =>
     transactions: [],
     invoices: [],
   };
+});
+
+onClientCallback('getAccountUsers', async (playerId, accountId: number): Promise<AccessTableData[]> => {
+  const result = await oxmysql.rawExecute<AccessTableData[]>(
+    'SELECT a.stateId, a.role, CONCAT(c.firstName, " ", c.lastName) AS `name` FROM `ox_banking_accounts_access` a LEFT JOIN `characters` c ON c.stateId = a.stateId WHERE a.accountId = ?',
+    [accountId]
+  );
+
+  console.log(JSON.stringify(result, null, 2));
+
+  return result;
+});
+
+onClientCallback('addUserToAccount', async (playerId, data: { accountId: string; stateId: string; role: string }) => {
+  const { accountId, stateId, role } = data;
+
+  if (!(await exports.ox_core.IsAccountOwner(playerId, accountId))) return;
+
+  const success = await oxmysql.prepare('SELECT 1 FROM `characters` WHERE `stateId` = ?', [stateId]);
+
+  if (!success) return 'No person with provided state id found.';
+
+  await oxmysql.prepare('INSERT INTO `ox_banking_accounts_access` (`accountId`, `stateId`, `role`) VALUES (?, ?, ?)', [
+    accountId,
+    stateId,
+    role,
+  ]);
+
+  return true;
 });

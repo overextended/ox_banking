@@ -6,14 +6,16 @@ import locales from '@/locales';
 import { useModal } from '@/components/ModalsProvider';
 import { useActiveAccount } from '@/state/accounts';
 import DeleteAccountModal from '@/layouts/bank/pages/accounts/modals/DeleteAccountModal';
+import { useNavigate } from 'react-router-dom';
 
 const AccountSettings: React.FC = () => {
   const modal = useModal();
   const account = useActiveAccount()!;
+  const navigate = useNavigate();
 
   return (
-    <BaseCard title={locales.settings} icon={Settings} className="h-fit flex-[0.75]">
-      <div className="flex flex-col gap-2">
+    <BaseCard title={locales.settings} icon={Settings} className='h-fit flex-[0.75]'>
+      <div className='flex flex-col gap-2'>
         <AccountButton
           label={locales.transfer_ownership}
           icon={ArrowRight}
@@ -25,11 +27,12 @@ const AccountSettings: React.FC = () => {
           disabled={account.type === 'shared' || account.type === 'group' || account.isDefault}
         />
         <AccountButton label={locales.rename} icon={Pencil} />
-        <AccountButton label={locales.manage_access} icon={Shield} disabled={account.type === 'personal'} />
+        <AccountButton label={locales.manage_access} icon={Shield} disabled={account.type === 'personal'}
+                       onClick={() => navigate(`/accounts/manage-access/${account.id}`)} />
         <AccountButton
           label={locales.delete_account}
           icon={Trash}
-          variant="destructive"
+          variant='destructive'
           disabled={account.isDefault}
           onClick={() =>
             modal.open({

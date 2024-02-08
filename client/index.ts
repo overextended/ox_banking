@@ -109,6 +109,8 @@ on('ox_inventory:itemCount', (itemName: string, count: number) => {
 });
 
 serverNuiCallback('getDashboardData');
+serverNuiCallback('getAccountUsers');
+serverNuiCallback('addUserToAccount');
 serverNuiCallback('getAccounts');
 serverNuiCallback('createAccount');
 serverNuiCallback('deleteAccount');

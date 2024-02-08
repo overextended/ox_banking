@@ -11,9 +11,10 @@ import { default as locales, setLocale } from '../../locales';
 import { fetchNui } from '@/utils/fetchNui';
 import { Character } from '~/typings';
 import { useSetCharacter } from '@/state/character';
+import ManageAccess from '@/layouts/bank/pages/accounts/manage-access/ManageAccess';
 
 const Bank: React.FC = () => {
-  const setCharacter = useSetCharacter()
+  const setCharacter = useSetCharacter();
   const setContainer = useSetModalContainer();
   const visible = useBankVisibility();
   const setVisible = useSetBankVisibility();
@@ -25,7 +26,7 @@ const Bank: React.FC = () => {
 
   useNuiEvent('openBank', (data: Character) => {
     setVisible(true);
-    setCharacter(data)
+    setCharacter(data);
   });
 
   const handleESC = (e: KeyboardEvent) => {
@@ -44,15 +45,16 @@ const Bank: React.FC = () => {
     <>
       {visible && (
         <div
-          className="relative flex h-[768px] w-[1280px] rounded-lg bg-background"
-          id="bank-container"
+          className='relative flex h-[768px] w-[1280px] rounded-lg bg-background'
+          id='bank-container'
           ref={setContainer}
         >
           <ModalsProvider>
             <Navbar />
             <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/accounts" element={<Accounts />} />
+              <Route path='/' element={<Dashboard />} />
+              <Route path='/accounts' element={<Accounts />} />
+              <Route path='/accounts/manage-access/:accountId' element={<ManageAccess />} />
             </Routes>
           </ModalsProvider>
         </div>

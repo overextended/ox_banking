@@ -1,0 +1,102 @@
+import React from 'react';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import locales from '@/locales';
+import { formatNumber } from '@/utils/formatNumber';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import SpinningLoader from '@/components/SpinningLoader';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useModal } from '@/components/ModalsProvider';
+import { fetchNui } from '@/utils/fetchNui';
+import { queryClient } from '@/main';
+
+const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => {
+  const modal = useModal();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const formSchema = React.useMemo(
+    () =>
+      z.object({
+        stateId: z.string().min(1),
+        role: z.string(),
+      }),
+    [],
+  );
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      stateId: '',
+      role: 'contributor',
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
+
+    const resp = await fetchNui<true | string>('addUserToAccount', { accountId, ...values }, {
+      data: true,
+      delay: 1500,
+    });
+
+    if (typeof resp === 'string') {
+      setIsLoading(false);
+      form.setError('stateId', { type: 'value', message: resp });
+
+      return;
+    }
+
+    await queryClient.invalidateQueries({ queryKey: ['account-access'] });
+
+    setIsLoading(false);
+    modal.close();
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+        <FormField
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>State ID</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+          name='stateId'
+        />
+        <FormField
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Role</FormLabel>
+              <FormControl>
+                <Select {...field} onValueChange={field.onChange} defaultValue={field.value}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value='contributor'>Contributor</SelectItem>
+                    <SelectItem value='manager'>Manager</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormDescription>
+                <p>Contributor - Only deposit allowed</p>
+                <p>Manager - Deposit, withdraw, transfer and logs allowed</p>
+              </FormDescription>
+            </FormItem>
+          )}
+          name='role'
+        />
+        <Button type='submit' className='w-full' disabled={isLoading}>
+          {isLoading ? <SpinningLoader /> : locales.confirm}
+        </Button>
+      </form>
+    </Form>
+  );
+};
+
+export default NewAccountUserModal;

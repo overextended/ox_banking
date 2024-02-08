@@ -19,3 +19,9 @@ export interface DashboardData {
     date: string;
   }[];
 }
+
+export interface AccessTableData {
+  name: string;
+  role: 'contributor' | 'manager' | 'owner';
+  stateId: string;
+}
