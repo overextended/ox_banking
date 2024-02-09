@@ -9,6 +9,7 @@ type GetAccountsReponse = {
   group?: Account['group'];
   balance: Account['balance'];
   isDefault?: Account['isDefault'];
+  owner: number;
   type: Account['type'];
   firstName: string;
   lastName: string;
@@ -19,16 +20,35 @@ onClientCallback('getAccounts', async (playerId): Promise<Account[]> => {
 
   if (!player) return;
 
-  const dbAccounts = await oxmysql.rawExecute<GetAccountsReponse[]>(
-    'SELECT a.id, a.label, a.group, a.balance, a.isDefault, a.type, b.firstName, b.lastName  FROM `accounts` a LEFT JOIN `characters` b ON a.owner = b.charId WHERE charId = ?',
+  const personalAccounts = await oxmysql.rawExecute<GetAccountsReponse[]>(
+    `
+    SELECT a.id, a.label, a.owner, a.group, a.balance, a.isDefault, a.type, b.firstName, b.lastName
+    FROM \`accounts\` a
+    LEFT JOIN \`characters\` b ON a.owner = b.charId
+    WHERE b.charId = ? AND type = 'personal'
+    `,
+
     [player.charId]
   );
 
-  const accounts: Account[] = dbAccounts.map((account) => ({
+  const accessAccounts = await oxmysql.rawExecute<GetAccountsReponse[]>(
+    `
+    SELECT a.id, a.label, a.owner, a.group, a.balance, a.isDefault, a.type, b.firstName, b.lastName
+    FROM \`ox_banking_accounts_access\` c
+    LEFT JOIN accounts a ON a.id = c.accountId
+    LEFT JOIN characters b ON b.charId = a.owner
+    WHERE c.stateId = ?
+    `,
+    [player.stateId]
+  );
+
+  const rawAccounts = [...accessAccounts, ...personalAccounts];
+
+  const accounts: Account[] = rawAccounts.map((account) => ({
     group: account.group,
     id: account.id,
     label: account.label,
-    isDefault: account.isDefault,
+    isDefault: player.charId === account.owner ? account.isDefault : false,
     balance: account.balance,
     type: account.type,
     owner: `${account.firstName} ${account.lastName}`,
