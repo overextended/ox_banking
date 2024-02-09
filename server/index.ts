@@ -157,3 +157,28 @@ onClientCallback('addUserToAccount', async (playerId, data: { accountId: string;
 
   return true;
 });
+
+onClientCallback(
+  'manageUser',
+  async (
+    playerId,
+    data: {
+      accountId: number;
+      targetStateId: string;
+      values: { role: string };
+    }
+  ): Promise<boolean> => {
+    const isAccountOwner: boolean = await exports.ox_core.IsAccountOwner(playerId, data.accountId);
+
+    console.log(`manageUser - ${isAccountOwner}`);
+    if (!isAccountOwner) return false;
+
+    console.log('mangeUser - query');
+    const success = await oxmysql.prepare(
+      'UPDATE `ox_banking_accounts_access` SET `role` = ? WHERE `accountId` = ? AND `stateId` = ?',
+      [data.values.role, data.accountId, data.targetStateId]
+    );
+
+    return success;
+  }
+);

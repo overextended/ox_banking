@@ -1,7 +1,9 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Edit, Trash } from 'lucide-react';
+import { Edit, Trash, UserCog, UserMinus } from 'lucide-react';
 import { AccessTableData } from '~/typings';
+import { useModal } from '@/components/ModalsProvider';
+import ManageUserModal from '@/layouts/bank/pages/accounts/manage-access/modals/ManageUserModal';
 
 const ROLES = {
   'owner': 'Owner',
@@ -9,18 +11,23 @@ const ROLES = {
   'contributor': 'Contributor',
 };
 
-const AccessTableUser: React.FC<AccessTableData> = ({ name, role, stateId }) => {
+const AccessTableUser: React.FC<AccessTableData & { accountId: number }> = ({ name, role, stateId, accountId }) => {
+  const modal = useModal();
+
   return (
-    <div className='grid rounded-tl-lg rounded-tr-lg grid-cols-4 py-4 place-items-center'>
+    <div className='grid grid-cols-4 py-4 place-items-center border-t border-border'>
       <p>{name}</p>
       <p>{ROLES[role]}</p>
       <p>{stateId}</p>
       <div className='flex gap-2 items-center'>
-        <Button size='icon'>
-          <Edit size={20} />
+        <Button size='icon' onClick={() => modal.open({
+          title: 'Manage user',
+          children: <ManageUserModal accountId={accountId} targetStateId={stateId} defaultRole={role} />,
+        })}>
+          <UserCog size={20} />
         </Button>
         <Button size='icon' variant='destructive'>
-          <Trash size={20} />
+          <UserMinus size={20} />
         </Button>
       </div>
     </div>

@@ -16,7 +16,7 @@ const ManageAccess: React.FC = () => {
   const modal = useModal();
   const { accountId } = useParams();
   const { data, isLoading } = useQuery<AccessTableData[]>({
-    queryKey: ['account-access', accountId], queryFn: async () => {
+    queryKey: ['account-access'], queryFn: async () => {
       const resp = await fetchNui<AccessTableData[]>('getAccountUsers', +accountId!, {
         data: [
           {
@@ -45,7 +45,7 @@ const ManageAccess: React.FC = () => {
             New account user
           </Button>
         </div>
-        <AccessTable data={data} />
+        <AccessTable data={data} accountId={+accountId!} />
       </BaseCard>
     </div>
   );
