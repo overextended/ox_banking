@@ -143,6 +143,7 @@ onClientCallback('getAccountUsers', async (playerId, accountId: number): Promise
 onClientCallback('addUserToAccount', async (playerId, data: { accountId: string; stateId: string; role: string }) => {
   const { accountId, stateId, role } = data;
 
+  // todo: allow manager to add user
   if (!(await exports.ox_core.IsAccountOwner(playerId, accountId))) return;
 
   const success = await oxmysql.prepare('SELECT 1 FROM `characters` WHERE `stateId` = ?', [stateId]);
@@ -170,10 +171,8 @@ onClientCallback(
   ): Promise<boolean> => {
     const isAccountOwner: boolean = await exports.ox_core.IsAccountOwner(playerId, data.accountId);
 
-    console.log(`manageUser - ${isAccountOwner}`);
     if (!isAccountOwner) return false;
 
-    console.log('mangeUser - query');
     const success = await oxmysql.prepare(
       'UPDATE `ox_banking_accounts_access` SET `role` = ? WHERE `accountId` = ? AND `stateId` = ?',
       [data.values.role, data.accountId, data.targetStateId]
@@ -182,3 +181,17 @@ onClientCallback(
     return success;
   }
 );
+
+onClientCallback('removeUser', async (playerId, data: { targetStateId: string; accountId: number }) => {
+  const isAccountOwner: boolean = await exports.ox_core.IsAccountOwner(playerId, data.accountId);
+
+  // todo: allow manager to remove people
+  if (!isAccountOwner) return false;
+
+  const success = await oxmysql.prepare(
+    'DELETE FROM `ox_banking_accounts_access` WHERE `accountId` = ? AND `stateId` = ?',
+    [data.accountId, data.targetStateId]
+  );
+
+  return success;
+});

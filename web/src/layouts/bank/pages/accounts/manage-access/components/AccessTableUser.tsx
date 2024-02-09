@@ -4,6 +4,7 @@ import { Edit, Trash, UserCog, UserMinus } from 'lucide-react';
 import { AccessTableData } from '~/typings';
 import { useModal } from '@/components/ModalsProvider';
 import ManageUserModal from '@/layouts/bank/pages/accounts/manage-access/modals/ManageUserModal';
+import RemoveUserModal from '@/layouts/bank/pages/accounts/manage-access/modals/RemoveUserModal';
 
 const ROLES = {
   'owner': 'Owner',
@@ -26,7 +27,10 @@ const AccessTableUser: React.FC<AccessTableData & { accountId: number }> = ({ na
         })}>
           <UserCog size={20} />
         </Button>
-        <Button size='icon' variant='destructive'>
+        <Button size='icon' variant='destructive' onClick={() => modal.open({
+          title: 'Remove user',
+          children: <RemoveUserModal targetStateId={stateId} accountId={accountId} />,
+        })}>
           <UserMinus size={20} />
         </Button>
       </div>
