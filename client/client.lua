@@ -1,56 +1,66 @@
-local locations = json.decode(LoadResourceFile(cache.resource, '/data/locations.json'))
+if GetConvarInt('ox_banking:target', 0) == 1 then return end
 
-local ATMProps = {
-    `prop_atm_01`,
-    `prop_atm_02`,
-    `prop_atm_03`,
-    `prop_fleeca_atm`,
-    `v_5_b_atm1`,
-    `v_5_b_atm`,
-}
+local function onEnterBank()
+    lib.showTextUI('[E] - Access bank')
+end
 
-if GetConvar('ox_enableTarget', 'false') == 'true' then return end
+local function onExitBank()
+    lib.hideTextUI()
+end
+
+local function insideBank()
+    if IsControlJustPressed(0, 38) then
+        exports.ox_banking.openBank()
+    end
+end
+
+local locations = lib.loadJson('data.locations')
 
 for i = 1, #locations do
-    local location = locations[i]
-    local point = lib.points.new(vector3(location[1], location[2], location[3]), 1.5)
-    function point:onEnter()
-        lib.showTextUI('[E] - Access bank')
-    end
-    function point:onExit()
-        lib.hideTextUI()
-    end
-    function point:nearby()
-        if self.currentDistance <= 1.5 and IsControlJustPressed(0, 38) then
-            exports.ox_banking.openBank()
+    lib.points.new({
+        coords = locations[i],
+        distance = 1.5,
+        onEnter = onEnterBank,
+        onExit = onExitBank,
+        nearby = insideBank
+    })
+end
+
+local atms = lib.loadJson('data.atms')
+
+for i = 1, #atms do atms[i] = GetHashKey(atms[i]) end
+
+local function findClosestAtm()
+    if IsNuiFocused() or IsPauseMenuActive() then return end
+
+    local x, y, z = cache.coords.x, cache.coords.y, cache.coords.z
+
+    for i = 1, #atms do
+        local atm = GetClosestObjectOfType(x, y, z, 1.5, atms[i], false, false, false)
+
+        if atm > 0 then
+            local atmCoords = GetEntityCoords(atm)
+
+            lib.showTextUI('[E] - Access ATM')
+
+            while #(GetEntityCoords(cache.ped) - atmCoords) <= 1.5 and not IsNuiFocused() and not IsPauseMenuActive() do
+                if IsControlJustPressed(0, 38) then
+                    -- todo: open atm
+                    exports.ox_banking.openBank()
+                end
+
+                Wait(0)
+            end
+
+            lib.hideTextUI()
+
+            return true
         end
     end
 end
 
 CreateThread(function()
     while true do
-        if not IsNuiFocused() and not IsPauseMenuActive() then
-            local playerCoords = GetEntityCoords(cache.ped)
-            for i = 1, #ATMProps do
-                local atm = GetClosestObjectOfType(playerCoords.x, playerCoords.y, playerCoords.z, 1.5, ATMProps[i], false)
-                if atm ~= 0 then
-                    lib.showTextUI('[E] - Access ATM')
-                    local atmCoords = GetEntityCoords(atm)
-                    repeat
-                        Wait(0)
-                        local distance = #(GetEntityCoords(cache.ped) - atmCoords)
-                        if IsNuiFocused() or IsPauseMenuActive() then
-                            break
-                        end
-                        if IsControlJustPressed(0, 38) then
-                            -- todo: open atm
-                            exports.ox_banking.openBank()
-                        end
-                    until distance > 1.5
-                    lib.hideTextUI()
-                end
-            end
-        end
-        Wait(1000)
+        Wait(findClosestAtm() and 500 or 1000)
     end
 end)

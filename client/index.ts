@@ -1,21 +1,13 @@
-import type { Character, Vector3 } from '../typings';
+import type { Character } from '../typings';
 import targets from '../data/targets.json';
 import locations from '../data/locations.json';
+import atms from '../data/atms.json';
 import { SendTypedNUIMessage, serverNuiCallback } from 'utils';
 import { getLocales } from '@overextended/ox_lib/shared';
 
-const usingTarget = GetConvar('ox_enableTarget', 'false') == 'true';
+const usingTarget = GetConvarInt('ox_banking:target', 0) === 1;
 let hasLoadedUi = false;
 let isUiOpen = false;
-
-const ATM_PROPS = [
-  GetHashKey(`prop_atm_01`),
-  GetHashKey(`prop_atm_02`),
-  GetHashKey(`prop_atm_03`),
-  GetHashKey(`prop_fleeca_atm`),
-  GetHashKey(`v_5_b_atm1`),
-  GetHashKey(`v_5_b_atm`),
-];
 
 const openBank = () => {
   if (!hasLoadedUi) {
@@ -38,8 +30,8 @@ const openBank = () => {
 
 exports('openBank', openBank);
 
-const createBankBlip = (coords: Vector3) => {
-  const blip = AddBlipForCoord(coords.x, coords.y, coords.z);
+const createBankBlip = (coords: number[]) => {
+  const blip = AddBlipForCoord(coords[0], coords[1], coords[2]);
   SetBlipSprite(blip, 207);
   SetBlipColour(blip, 2);
   SetBlipAsShortRange(blip, true);
@@ -49,15 +41,12 @@ const createBankBlip = (coords: Vector3) => {
 };
 
 if (!usingTarget) {
-  for (let i = 0; i < locations.length; i++) {
-    const [x, y, z] = locations[i];
-
-    createBankBlip({ x, y, z });
-  }
+  for (let i = 0; i < locations.length; i++) createBankBlip(locations[i]);
 }
 
 if (usingTarget) {
-  exports.ox_target.addModel(ATM_PROPS, [
+  exports.ox_target.addModel(
+    atms.map((value) => GetHashKey(value)),
     {
       name: 'access_atm',
       icon: 'fa-solid fa-money-check',
@@ -66,15 +55,14 @@ if (usingTarget) {
         // todo: open atm
         openBank();
       },
-    },
-  ]);
+    }
+  );
 
   for (let i = 0; i < targets.length; i++) {
     const target = targets[i];
-    const [x, y, z] = target.coords;
 
     exports.ox_target.addBoxZone({
-      coords: { x, y, z },
+      coords: target.coords,
       size: target.size,
       rotation: target.rotation,
       debug: true,
@@ -92,7 +80,7 @@ if (usingTarget) {
       ],
     });
 
-    createBankBlip({ x, y, z });
+    createBankBlip(target.coords);
   }
 }
 
