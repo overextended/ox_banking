@@ -34,7 +34,7 @@ onClientCallback('ox_banking:getAccounts', async (playerId): Promise<Account[]> 
   const accessAccounts = await oxmysql.rawExecute<GetAccountsReponse[]>(
     `
     SELECT a.id, a.label, a.owner, a.group, a.balance, a.isDefault, a.type, b.firstName, b.lastName
-    FROM \`ox_banking_accounts_access\` c
+    FROM \`accounts_access\` c
     LEFT JOIN accounts a ON a.id = c.accountId
     LEFT JOIN characters b ON b.charId = a.owner
     WHERE c.stateId = ?
@@ -65,7 +65,7 @@ onClientCallback('ox_banking:createAccount', async (playerId, { name, shared }: 
   const accountId: number = await exports.ox_core.CreateAccount(player.charId, name, shared);
 
   if (shared) {
-    await oxmysql.prepare('INSERT INTO `ox_banking_accounts_access` (`accountId`, `stateId`, `role`) VALUE (?, ?, ?)', [
+    await oxmysql.prepare('INSERT INTO `accounts_access` (`accountId`, `stateId`, `role`) VALUE (?, ?, ?)', [
       accountId,
       player.stateId,
       'owner',
@@ -131,7 +131,7 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
 
 onClientCallback('ox_banking:getAccountUsers', async (playerId, accountId: number): Promise<AccessTableData[]> => {
   const result = await oxmysql.rawExecute<AccessTableData[]>(
-    'SELECT a.stateId, a.role, CONCAT(c.firstName, " ", c.lastName) AS `name` FROM `ox_banking_accounts_access` a LEFT JOIN `characters` c ON c.stateId = a.stateId WHERE a.accountId = ?',
+    'SELECT a.stateId, a.role, CONCAT(c.firstName, " ", c.lastName) AS `name` FROM `accounts_access` a LEFT JOIN `characters` c ON c.stateId = a.stateId WHERE a.accountId = ?',
     [accountId]
   );
 
@@ -159,10 +159,11 @@ onClientCallback(
 
     if (!success) return 'No person with provided state id found.';
 
-    await oxmysql.prepare(
-      'INSERT INTO `ox_banking_accounts_access` (`accountId`, `stateId`, `role`) VALUES (?, ?, ?)',
-      [accountId, stateId, role]
-    );
+    await oxmysql.prepare('INSERT INTO `accounts_access` (`accountId`, `stateId`, `role`) VALUES (?, ?, ?)', [
+      accountId,
+      stateId,
+      role,
+    ]);
 
     return true;
   }
@@ -183,7 +184,7 @@ onClientCallback(
     if (!isAccountOwner) return false;
 
     const success = await oxmysql.prepare(
-      'UPDATE `ox_banking_accounts_access` SET `role` = ? WHERE `accountId` = ? AND `stateId` = ?',
+      'UPDATE `accounts_access` SET `role` = ? WHERE `accountId` = ? AND `stateId` = ?',
       [data.values.role, data.accountId, data.targetStateId]
     );
 
@@ -197,10 +198,10 @@ onClientCallback('ox_banking:removeUser', async (playerId, data: { targetStateId
   // todo: allow manager to remove people
   if (!isAccountOwner) return false;
 
-  const success = await oxmysql.prepare(
-    'DELETE FROM `ox_banking_accounts_access` WHERE `accountId` = ? AND `stateId` = ?',
-    [data.accountId, data.targetStateId]
-  );
+  const success = await oxmysql.prepare('DELETE FROM `accounts_access` WHERE `accountId` = ? AND `stateId` = ?', [
+    data.accountId,
+    data.targetStateId,
+  ]);
 
   return success;
 });
