@@ -28,7 +28,8 @@ const AccessTableUserItem: React.FC<AccessTableUser & { accountId: number; chara
         })}>
           <UserCog size={20} />
         </Button>
-        <Button disabled={characterRole !== 'owner' && characterRole !== 'manager'} size='icon' variant='destructive'
+        <Button disabled={(characterRole !== 'owner' && characterRole !== 'manager') || role === characterRole}
+                size='icon' variant='destructive'
                 onClick={() => modal.open({
                   title: 'Remove user',
                   children: <RemoveUserModal targetStateId={stateId} accountId={accountId} />,
