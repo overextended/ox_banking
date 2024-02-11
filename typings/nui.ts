@@ -1,3 +1,10 @@
+export type AccountRole = 'contributor' | 'manager' | 'owner';
+export type AccessTableUser = {
+  name: string;
+  role: AccountRole;
+  stateId: string;
+};
+
 export interface DashboardData {
   balance: number;
   overview?: {
@@ -21,7 +28,7 @@ export interface DashboardData {
 }
 
 export interface AccessTableData {
-  name: string;
-  role: 'contributor' | 'manager' | 'owner';
-  stateId: string;
+  role: AccountRole;
+  numberOfPages: number;
+  users: AccessTableUser[];
 }

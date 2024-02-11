@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, Edit, Trash } from 'lucide-react';
-import AccessTableUser from '@/layouts/bank/pages/accounts/manage-access/components/AccessTableUser';
+import AccessTableUserItem from '@/layouts/bank/pages/accounts/manage-access/components/AccessTableUserItem';
 import { AccessTableData } from '~/typings';
 
-const AccessTable: React.FC<{ data?: AccessTableData[]; accountId: number }> = ({ data, accountId }) => {
+const AccessTable: React.FC<{ data?: AccessTableData; accountId: number }> = ({ data, accountId }) => {
   if (!data) return null;
 
   return (
@@ -16,16 +16,17 @@ const AccessTable: React.FC<{ data?: AccessTableData[]; accountId: number }> = (
           <p>State ID</p>
           <p></p>
         </div>
-        {data.map(user => (
-          <AccessTableUser key={user.stateId} accountId={accountId} name={user.name} stateId={user.stateId}
-                           role={user.role} />
+        {data.users.map(user => (
+          <AccessTableUserItem key={user.stateId} characterRole={data.role} accountId={accountId} name={user.name}
+                               stateId={user.stateId}
+                               role={user.role} />
         ))}
       </div>
       <div className='flex gap-4 items-center justify-end'>
         <Button size='icon'>
           <ChevronLeft size={20} />
         </Button>
-        <p>Page 1 of X</p>
+        <p>Page 1 of {data.numberOfPages}</p>
         <Button size='icon'>
           <ChevronRight size={20} />
         </Button>

@@ -15,16 +15,20 @@ import { fetchNui } from '@/utils/fetchNui';
 const ManageAccess: React.FC = () => {
   const modal = useModal();
   const { accountId } = useParams();
-  const { data, isLoading } = useQuery<AccessTableData[]>({
+  const { data, isLoading } = useQuery<AccessTableData>({
     queryKey: ['account-access'], queryFn: async () => {
-      const resp = await fetchNui<AccessTableData[]>('getAccountUsers', +accountId!, {
-        data: [
-          {
-            name: 'Place Holder',
-            stateId: 'LF23312',
-            role: 'contributor',
-          },
-        ],
+      const resp = await fetchNui<AccessTableData>('getAccountUsers', +accountId!, {
+        data: {
+          role: 'manager',
+          numberOfPages: 2,
+          users: [
+            {
+              name: 'Place Holder',
+              stateId: 'LF23312',
+              role: 'contributor',
+            },
+          ],
+        },
       });
 
       return resp;

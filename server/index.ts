@@ -106,15 +106,19 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
   };
 });
 
-onClientCallback('ox_banking:getAccountUsers', async (playerId, accountId: number): Promise<AccessTableData[]> => {
-  const result = await oxmysql.rawExecute<AccessTableData[]>(
-    'SELECT a.stateId, a.role, CONCAT(c.firstName, " ", c.lastName) AS `name` FROM `accounts_access` a LEFT JOIN `characters` c ON c.charId = a.charId WHERE a.accountId = ?',
+onClientCallback('ox_banking:getAccountUsers', async (playerId, accountId: number): Promise<AccessTableData> => {
+  const users = await oxmysql.rawExecute<AccessTableData['users']>(
+    'SELECT c.stateId, a.role, CONCAT(c.firstName, " ", c.lastName) AS `name` FROM `accounts_access` a LEFT JOIN `characters` c ON c.charId = a.charId WHERE a.accountId = ?',
     [accountId]
   );
 
-  console.log(JSON.stringify(result, null, 2));
+  const role = await exports.ox_core.GetAccountRole(playerId, accountId);
 
-  return result;
+  return {
+    role: role || 'contributor',
+    numberOfPages: 1,
+    users,
+  };
 });
 
 onClientCallback(
