@@ -158,7 +158,7 @@ onClientCallback(
 
     if (!isAccountOwner) return false;
 
-    return await exports.ox_core.SetAccountAccess(data.accountId, data.targetStateId, data.values.role);
+    return await exports.ox_core.SetAccountAccess(data.accountId, data.targetStateId, data.values.role, true);
   }
 );
 
@@ -167,5 +167,5 @@ onClientCallback('ox_banking:removeUser', async (playerId, data: { targetStateId
 
   if (role !== 'owner' && role !== 'manager') return;
 
-  return await exports.ox_core.SetAccountAccess(data.accountId, data.targetStateId);
+  return await exports.ox_core.RemoveAccountAccess(data.accountId, data.targetStateId);
 });
