@@ -5,35 +5,13 @@ import locales from '@/locales';
 import { Edit, Plus, Shield, Trash } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import AccessTable from './components/AccessTable';
-import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import { AccessTableData } from '~/typings';
 import { useModal } from '@/components/ModalsProvider';
 import NewAccountUserModal from './modals/NewAccountUserModal';
-import { fetchNui } from '@/utils/fetchNui';
 
 const ManageAccess: React.FC = () => {
   const modal = useModal();
   const { accountId } = useParams();
-  const { data, isLoading } = useQuery<AccessTableData>({
-    queryKey: ['account-access'], queryFn: async () => {
-      const resp = await fetchNui<AccessTableData>('getAccountUsers', +accountId!, {
-        data: {
-          role: 'manager',
-          numberOfPages: 2,
-          users: [
-            {
-              name: 'Place Holder',
-              stateId: 'LF23312',
-              role: 'contributor',
-            },
-          ],
-        },
-      });
-
-      return resp;
-    },
-  });
 
   return (
     <div className='flex w-full h-full p-2 gap-2 flex-col'>
@@ -49,7 +27,7 @@ const ManageAccess: React.FC = () => {
             New account user
           </Button>
         </div>
-        <AccessTable data={data} accountId={+accountId!} />
+        <AccessTable accountId={+accountId!} />
       </BaseCard>
     </div>
   );

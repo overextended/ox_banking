@@ -106,20 +106,43 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
   };
 });
 
-onClientCallback('ox_banking:getAccountUsers', async (playerId, accountId: number): Promise<AccessTableData> => {
-  const users = await oxmysql.rawExecute<AccessTableData['users']>(
-    'SELECT c.stateId, a.role, CONCAT(c.firstName, " ", c.lastName) AS `name` FROM `accounts_access` a LEFT JOIN `characters` c ON c.charId = a.charId WHERE a.accountId = ?',
-    [accountId]
-  );
+onClientCallback(
+  'ox_banking:getAccountUsers',
+  async (
+    playerId,
+    data: {
+      accountId: number;
+      page: number;
+    }
+  ): Promise<AccessTableData> => {
+    const { accountId, page } = data;
 
-  const role = await exports.ox_core.GetAccountRole(playerId, accountId);
+    const users = await oxmysql.rawExecute<AccessTableData['users']>(
+      `
+      SELECT c.stateId, a.role, CONCAT(c.firstName, " ", c.lastName) AS \`name\` FROM \`accounts_access\` a
+      LEFT JOIN \`characters\` c ON c.charId = a.charId
+      WHERE a.accountId = ?
+      ORDER BY a.role DESC
+      LIMIT 7
+      OFFSET ?
+      `,
+      [accountId, page * 7]
+    );
 
-  return {
-    role: role || 'contributor',
-    numberOfPages: 1,
-    users,
-  };
-});
+    const usersCount = await oxmysql.prepare<number>('SELECT COUNT(*) FROM `accounts_access` WHERE accountId = ?', [
+      accountId,
+    ]);
+
+    // todo: iterate over user table to get role rather than do another query
+    const role = await exports.ox_core.GetAccountRole(playerId, accountId);
+
+    return {
+      role: role || 'contributor',
+      numberOfPages: Math.ceil(usersCount / 7),
+      users,
+    };
+  }
+);
 
 onClientCallback(
   'ox_banking:addUserToAccount',
@@ -158,7 +181,7 @@ onClientCallback(
 
     if (!isAccountOwner) return false;
 
-    return await exports.ox_core.SetAccountAccess(data.accountId, data.targetStateId, data.values.role, true);
+    return await exports.ox_core.SetAccountAccess(data.accountId, data.targetStateId, data.values.role);
   }
 );
 
