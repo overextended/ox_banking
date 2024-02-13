@@ -113,27 +113,31 @@ onClientCallback(
     data: {
       accountId: number;
       page: number;
+      search?: string;
     }
   ): Promise<AccessTableData> => {
-    const { accountId, page } = data;
+    const { accountId, page, search } = data;
+
+    const wildcard = `%${search}%`;
 
     const users = await oxmysql.rawExecute<AccessTableData['users']>(
       `
       SELECT c.stateId, a.role, CONCAT(c.firstName, " ", c.lastName) AS \`name\` FROM \`accounts_access\` a
       LEFT JOIN \`characters\` c ON c.charId = a.charId
       WHERE a.accountId = ?
+      AND CONCAT(c.firstName, " ", c.lastName) LIKE ?
       ORDER BY a.role DESC
       LIMIT 7
       OFFSET ?
       `,
-      [accountId, page * 7]
+      [accountId, wildcard, page * 7]
     );
 
-    const usersCount = await oxmysql.prepare<number>('SELECT COUNT(*) FROM `accounts_access` WHERE accountId = ?', [
-      accountId,
-    ]);
+    const usersCount = await oxmysql.prepare<number>(
+      'SELECT COUNT(*) FROM `accounts_access` ac LEFT JOIN characters c ON c.charId = ac.charId WHERE accountId = ? AND CONCAT(c.firstName, " ", c.lastName) LIKE ?',
+      [accountId, wildcard]
+    );
 
-    // todo: iterate over user table to get role rather than do another query
     const role = await exports.ox_core.GetAccountRole(playerId, accountId);
 
     return {

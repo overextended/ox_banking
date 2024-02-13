@@ -6,14 +6,18 @@ import { AccessTableData } from '~/typings';
 import { useQuery } from '@tanstack/react-query';
 import { fetchNui } from '@/utils/fetchNui';
 import SpinningLoader from '@/components/SpinningLoader';
+import { useDebouncedAccessTableSearch, useIsAccessTableSearchDebouncing } from '@/state/manage-access/search';
+import { cn } from '@/lib/utils';
 
 const AccessTable: React.FC<{ accountId: number }> = ({ accountId }) => {
   const [page, setPage] = React.useState(0);
   const [numberOfPages, setNumberOfPages] = React.useState(0);
+  const search = useDebouncedAccessTableSearch();
+  const isSearchDebouncing = useIsAccessTableSearchDebouncing();
   const { data, isLoading } = useQuery<AccessTableData>({
-    queryKey: ['account-access', page], queryFn: async () => {
+    queryKey: ['account-access', page, search], queryFn: async () => {
       const resp = await fetchNui<AccessTableData>('getAccountUsers', {
-        accountId: +accountId!, page,
+        accountId: +accountId!, page, search,
       }, {
         data: {
           role: 'manager',
@@ -35,9 +39,16 @@ const AccessTable: React.FC<{ accountId: number }> = ({ accountId }) => {
     },
   });
 
+  // todo: runs the query twice
+  React.useEffect(() => setPage(0), [search]);
+
+  const spinnerVisible = isLoading || isSearchDebouncing;
+
   return (
-    <div className='flex flex-col justify-between h-full border border-border rounded-lg p-4'>
-      {!isLoading ? <div>
+    <div
+      className='flex flex-col justify-between h-full border border-border rounded-lg p-4'>
+
+      {!spinnerVisible ? <div>
         <div className='grid grid-cols-4 place-items-center text-sm'>
           <p>Name</p>
           <p>Role</p>
@@ -55,15 +66,16 @@ const AccessTable: React.FC<{ accountId: number }> = ({ accountId }) => {
         </div>
       )}
       <div className='flex gap-4 items-center justify-end'>
-        <Button size='icon' onClick={() => setPage(prev => --prev)} disabled={page <= 0}>
+        <Button size='icon' onClick={() => setPage(prev => --prev)} disabled={page <= 0 || spinnerVisible}>
           <ChevronLeft size={20} />
         </Button>
-        <p>Page {page + 1} of {numberOfPages}</p>
+        <p>Page {page + 1} of {spinnerVisible ? '?' : numberOfPages}</p>
         <Button size='icon' onClick={() => setPage(prev => ++prev)}
-                disabled={page >= numberOfPages - 1}>
+                disabled={page >= numberOfPages - 1 || spinnerVisible}>
           <ChevronRight size={20} />
         </Button>
       </div>
+
     </div>
   );
 };
