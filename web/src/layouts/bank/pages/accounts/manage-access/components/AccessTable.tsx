@@ -1,27 +1,28 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Edit, Trash } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import AccessTableUserItem from '@/layouts/bank/pages/accounts/manage-access/components/AccessTableUserItem';
 import { AccessTableData } from '~/typings';
 import { useQuery } from '@tanstack/react-query';
 import { fetchNui } from '@/utils/fetchNui';
 import SpinningLoader from '@/components/SpinningLoader';
 import { useDebouncedAccessTableSearch, useIsAccessTableSearchDebouncing } from '@/state/manage-access/search';
-import { cn } from '@/lib/utils';
 import locales from '@/locales';
+import { useActiveAccount } from '@/state/accounts';
 
 const AccessTable: React.FC<{ accountId: number }> = ({ accountId }) => {
   const [page, setPage] = React.useState(0);
   const [numberOfPages, setNumberOfPages] = React.useState(0);
   const search = useDebouncedAccessTableSearch();
   const isSearchDebouncing = useIsAccessTableSearchDebouncing();
+  const { role: characterRole } = useActiveAccount()!;
+
   const { data, isLoading } = useQuery<AccessTableData>({
     queryKey: ['account-access', page, search], queryFn: async () => {
       const resp = await fetchNui<AccessTableData>('getAccountUsers', {
         accountId: +accountId!, page, search,
       }, {
         data: {
-          role: 'owner',
           numberOfPages: 2,
           users: [
             {
@@ -57,7 +58,7 @@ const AccessTable: React.FC<{ accountId: number }> = ({ accountId }) => {
           <p></p>
         </div>
         {data?.users.map(user => (
-          <AccessTableUserItem key={user.stateId} characterRole={data.role} accountId={accountId} name={user.name}
+          <AccessTableUserItem key={user.stateId} characterRole={characterRole} accountId={accountId} name={user.name}
                                stateId={user.stateId}
                                role={user.role} />
         ))}

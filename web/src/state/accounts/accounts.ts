@@ -17,6 +17,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             label: 'Some name',
             owner: 'Some owner',
             type: 'personal',
+            role: 'owner',
           },
           {
             id: 932123,
@@ -24,6 +25,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             label: 'Some name',
             owner: 'Some owner',
             type: 'shared',
+            role: 'owner',
           },
           {
             id: 932124,
@@ -31,6 +33,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             label: 'Some name',
             owner: 'Some owner',
             type: 'personal',
+            role: 'owner',
           },
           {
             id: 932125,
@@ -38,6 +41,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             label: 'Some name',
             owner: 'Some owner',
             type: 'personal',
+            role: 'owner',
           },
           {
             id: 932126,
@@ -45,6 +49,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             label: 'Some name',
             owner: 'Some owner',
             type: 'personal',
+            role: 'owner',
           },
           {
             id: 932127,
@@ -52,6 +57,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             label: 'Some name',
             owner: 'Some owner',
             type: 'personal',
+            role: 'owner',
           },
           {
             id: 932128,
@@ -59,6 +65,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             label: 'Some name',
             owner: 'Some owner',
             type: 'personal',
+            role: 'owner',
           },
         ],
       });

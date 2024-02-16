@@ -28,7 +28,6 @@ export interface DashboardData {
 }
 
 export interface AccessTableData {
-  role: AccountRole;
   numberOfPages: number;
   users: AccessTableUser[];
 }

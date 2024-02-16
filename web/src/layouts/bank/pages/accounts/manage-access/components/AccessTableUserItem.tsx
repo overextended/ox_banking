@@ -7,15 +7,15 @@ import ManageUserModal from '@/layouts/bank/pages/accounts/manage-access/modals/
 import RemoveUserModal from '@/layouts/bank/pages/accounts/manage-access/modals/RemoveUserModal';
 import locales from '@/locales';
 
-const ROLES = {
-  'owner': locales.owner,
-  'manager': locales.manager,
-  'contributor': locales.contributor,
-};
-
 const AccessTableUserItem: React.FC<AccessTableUser & { accountId: number; characterRole: AccountRole }> = (props) => {
   const { role, name, stateId, characterRole, accountId } = props;
   const modal = useModal();
+
+  const ROLES = React.useMemo(() => ({
+    owner: locales.owner,
+    manager: locales.manager,
+    contributor: locales.contributor,
+  }), []);
 
   return (
     <div className='grid grid-cols-4 py-4 place-items-center border-t border-border'>

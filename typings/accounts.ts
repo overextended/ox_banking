@@ -1,3 +1,5 @@
+import { AccountRole } from './nui';
+
 type AccountType = 'personal' | 'shared' | 'group';
 
 export interface Account {
@@ -8,6 +10,7 @@ export interface Account {
   balance: number;
   isDefault?: boolean;
   type: AccountType;
+  role: AccountRole;
 }
 
 export type DatabaseAccount = {
