@@ -10,6 +10,7 @@ import { useModal } from '@/components/ModalsProvider';
 import SpinningLoader from '@/components/SpinningLoader';
 import locales from '@/locales';
 import { queryClient } from '@/main';
+import { AccessTableData, AccountRole } from '~/typings';
 
 
 interface Props {
@@ -37,7 +38,27 @@ const ManageUserModal: React.FC<Props> = ({ targetStateId, defaultRole, accountI
     setIsLoading(true);
     const resp = await fetchNui('manageUser', { accountId, targetStateId, values }, { data: true, delay: 1500 });
 
-    await queryClient.invalidateQueries({ queryKey: ['account-access'] });
+    queryClient.setQueriesData({ queryKey: ['account-access'] }, (data: AccessTableData | undefined) => {
+      console.log(0);
+      if (!data) return;
+
+      const selectedUserIndex = data.users.findIndex(user => user.stateId === targetStateId);
+
+      if (selectedUserIndex === -1) return;
+
+      const selectedUser = data.users[selectedUserIndex];
+
+      const updatedUser = { ...selectedUser, role: values.role as AccountRole };
+
+      const newUsers = [...data.users];
+
+      newUsers[selectedUserIndex] = { ...newUsers[selectedUserIndex], ...updatedUser };
+
+      return {
+        ...data,
+        users: newUsers,
+      };
+    });
 
     setIsLoading(false);
     modal.close();
