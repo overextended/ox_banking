@@ -29,10 +29,9 @@ const RemoveUserModal: React.FC<Props> = ({ targetStateId, accountId }) => {
 
   return (
     <div className='flex flex-col gap-4'>
-      <p className='text-sm'>Are you sure you want to remove account access from the user with state
-        id <b>{targetStateId}</b>?</p>
+      <p className='text-sm'>{locales.remove_user_warning.format(targetStateId)}</p>
       <Button variant='destructive' onClick={handleRemove} disabled={isLoading}>
-        {isLoading ? <SpinningLoader /> : 'Remove account access'}
+        {isLoading ? <SpinningLoader /> : locales.remove_account_access}
       </Button>
     </div>
   );

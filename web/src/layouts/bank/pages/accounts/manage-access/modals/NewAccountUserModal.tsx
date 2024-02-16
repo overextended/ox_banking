@@ -59,7 +59,7 @@ const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => 
         <FormField
           render={({ field }) => (
             <FormItem>
-              <FormLabel>State ID</FormLabel>
+              <FormLabel>{locales.state_id}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -71,21 +71,21 @@ const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => 
         <FormField
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Role</FormLabel>
+              <FormLabel>{locales.role}</FormLabel>
               <FormControl>
                 <Select {...field} onValueChange={field.onChange} defaultValue={field.value}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='contributor'>Contributor</SelectItem>
-                    <SelectItem value='manager'>Manager</SelectItem>
+                    <SelectItem value='manager'>{locales.manager}</SelectItem>
+                    <SelectItem value='contributor'>{locales.contributor}</SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>
               <FormDescription>
-                <p>Contributor - Only deposit allowed</p>
-                <p>Manager - Deposit, withdraw, transfer and logs allowed</p>
+                <p>{locales.contributor_description}</p>
+                <p>{locales.manager_description}</p>
               </FormDescription>
             </FormItem>
           )}

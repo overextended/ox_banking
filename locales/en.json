@@ -46,5 +46,20 @@
   "delete_account_warning": "This action is irreversible and the funds will be transferred to your main account.",
   "amount_greater_than_cash": "Amount is greater than available cash",
   "amount_greater_than_balance": "Amount is greater than available balance",
-  "cash_balance": "Cash balance"
+  "cash_balance": "Cash balance",
+  "new_account_user": "New account user",
+  "search_names": "Search names...",
+  "name": "Name",
+  "role": "Role",
+  "state_id": "State ID",
+  "current_page": "Page %s of %s",
+  "owner": "Owner",
+  "manager": "Manager",
+  "contributor": "Contributor",
+  "manage_user": "Manage user",
+  "remove_user": "Remove user",
+  "contributor_description": "Contributor - Only deposit allowed",
+  "manager_description": "Manager - Deposit, withdraw, transfer and logs allowed",
+  "remove_user_warning": "Are you sure you want to remove account access from the user with state id %s?",
+  "remove_account_access": "Remove account access"
 }

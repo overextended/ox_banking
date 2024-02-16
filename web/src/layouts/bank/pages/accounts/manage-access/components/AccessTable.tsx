@@ -8,6 +8,7 @@ import { fetchNui } from '@/utils/fetchNui';
 import SpinningLoader from '@/components/SpinningLoader';
 import { useDebouncedAccessTableSearch, useIsAccessTableSearchDebouncing } from '@/state/manage-access/search';
 import { cn } from '@/lib/utils';
+import locales from '@/locales';
 
 const AccessTable: React.FC<{ accountId: number }> = ({ accountId }) => {
   const [page, setPage] = React.useState(0);
@@ -20,7 +21,7 @@ const AccessTable: React.FC<{ accountId: number }> = ({ accountId }) => {
         accountId: +accountId!, page, search,
       }, {
         data: {
-          role: 'manager',
+          role: 'owner',
           numberOfPages: 2,
           users: [
             {
@@ -50,9 +51,9 @@ const AccessTable: React.FC<{ accountId: number }> = ({ accountId }) => {
 
       {!spinnerVisible ? <div>
         <div className='grid grid-cols-4 place-items-center text-sm'>
-          <p>Name</p>
-          <p>Role</p>
-          <p>State ID</p>
+          <p>{locales.name}</p>
+          <p>{locales.role}</p>
+          <p>{locales.state_id}</p>
           <p></p>
         </div>
         {data?.users.map(user => (
@@ -69,7 +70,7 @@ const AccessTable: React.FC<{ accountId: number }> = ({ accountId }) => {
         <Button size='icon' onClick={() => setPage(prev => --prev)} disabled={page <= 0 || spinnerVisible}>
           <ChevronLeft size={20} />
         </Button>
-        <p>Page {page + 1} of {spinnerVisible ? '?' : numberOfPages}</p>
+        <p>{locales.current_page.format(page + 1, spinnerVisible ? '?' : numberOfPages)}</p>
         <Button size='icon' onClick={() => setPage(prev => ++prev)}
                 disabled={page >= numberOfPages - 1 || spinnerVisible}>
           <ChevronRight size={20} />

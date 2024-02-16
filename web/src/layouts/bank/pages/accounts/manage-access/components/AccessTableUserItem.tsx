@@ -5,11 +5,12 @@ import { AccessTableUser, AccountRole } from '~/typings';
 import { useModal } from '@/components/ModalsProvider';
 import ManageUserModal from '@/layouts/bank/pages/accounts/manage-access/modals/ManageUserModal';
 import RemoveUserModal from '@/layouts/bank/pages/accounts/manage-access/modals/RemoveUserModal';
+import locales from '@/locales';
 
 const ROLES = {
-  'owner': 'Owner',
-  'manager': 'Manager',
-  'contributor': 'Contributor',
+  'owner': locales.owner,
+  'manager': locales.manager,
+  'contributor': locales.contributor,
 };
 
 const AccessTableUserItem: React.FC<AccessTableUser & { accountId: number; characterRole: AccountRole }> = (props) => {
@@ -23,7 +24,7 @@ const AccessTableUserItem: React.FC<AccessTableUser & { accountId: number; chara
       <p>{stateId}</p>
       <div className='flex gap-2 items-center'>
         <Button disabled={characterRole !== 'owner'} size='icon' onClick={() => modal.open({
-          title: 'Manage user',
+          title: locales.manage_access,
           children: <ManageUserModal accountId={accountId} targetStateId={stateId} defaultRole={role} />,
         })}>
           <UserCog size={20} />
@@ -31,7 +32,7 @@ const AccessTableUserItem: React.FC<AccessTableUser & { accountId: number; chara
         <Button disabled={(characterRole !== 'owner' && characterRole !== 'manager') || role === characterRole}
                 size='icon' variant='destructive'
                 onClick={() => modal.open({
-                  title: 'Remove user',
+                  title: locales.remove_user,
                   children: <RemoveUserModal targetStateId={stateId} accountId={accountId} />,
                 })}>
           <UserMinus size={20} />

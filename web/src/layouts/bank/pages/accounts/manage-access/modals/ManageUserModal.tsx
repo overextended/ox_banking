@@ -12,7 +12,6 @@ import locales from '@/locales';
 import { queryClient } from '@/main';
 import { AccessTableData, AccountRole } from '~/typings';
 
-
 interface Props {
   targetStateId: string;
   defaultRole: string;
@@ -71,21 +70,21 @@ const ManageUserModal: React.FC<Props> = ({ targetStateId, defaultRole, accountI
           <FormField
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Role</FormLabel>
+                <FormLabel>{locales.role}</FormLabel>
                 <FormControl>
                   <Select {...field} onValueChange={field.onChange} defaultValue={field.value}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value='contributor'>Contributor</SelectItem>
-                      <SelectItem value='manager'>Manager</SelectItem>
+                      <SelectItem value='manager'>{locales.manager}</SelectItem>
+                      <SelectItem value='contributor'>{locales.contributor}</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormControl>
                 <FormDescription>
-                  <p>Contributor - Only deposit allowed</p>
-                  <p>Manager - Deposit, withdraw, transfer and logs allowed</p>
+                  <p>{locales.contributor_description}</p>
+                  <p>{locales.manager_description}</p>
                 </FormDescription>
               </FormItem>
             )}

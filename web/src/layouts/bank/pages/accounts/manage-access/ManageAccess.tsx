@@ -20,11 +20,11 @@ const ManageAccess: React.FC = () => {
           <AccessTableSearch />
           <Button className='flex gap-2 items-center'
                   onClick={() => modal.open({
-                    title: 'New account user',
+                    title: locales.new_account_user,
                     children: <NewAccountUserModal accountId={+accountId!} />,
                   })}>
             <Plus size={20} />
-            New account user
+            {locales.new_account_user}
           </Button>
         </div>
         <AccessTable accountId={+accountId!} />
