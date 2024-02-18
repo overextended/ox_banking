@@ -6,21 +6,25 @@ import { AccessTableData } from '~/typings';
 import { useQuery } from '@tanstack/react-query';
 import { fetchNui } from '@/utils/fetchNui';
 import SpinningLoader from '@/components/SpinningLoader';
-import { useDebouncedAccessTableSearch, useIsAccessTableSearchDebouncing } from '@/state/manage-access/search';
+import {
+  useDebouncedAccessTableFilters,
+  useIsAccessTableFiltersDebouncing,
+  useSetAccessTableFiltersDebounce,
+} from '@/state/manage-access/tableFilters';
 import locales from '@/locales';
 import { useActiveAccount } from '@/state/accounts';
 
 const AccessTable: React.FC<{ accountId: number }> = ({ accountId }) => {
-  const [page, setPage] = React.useState(0);
   const [numberOfPages, setNumberOfPages] = React.useState(0);
-  const search = useDebouncedAccessTableSearch();
-  const isSearchDebouncing = useIsAccessTableSearchDebouncing();
+  const tableFilter = useDebouncedAccessTableFilters();
+  const setTableFilter = useSetAccessTableFiltersDebounce();
+  const isSearchDebouncing = useIsAccessTableFiltersDebouncing();
   const { role: characterRole } = useActiveAccount()!;
 
   const { data, isLoading } = useQuery<AccessTableData>({
-    queryKey: ['account-access', page, search], queryFn: async () => {
+    queryKey: ['account-access', tableFilter.page, tableFilter.search], queryFn: async () => {
       const resp = await fetchNui<AccessTableData>('getAccountUsers', {
-        accountId: +accountId!, page, search,
+        accountId: +accountId!, page: tableFilter.page, search: tableFilter.search,
       }, {
         data: {
           numberOfPages: 2,
@@ -40,9 +44,6 @@ const AccessTable: React.FC<{ accountId: number }> = ({ accountId }) => {
       return resp;
     },
   });
-
-  // todo: runs the query twice
-  React.useEffect(() => setPage(0), [search]);
 
   const spinnerVisible = isLoading || isSearchDebouncing;
 
@@ -68,12 +69,13 @@ const AccessTable: React.FC<{ accountId: number }> = ({ accountId }) => {
         </div>
       )}
       <div className='flex gap-4 items-center justify-end'>
-        <Button size='icon' onClick={() => setPage(prev => --prev)} disabled={page <= 0 || spinnerVisible}>
+        <Button size='icon' onClick={() => setTableFilter(prev => ({ ...prev, page: --prev.page }))}
+                disabled={tableFilter.page <= 0 || spinnerVisible}>
           <ChevronLeft size={20} />
         </Button>
-        <p>{locales.current_page.format(page + 1, spinnerVisible ? '?' : numberOfPages)}</p>
-        <Button size='icon' onClick={() => setPage(prev => ++prev)}
-                disabled={page >= numberOfPages - 1 || spinnerVisible}>
+        <p>{locales.current_page.format(tableFilter.page + 1, spinnerVisible ? '?' : numberOfPages)}</p>
+        <Button size='icon' onClick={() => setTableFilter(prev => ({ ...prev, page: ++prev.page }))}
+                disabled={tableFilter.page >= numberOfPages - 1 || spinnerVisible}>
           <ChevronRight size={20} />
         </Button>
       </div>
