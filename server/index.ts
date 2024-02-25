@@ -1,7 +1,7 @@
 import { onClientCallback } from '@overextended/ox_lib/server';
 import type { AccessTableData, Account, AccountRole, DashboardData } from '../typings';
 import { oxmysql } from '@overextended/oxmysql';
-import { GetPlayer } from '@overextended/ox_core/server';
+import { Ox, GetPlayer } from '@overextended/ox_core/server';
 
 type GetAccountsReponse = {
   id: Account['id'];
@@ -47,17 +47,20 @@ onClientCallback('ox_banking:getAccounts', async (playerId): Promise<Account[]> 
 });
 
 onClientCallback('ox_banking:createAccount', async (playerId, { name, shared }: { name: string; shared: boolean }) => {
-  const player = GetPlayer(playerId);
+  const { charId } = GetPlayer(playerId);
 
-  if (!player) return;
+  if (!charId) return;
 
-  return await exports.ox_core.CreateAccount(player.charId, name, shared);
+  return await Ox.CreateAccount(charId, name, shared);
 });
 
 onClientCallback('ox_banking:deleteAccount', async (playerId, accountId: number) => {
-  if (!(await exports.ox_core.IsAccountOwner(playerId, accountId))) return;
+  const { charId } = GetPlayer(playerId);
+  const role = charId && (await Ox.GetAccountRole(accountId, charId));
 
-  return await oxmysql.prepare('DELETE FROM `accounts` WHERE id = ?', [accountId]);
+  if (role !== 'owner' && role !== 'manager') return;
+
+  return await Ox.DeleteAccount(accountId);
 });
 
 interface UpdateBalance {
@@ -73,35 +76,38 @@ interface TransferBalance {
 }
 
 onClientCallback('ox_banking:depositMoney', async (playerId, { accountId, amount }: UpdateBalance) => {
-  return await exports.ox_core.DepositMoney(playerId, accountId, amount);
+  return await Ox.DepositMoney(playerId, accountId, amount);
 });
 
 onClientCallback('ox_banking:withdrawMoney', async (playerId, { accountId, amount }: UpdateBalance) => {
-  return await exports.ox_core.WithdrawMoney(playerId, accountId, amount);
+  return await Ox.WithdrawMoney(playerId, accountId, amount);
 });
 
 onClientCallback(
   'ox_banking:transferMoney',
   async (playerId, { fromAccountId, target, transferType, amount }: TransferBalance) => {
-    if (!(await exports.ox_core.IsAccountOwner(playerId, fromAccountId))) return;
+    const { charId } = GetPlayer(playerId);
+    const role = charId && (await Ox.GetAccountRole(fromAccountId, charId));
+
+    if (role !== 'owner' && role !== 'manager') return;
 
     const targetAccountId =
-      transferType === 'account' ? target : (await exports.ox_core.GetCharacterAccount(target))?.id;
+      transferType === 'account' ? (target as number) : (await Ox.GetCharacterAccount(target))?.id;
 
     if (targetAccountId) {
       //@todo notify
-      return await exports.ox_core.TransferAccountBalance(fromAccountId, targetAccountId, amount);
+      return await Ox.TransferAccountBalance(fromAccountId, targetAccountId, amount);
     }
   }
 );
 
 onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<DashboardData> => {
-  const playerAccount = await exports.ox_core.GetPlayerAccount(playerId);
+  const account = await GetPlayer(playerId)?.getAccount();
 
-  if (!playerAccount) return;
+  if (!account) return;
 
   return {
-    balance: playerAccount.balance,
+    balance: account.balance,
     overview: [],
     transactions: [],
     invoices: [],
@@ -152,13 +158,14 @@ onClientCallback(
   async (
     playerId,
     data: {
-      accountId: string;
+      accountId: number;
       stateId: string;
       role: string;
     }
   ) => {
     const { accountId, stateId, role } = data;
-    const userRole = await exports.ox_core.GetAccountRole(playerId, data.accountId);
+    const { charId } = GetPlayer(playerId);
+    const userRole = await Ox.GetAccountRole(accountId, charId);
 
     if (userRole !== 'owner' && userRole !== 'manager') return;
 
@@ -166,7 +173,7 @@ onClientCallback(
 
     if (!success) return 'No person with provided state id found.';
 
-    return await exports.ox_core.SetAccountAccess(accountId, stateId, role);
+    return await Ox.SetAccountAccess(accountId, charId, role);
   }
 );
 
@@ -180,18 +187,20 @@ onClientCallback(
       values: { role: string };
     }
   ): Promise<boolean> => {
-    const isAccountOwner: boolean = await exports.ox_core.IsAccountOwner(playerId, data.accountId);
+    const { charId } = GetPlayer(playerId);
+    const role = await Ox.GetAccountRole(data.accountId, charId);
 
-    if (!isAccountOwner) return false;
+    if (role !== 'owner') return false;
 
-    return await exports.ox_core.SetAccountAccess(data.accountId, data.targetStateId, data.values.role);
+    return (await Ox.SetAccountAccess(data.accountId, data.targetStateId, data.values.role)) > 0;
   }
 );
 
 onClientCallback('ox_banking:removeUser', async (playerId, data: { targetStateId: string; accountId: number }) => {
-  const role = await exports.ox_core.GetAccountRole(playerId, data.accountId);
+  const { charId } = GetPlayer(playerId);
+  const role = await Ox.GetAccountRole(data.accountId, charId);
 
   if (role !== 'owner' && role !== 'manager') return;
 
-  return await exports.ox_core.RemoveAccountAccess(data.accountId, data.targetStateId);
+  return await Ox.RemoveAccountAccess(data.accountId, data.targetStateId);
 });
