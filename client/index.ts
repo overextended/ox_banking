@@ -97,6 +97,7 @@ on('ox_inventory:itemCount', (itemName: string, count: number) => {
 });
 
 serverNuiCallback('getDashboardData');
+serverNuiCallback('transferOwnership');
 serverNuiCallback('manageUser');
 serverNuiCallback('removeUser');
 serverNuiCallback('getAccountUsers');

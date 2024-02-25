@@ -2,6 +2,8 @@ import { onClientCallback } from '@overextended/ox_lib/server';
 import type { AccessTableData, Account, AccountRole, DashboardData } from '../typings';
 import { oxmysql } from '@overextended/oxmysql';
 import { Ox, GetPlayer } from '@overextended/ox_core/server';
+import * as console from 'console';
+import { GetCharIdFromStateId } from '@overextended/ox_core/package/server/player/db';
 
 type GetAccountsReponse = {
   id: Account['id'];
@@ -171,6 +173,7 @@ onClientCallback(
 
     const success = await oxmysql.prepare('SELECT 1 FROM `characters` WHERE `stateId` = ?', [stateId]);
 
+    // todo locale
     if (!success) return 'No person with provided state id found.';
 
     return await Ox.SetAccountAccess(accountId, charId, role);
@@ -204,3 +207,41 @@ onClientCallback('ox_banking:removeUser', async (playerId, data: { targetStateId
 
   return await Ox.RemoveAccountAccess(data.accountId, data.targetStateId);
 });
+
+onClientCallback(
+  'ox_banking:transferOwnership',
+  async (
+    playerId,
+    data: {
+      targetStateId: string;
+      accountId: number;
+    }
+  ): Promise<true | 'state_id_not_exists'> => {
+    // todo: move to ox_core
+
+    const { charId } = GetPlayer(playerId);
+    const accountRole = await Ox.GetAccountRole(data.accountId, charId);
+
+    if (accountRole !== 'owner') return;
+
+    const targetCharId = await oxmysql.prepare<number | null>('SELECT `charId` FROM `characters` WHERE `stateId` = ?', [
+      data.targetStateId,
+    ]);
+
+    if (!targetCharId) return 'state_id_not_exists';
+
+    await oxmysql.prepare(
+      "INSERT INTO `accounts_access` (`accountId`, `charId`, `role`) VALUES (?, ?, 'owner') ON DUPLICATE KEY UPDATE `role` = 'owner'",
+      [data.accountId, targetCharId]
+    );
+
+    await oxmysql.prepare('UPDATE `accounts` SET `owner` = ? WHERE `id` = ?', [targetCharId, data.accountId]);
+
+    await oxmysql.prepare("UPDATE `accounts_access` SET `role` = 'manager' WHERE `accountId` = ? AND `charId` = ?", [
+      data.accountId,
+      charId,
+    ]);
+
+    return true;
+  }
+);

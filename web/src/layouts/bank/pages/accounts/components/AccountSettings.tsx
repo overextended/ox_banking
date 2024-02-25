@@ -7,6 +7,7 @@ import { useModal } from '@/components/ModalsProvider';
 import { useActiveAccount } from '@/state/accounts';
 import DeleteAccountModal from '@/layouts/bank/pages/accounts/modals/DeleteAccountModal';
 import { useNavigate } from 'react-router-dom';
+import TransferAccountModal from '@/layouts/bank/pages/accounts/modals/TransferAccountModal';
 
 const AccountSettings: React.FC = () => {
   const modal = useModal();
@@ -19,7 +20,11 @@ const AccountSettings: React.FC = () => {
         <AccountButton
           label={locales.transfer_ownership}
           icon={ArrowRight}
-          disabled={account.type === 'personal' || account.type === 'group'}
+          onClick={() => modal.open({
+            title: locales.transfer_ownership,
+            children: <TransferAccountModal accountId={account.id} />,
+          })}
+          disabled={account.type === 'personal' || account.type === 'group' || (account.type === 'shared' && account.role !== 'owner')}
         />
         <AccountButton
           label={locales.convert_to_shared}
