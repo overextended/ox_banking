@@ -13,10 +13,9 @@ export interface DashboardData {
     expenses: number;
   }[];
   transactions?: {
-    firstName: string;
-    lastName: string;
     date: string;
     amount: number;
+    reason: string;
     type: 'inbound' | 'outbound';
   }[];
   invoices?: {

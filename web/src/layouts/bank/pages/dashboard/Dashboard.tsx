@@ -84,11 +84,11 @@ const MOCK_DASHBOARD: DashboardData = {
     },
   ],
   transactions: [
-    { amount: 1500, firstName: 'Olivia', lastName: 'Martin', date: '28/10/2023', type: 'inbound' },
-    { amount: 2900, firstName: 'Jack', lastName: 'Sparrow', date: '28/10/2023', type: 'inbound' },
-    { amount: 12700, firstName: 'John', lastName: 'Doe', date: '28/10/2023', type: 'outbound' },
-    { amount: 3500, firstName: 'Svetozar', lastName: 'Miletić', date: '28/10/2023', type: 'inbound' },
-    { amount: 3500, firstName: 'Svetozar', lastName: 'Miletić', date: '28/10/2023', type: 'inbound' },
+    { amount: 1500, reason: 'Salary', date: '28/10/2023', type: 'inbound' },
+    { amount: 2900, reason: 'Salary', date: '28/10/2023', type: 'inbound' },
+    { amount: 12700, reason: 'Withdraw', date: '28/10/2023', type: 'outbound' },
+    { amount: 3500, reason: 'Deposit', date: '28/10/2023', type: 'inbound' },
+    { amount: 3500, reason: 'Deposit', date: '28/10/2023', type: 'inbound' },
   ],
 };
 
@@ -123,10 +123,9 @@ const Dashboard: React.FC = () => {
         <BaseCard title={locales.recent_transactions} icon={Repeat} className='flex-1'>
           {data.transactions?.map((transaction) => (
             <TransactionItem
-              key={`${transaction.firstName}-${transaction.date}`}
+              key={`${transaction.amount}-${transaction.date}`}
               amount={transaction.amount}
-              firstName={transaction.firstName}
-              lastName={transaction.lastName}
+              reason={transaction.reason}
               date={transaction.date}
               type={transaction.type}
             />
