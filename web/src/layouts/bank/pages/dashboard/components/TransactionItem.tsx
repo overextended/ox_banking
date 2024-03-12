@@ -1,24 +1,30 @@
 import React from 'react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { formatNumber } from '@/utils/formatNumber';
 import { cn } from '@/lib/utils';
+import locales from '@/locales';
 
 interface Props {
-  firstName: string;
-  lastName: string;
   date: string;
   amount: number;
   type: 'inbound' | 'outbound';
+  message?: string;
 }
 
 const TransactionItem: React.FC<Props> = (props) => {
   return (
     <div className='flex items-center'>
       <Avatar className='h-9 w-9'>
-        <AvatarFallback>{`${props.firstName.charAt(0)}${props.lastName.charAt(0)}`}</AvatarFallback>
+        <AvatarFallback>
+          {props.type === 'outbound' ?
+            <ArrowDownRight className='text-destructive' /> :
+            <ArrowUpRight className='text-primary' />
+          }
+        </AvatarFallback>
       </Avatar>
       <div className='ml-4 space-y-1'>
-        <p className='text-sm font-medium leading-none'>{`${props.firstName} ${props.lastName}`}</p>
+        <p className='text-sm font-medium leading-none'>{props.message ?? locales.no_message}</p>
         <p className='text-xs text-muted-foreground'>
           {props.date}
         </p>
