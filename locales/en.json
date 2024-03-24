@@ -62,5 +62,6 @@
   "manager_description": "Manager - Deposit, withdraw, transfer and logs allowed",
   "remove_user_warning": "Are you sure you want to remove account access from the user with state id %s?",
   "remove_account_access": "Remove account access",
-  "state_id_not_exists": "No person with such state id found."
+  "state_id_not_exists": "No person with such state id found.",
+  "no_message": "No message"
 }

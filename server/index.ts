@@ -1,5 +1,5 @@
 import { onClientCallback } from '@overextended/ox_lib/server';
-import type { AccessTableData, Account, AccountRole, DashboardData } from '../typings';
+import type { AccessTableData, Account, AccountRole, DashboardData, Transaction } from '../typings';
 import { oxmysql } from '@overextended/oxmysql';
 import { Ox, GetPlayer } from '@overextended/ox_core/server';
 import * as console from 'console';
@@ -108,10 +108,36 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
 
   if (!account) return;
 
+  const lastTransactions = await oxmysql.rawExecute<{
+    amount: number;
+    date: string;
+    toId?: number;
+    fromId?: number;
+    message?: string;
+  }[]>(
+    `
+    SELECT amount, date, toId, fromId, message
+    FROM accounts_transactions
+    WHERE toId = ? OR fromId = ?
+    ORDER BY date DESC
+    LIMIT 5
+    `,
+    [account.id, account.id]
+  );
+
+  const transactions: Transaction[] = lastTransactions.map((transaction) => {
+    return {
+      amount: transaction.amount,
+      date: transaction.date,
+      message: transaction.message,
+      type: transaction.toId === account.id ? 'inbound' : 'outbound',
+    };
+  });
+
   return {
     balance: account.balance,
     overview: [],
-    transactions: [],
+    transactions,
     invoices: [],
   };
 });
