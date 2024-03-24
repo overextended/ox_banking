@@ -1,5 +1,5 @@
 import { onClientCallback } from '@overextended/ox_lib/server';
-import type { AccessTableData, Account, AccountRole, DashboardData } from '../typings';
+import type { AccessTableData, Account, AccountRole, DashboardData, Transaction } from '../typings';
 import { oxmysql } from '@overextended/oxmysql';
 import { Ox, GetPlayer } from '@overextended/ox_core/server';
 import * as console from 'console';
@@ -107,14 +107,14 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
   const account = await GetPlayer(playerId)?.getAccount();
 
   if (!account) return;
-  
+
   const overview = await oxmysql.rawExecute<{
     day: string;
     income: number;
     expenses: number;
   }[]>(
     `
-    SELECT 
+    SELECT
       DAYNAME(d.date) as day,
       COALESCE(SUM(CASE WHEN at.toId = ? THEN at.amount ELSE 0 END), 0) as income,
       COALESCE(SUM(CASE WHEN at.fromId = ? THEN at.amount ELSE 0 END), 0) as expenses
@@ -133,11 +133,37 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
     `,
     [account.id, account.id, account.id, account.id]
   );
-  
+
+  const lastTransactions = await oxmysql.rawExecute<{
+    amount: number;
+    date: string;
+    toId?: number;
+    fromId?: number;
+    message?: string;
+  }[]>(
+    `
+    SELECT amount, date, toId, fromId, message
+    FROM accounts_transactions
+    WHERE toId = ? OR fromId = ?
+    ORDER BY date DESC
+    LIMIT 5
+    `,
+    [account.id, account.id]
+  );
+
+  const transactions: Transaction[] = lastTransactions.map((transaction) => {
+    return {
+      amount: transaction.amount,
+      date: transaction.date,
+      message: transaction.message,
+      type: transaction.toId === account.id ? 'inbound' : 'outbound',
+    };
+  });
+
   return {
     balance: account.balance,
     overview,
-    transactions: [],
+    transactions,
     invoices: [],
   };
 });
