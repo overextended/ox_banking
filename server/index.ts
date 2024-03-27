@@ -108,6 +108,32 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
 
   if (!account) return;
 
+  const overview = await oxmysql.rawExecute<{
+    day: string;
+    income: number;
+    expenses: number;
+  }[]>(
+    `
+    SELECT
+      DAYNAME(d.date) as day,
+      COALESCE(SUM(CASE WHEN at.toId = ? THEN at.amount ELSE 0 END), 0) as income,
+      COALESCE(SUM(CASE WHEN at.fromId = ? THEN at.amount ELSE 0 END), 0) as expenses
+    FROM (
+      SELECT CURDATE() as date
+      UNION ALL SELECT DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+      UNION ALL SELECT DATE_SUB(CURDATE(), INTERVAL 2 DAY)
+      UNION ALL SELECT DATE_SUB(CURDATE(), INTERVAL 3 DAY)
+      UNION ALL SELECT DATE_SUB(CURDATE(), INTERVAL 4 DAY)
+      UNION ALL SELECT DATE_SUB(CURDATE(), INTERVAL 5 DAY)
+      UNION ALL SELECT DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+    ) d
+    LEFT JOIN accounts_transactions at ON d.date = DATE(at.date) AND (at.toId = ? OR at.fromId = ?)
+    GROUP BY d.date
+    ORDER BY d.date ASC
+    `,
+    [account.id, account.id, account.id, account.id]
+  );
+
   const lastTransactions = await oxmysql.rawExecute<{
     amount: number;
     date: string;
@@ -136,7 +162,7 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
 
   return {
     balance: account.balance,
-    overview: [],
+    overview,
     transactions,
     invoices: [],
   };
