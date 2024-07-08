@@ -2,8 +2,6 @@ import { onClientCallback } from '@overextended/ox_lib/server';
 import type { AccessTableData, Account, AccountRole, DashboardData, Transaction } from '../typings';
 import { oxmysql } from '@overextended/oxmysql';
 import { Ox, GetPlayer } from '@overextended/ox_core/server';
-import * as console from 'console';
-import { GetCharIdFromStateId } from '@overextended/ox_core/package/server/player/db';
 
 type GetAccountsReponse = {
   id: Account['id'];
@@ -98,7 +96,12 @@ onClientCallback(
 
     if (targetAccountId) {
       //@todo notify
-      return await Ox.TransferAccountBalance(fromAccountId, targetAccountId, amount);
+      return await Ox.TransferAccountBalance({
+        fromId: fromAccountId,
+        toId: targetAccountId,
+        amount: amount,
+        actorId: charId,
+      });
     }
   }
 );
@@ -108,11 +111,13 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
 
   if (!account) return;
 
-  const overview = await oxmysql.rawExecute<{
-    day: string;
-    income: number;
-    expenses: number;
-  }[]>(
+  const overview = await oxmysql.rawExecute<
+    {
+      day: string;
+      income: number;
+      expenses: number;
+    }[]
+  >(
     `
     SELECT
       DAYNAME(d.date) as day,
@@ -134,13 +139,15 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
     [account.id, account.id, account.id, account.id]
   );
 
-  const lastTransactions = await oxmysql.rawExecute<{
-    amount: number;
-    date: string;
-    toId?: number;
-    fromId?: number;
-    message?: string;
-  }[]>(
+  const lastTransactions = await oxmysql.rawExecute<
+    {
+      amount: number;
+      date: string;
+      toId?: number;
+      fromId?: number;
+      message?: string;
+    }[]
+  >(
     `
     SELECT amount, date, toId, fromId, message
     FROM accounts_transactions

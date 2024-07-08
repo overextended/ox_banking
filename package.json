@@ -20,15 +20,15 @@
   "devDependencies": {
     "@citizenfx/client": "latest",
     "@citizenfx/server": "latest",
-    "@types/node": "^20.11.5",
-    "esbuild": "^0.19.11",
-    "prettier": "^3.2.4",
-    "typescript": "^5.3.3"
+    "@types/node": "^20.14.10",
+    "esbuild": "^0.19.12",
+    "prettier": "^3.3.2",
+    "typescript": "^5.5.3"
   },
   "dependencies": {
     "@nativewrappers/client": "latest",
     "@nativewrappers/fivem-server": "latest",
-    "@overextended/ox_core": "^0.21.1",
+    "@overextended/ox_core": "^0.28.0",
     "@overextended/ox_lib": "latest",
     "@overextended/oxmysql": "latest"
   },
