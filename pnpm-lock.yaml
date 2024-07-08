@@ -15,8 +15,8 @@ importers:
         specifier: latest
         version: 0.0.20
       '@overextended/ox_core':
-        specifier: ^0.28.0
-        version: 0.28.0
+        specifier: ^0.28.1
+        version: 0.28.1
       '@overextended/ox_lib':
         specifier: latest
         version: 3.23.1
@@ -26,10 +26,10 @@ importers:
     devDependencies:
       '@citizenfx/client':
         specifier: latest
-        version: 2.0.8859-1
+        version: 2.0.8860-1
       '@citizenfx/server':
         specifier: latest
-        version: 2.0.8859-1
+        version: 2.0.8860-1
       '@types/node':
         specifier: ^20.14.10
         version: 20.14.10
@@ -45,11 +45,11 @@ importers:
 
 packages:
 
-  '@citizenfx/client@2.0.8859-1':
-    resolution: {integrity: sha512-Yi/4CvsBCp9SjyCug/G+JCGx0na0ll6tuAxwP4+k6F2FaodKyiH2o55w4bz1YyVDQ5ngzadLlH6bJTxncfbdyw==}
+  '@citizenfx/client@2.0.8860-1':
+    resolution: {integrity: sha512-s6ZtaNsvohq2dJczVMnP6ptLruEBjP1+pbky+izOBGx4E2Zpe1Jo3wQBA6YeWgqlOtIS968VmMlOsoTVrJ5kaA==}
 
-  '@citizenfx/server@2.0.8859-1':
-    resolution: {integrity: sha512-FcvRV5L9EFiA8IK75tqrQWj5i7fuM6wAnwF8csM/Y7A7mcGAKzzBKZ3KG9hCOso46+/0skJdTMdE9LmMg0ieDw==}
+  '@citizenfx/server@2.0.8860-1':
+    resolution: {integrity: sha512-TkBRem1gCKYWhbDf3slkMpJk/M+HPnY0UWDrMh5nbN08eZ+LWFegIQ1BNvpMMnsTPGcs+BNmuCh8mzup3OVfTQ==}
 
   '@esbuild/aix-ppc64@0.19.12':
     resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}
@@ -198,8 +198,8 @@ packages:
   '@nativewrappers/fivem@0.0.28':
     resolution: {integrity: sha512-PVv2dcAkgh78LH/gQ+PNVg8xGM3vUrwU5N9sTvKI8DTqfInIHJkoBXvd0+0muDU9J5OyAFUPkwbPzCn7H9ZSNQ==}
 
-  '@overextended/ox_core@0.28.0':
-    resolution: {integrity: sha512-Qm78n2KeB/v5X4Au+m//Lxi4I1HEKniYkmUHnFCoGUZzVUmzrmnSkuiYy+sN+8AnV8zF5fYO7EyZJyjsbac6Vg==}
+  '@overextended/ox_core@0.28.1':
+    resolution: {integrity: sha512-PuiEWgwVW09kDCt2JOKqFa1BTbtYwBvz3leTR9sD8N09B+WuEXKoc/Hnvjr1+3EmMoZvnwkEg81ZcgqcMOltzQ==}
     engines: {node: '>=16.9.1'}
 
   '@overextended/ox_lib@3.23.1':
@@ -263,9 +263,9 @@ packages:
 
 snapshots:
 
-  '@citizenfx/client@2.0.8859-1': {}
+  '@citizenfx/client@2.0.8860-1': {}
 
-  '@citizenfx/server@2.0.8859-1': {}
+  '@citizenfx/server@2.0.8860-1': {}
 
   '@esbuild/aix-ppc64@0.19.12':
     optional: true
@@ -342,7 +342,7 @@ snapshots:
 
   '@nativewrappers/fivem@0.0.28': {}
 
-  '@overextended/ox_core@0.28.0':
+  '@overextended/ox_core@0.28.1':
     dependencies:
       '@nativewrappers/fivem': 0.0.28
       '@overextended/ox_lib': 3.23.1

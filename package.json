@@ -28,7 +28,7 @@
   "dependencies": {
     "@nativewrappers/client": "latest",
     "@nativewrappers/fivem-server": "latest",
-    "@overextended/ox_core": "^0.28.0",
+    "@overextended/ox_core": "^0.28.1",
     "@overextended/ox_lib": "latest",
     "@overextended/oxmysql": "latest"
   },
