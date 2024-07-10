@@ -291,7 +291,7 @@ onClientCallback(
 
     await oxmysql.prepare("UPDATE `accounts_access` SET `role` = 'manager' WHERE `accountId` = ? AND `charId` = ?", [
       data.accountId,
-      charId,
+      player.charId,
     ]);
 
     return true;
