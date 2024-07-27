@@ -55,7 +55,9 @@ onClientCallback('ox_banking:createAccount', async (playerId, { name, shared }: 
 });
 
 onClientCallback('ox_banking:deleteAccount', async (playerId, accountId: number) => {
-  if (!GetPlayer(playerId)?.hasAccountPermission(accountId, 'closeAccount')) return;
+  const player = GetPlayer(playerId);
+
+  if (!player?.hasAccountPermission(accountId, 'closeAccount')) return;
 
   return await Ox.DeleteAccount(accountId);
 });
@@ -85,7 +87,7 @@ onClientCallback(
   async (playerId, { fromAccountId, target, transferType, amount }: TransferBalance) => {
     const player = GetPlayer(playerId);
 
-    if (player?.hasAccountPermission(fromAccountId, 'withdraw')) return;
+    if (!player?.hasAccountPermission(fromAccountId, 'withdraw')) return;
 
     const targetAccountId =
       transferType === 'account' ? (target as number) : (await Ox.GetCharacterAccount(target))?.id;
@@ -226,7 +228,7 @@ onClientCallback(
   ) => {
     const player = GetPlayer(playerId);
 
-    if (player?.hasAccountPermission(accountId, 'addUser')) return;
+    if (!player?.hasAccountPermission(accountId, 'addUser')) return;
 
     const success = await oxmysql.prepare('SELECT 1 FROM `characters` WHERE `stateId` = ?', [stateId]);
 
@@ -249,7 +251,7 @@ onClientCallback(
   ): Promise<boolean> => {
     const player = GetPlayer(playerId);
 
-    if (player?.hasAccountPermission(data.accountId, 'manageUser')) return;
+    if (!player?.hasAccountPermission(data.accountId, 'manageUser')) return;
 
     return (await Ox.SetAccountAccess(data.accountId, data.targetStateId, data.values.role)) > 0;
   }
@@ -258,7 +260,7 @@ onClientCallback(
 onClientCallback('ox_banking:removeUser', async (playerId, data: { targetStateId: string; accountId: number }) => {
   const player = GetPlayer(playerId);
 
-  if (player?.hasAccountPermission(data.accountId, 'removeUser')) return;
+  if (!player?.hasAccountPermission(data.accountId, 'removeUser')) return;
 
   return await Ox.RemoveAccountAccess(data.accountId, data.targetStateId);
 });
@@ -274,7 +276,7 @@ onClientCallback(
   ): Promise<true | 'state_id_not_exists'> => {
     const player = GetPlayer(playerId);
 
-    if (player?.hasAccountPermission(data.accountId, 'transferOwnership')) return;
+    if (!player?.hasAccountPermission(data.accountId, 'transferOwnership')) return;
 
     const targetCharId = await oxmysql.prepare<number | null>('SELECT `charId` FROM `characters` WHERE `stateId` = ?', [
       data.targetStateId,
