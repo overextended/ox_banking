@@ -73,8 +73,6 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
       }
     );
 
-    setCharacter(prev => ({...prev, cash: isDeposit ? prev.cash - amount : prev.cash + amount}))
-
     queryClient.setQueryData(['accounts'], (data: { numberOfPages: number; accounts: Account[] } | undefined) => {
       if (!data) return;
 
