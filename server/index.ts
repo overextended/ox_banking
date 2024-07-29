@@ -27,7 +27,7 @@ onClientCallback('ox_banking:getAccounts', async (playerId): Promise<Account[]> 
     FROM \`accounts_access\` c
     LEFT JOIN accounts a ON a.id = c.accountId
     LEFT JOIN characters b ON b.charId = a.owner
-    WHERE c.charId = ?
+    WHERE c.charId = ? AND a.type != 'inactive'
     `,
     [player.charId]
   );
