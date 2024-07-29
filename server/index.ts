@@ -240,7 +240,7 @@ onClientCallback(
     // todo locale
     if (!success) return 'No person with provided state id found.';
 
-    return await Ox.SetAccountAccess(accountId, player.charId, role);
+    return await Ox.SetAccountAccess(accountId, stateId, role);
   }
 );
 
