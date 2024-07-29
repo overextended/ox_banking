@@ -152,7 +152,7 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
     }[]
   >(
     `
-    SELECT amount, date, toId, fromId, message
+    SELECT amount, DATE_FORMAT(date, '%Y-%m-%d %H:00') as date, toId, fromId, message
     FROM accounts_transactions
     WHERE toId = ? OR fromId = ?
     ORDER BY date DESC
