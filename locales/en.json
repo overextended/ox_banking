@@ -56,6 +56,7 @@
   "owner": "Owner",
   "manager": "Manager",
   "contributor": "Contributor",
+  "viewer": "Viewer",
   "manage_user": "Manage user",
   "remove_user": "Remove user",
   "contributor_description": "Contributor - Only deposit allowed",
