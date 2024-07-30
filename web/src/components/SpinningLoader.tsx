@@ -7,7 +7,7 @@ interface Props {
 }
 
 const SpinningLoader: React.FC<Props> = ({ variant }) => {
-  return <Loader2 className={cn('animate-spin', variant === 'primary' && 'text-primary')} />;
+  return <Loader2 size={20} className={cn('animate-spin', variant === 'primary' && 'text-primary')} />;
 };
 
 export default SpinningLoader;

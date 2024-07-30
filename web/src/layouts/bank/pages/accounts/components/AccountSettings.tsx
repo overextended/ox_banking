@@ -8,6 +8,7 @@ import { useActiveAccount } from '@/state/accounts';
 import DeleteAccountModal from '@/layouts/bank/pages/accounts/modals/DeleteAccountModal';
 import { useNavigate } from 'react-router-dom';
 import TransferAccountModal from '@/layouts/bank/pages/accounts/modals/TransferAccountModal';
+import RenameAccountModal from '../modals/RenameAccountModal';
 
 const AccountSettings: React.FC = () => {
   const modal = useModal();
@@ -37,7 +38,18 @@ const AccountSettings: React.FC = () => {
           icon={Users}
           disabled={account.type === 'shared' || account.type === 'group' || account.isDefault}
         />
-        <AccountButton label={locales.rename} icon={Pencil} />
+        <AccountButton
+          onClick={() =>
+            modal.open({
+              title: locales.rename_account,
+              description: locales.rename_account_description,
+              children: <RenameAccountModal accountId={account.id} initialName={account.label} />,
+            })
+          }
+          disabled={account.role !== 'manager' && account.role !== 'owner'}
+          label={locales.rename}
+          icon={Pencil}
+        />
         <AccountButton
           label={locales.manage_access}
           icon={Shield}

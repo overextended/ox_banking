@@ -311,3 +311,16 @@ onClientCallback(
     return true;
   }
 );
+
+onClientCallback('ox_banking:renameAccount', async (playerId, data: { accountId: number; name: string }) => {
+  const player = GetPlayer(playerId);
+
+  if (!player) return;
+
+  const hasPermission = await player.hasAccountPermission(data.accountId, 'manageAccount');
+  if (!hasPermission) return false;
+
+  await oxmysql.prepare('UPDATE `accounts` SET `label` = ? WHERE `id` = ?', [data.name, data.accountId]);
+
+  return true;
+});
