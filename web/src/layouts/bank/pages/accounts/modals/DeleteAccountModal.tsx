@@ -1,5 +1,5 @@
 import React from 'react';
-import { Account } from '../../../../../../../typings';
+import { Account } from '~/typings';
 import { Button } from '@/components/ui/button';
 import locales from '@/locales';
 import { useModal } from '@/components/ModalsProvider';
@@ -20,14 +20,15 @@ const DeleteAccountModal: React.FC<Props> = ({ account }) => {
   return (
     <div className="flex flex-col gap-4">
       <p className="text-sm">{locales.delete_account_message.format(account.label)}</p>
-      <p className="text-sm text-destructive">{locales.delete_account_warning}</p>
+      <p className="text-destructive text-sm">{locales.delete_account_warning}</p>
+      {account.balance > 0 && <p className="text-destructive text-sm">{locales.delete_account_required_balance}</p>}
       <div className="flex justify-end gap-2">
         <Button variant="secondary" onClick={() => modal.close()}>
           {locales.cancel}
         </Button>
         <Button
           variant="destructive"
-          disabled={isLoading}
+          disabled={isLoading || account.balance > 0}
           onClick={async () => {
             setIsLoading(true);
             await fetchNui('deleteAccount', account.id, { data: true, delay: 1500 });

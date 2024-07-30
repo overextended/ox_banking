@@ -15,16 +15,22 @@ const AccountSettings: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <BaseCard title={locales.settings} icon={Settings} className='h-fit flex-[0.75]'>
-      <div className='flex flex-col gap-2'>
+    <BaseCard title={locales.settings} icon={Settings} className="h-fit flex-[0.75]">
+      <div className="flex flex-col gap-2">
         <AccountButton
           label={locales.transfer_ownership}
           icon={ArrowRight}
-          onClick={() => modal.open({
-            title: locales.transfer_ownership,
-            children: <TransferAccountModal accountId={account.id} />,
-          })}
-          disabled={account.type === 'personal' || account.type === 'group' || (account.type === 'shared' && account.role !== 'owner')}
+          onClick={() =>
+            modal.open({
+              title: locales.transfer_ownership,
+              children: <TransferAccountModal accountId={account.id} />,
+            })
+          }
+          disabled={
+            account.type === 'personal' ||
+            account.type === 'group' ||
+            (account.type === 'shared' && account.role !== 'owner')
+          }
         />
         <AccountButton
           label={locales.convert_to_shared}
@@ -32,12 +38,16 @@ const AccountSettings: React.FC = () => {
           disabled={account.type === 'shared' || account.type === 'group' || account.isDefault}
         />
         <AccountButton label={locales.rename} icon={Pencil} />
-        <AccountButton label={locales.manage_access} icon={Shield} disabled={account.type === 'personal'}
-                       onClick={() => navigate(`/accounts/manage-access/${account.id}`)} />
+        <AccountButton
+          label={locales.manage_access}
+          icon={Shield}
+          disabled={account.type === 'personal'}
+          onClick={() => navigate(`/accounts/manage-access/${account.id}`)}
+        />
         <AccountButton
           label={locales.delete_account}
           icon={Trash}
-          variant='destructive'
+          variant="destructive"
           disabled={account.isDefault}
           onClick={() =>
             modal.open({

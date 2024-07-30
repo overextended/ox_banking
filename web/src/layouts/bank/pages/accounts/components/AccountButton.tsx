@@ -16,7 +16,7 @@ const AccountButton: React.FC<Props> = (props) => {
     <Button
       disabled={props.disabled}
       variant={props.variant || 'secondary'}
-      className="h-fit items-center justify-start gap-4 p-4"
+      className="h-fit w-full items-center justify-start gap-4 p-4"
       onClick={() => props.onClick?.()}
     >
       <props.icon />

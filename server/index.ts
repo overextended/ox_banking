@@ -56,8 +56,15 @@ onClientCallback('ox_banking:createAccount', async (playerId, { name, shared }: 
 
 onClientCallback('ox_banking:deleteAccount', async (playerId, accountId: number) => {
   const player = GetPlayer(playerId);
+  const account = await Ox.GetAccountById(accountId);
 
-  if (!player?.hasAccountPermission(accountId, 'closeAccount')) return;
+  if (!account || !player) return;
+
+  if (account.balance > 0) return;
+
+  const hasPermission = await player.hasAccountPermission(accountId, 'closeAccount');
+
+  if (!hasPermission) return;
 
   return await Ox.DeleteAccount(accountId);
 });
