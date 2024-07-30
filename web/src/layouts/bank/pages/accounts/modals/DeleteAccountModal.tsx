@@ -20,7 +20,7 @@ const DeleteAccountModal: React.FC<Props> = ({ account }) => {
   return (
     <div className="flex flex-col gap-4">
       <p className="text-sm">{locales.delete_account_message.format(account.label)}</p>
-      <p className="text-destructive text-sm">{locales.delete_account_warning}</p>
+      <p className="text-destructive text-sm">{locales.action_irreversible}</p>
       {account.balance > 0 && <p className="text-destructive text-sm">{locales.delete_account_required_balance}</p>}
       <div className="flex justify-end gap-2">
         <Button variant="secondary" onClick={() => modal.close()}>

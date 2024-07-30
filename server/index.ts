@@ -324,3 +324,18 @@ onClientCallback('ox_banking:renameAccount', async (playerId, data: { accountId:
 
   return true;
 });
+
+onClientCallback('ox_banking:convertAccountToShared', async (playerId, data: { accountId: number }) => {
+  const player = GetPlayer(playerId);
+
+  if (!player) return;
+
+  const account = await Ox.GetAccountById(data.accountId);
+
+  if (account.type !== 'personal') return;
+  if (account.owner !== player.charId) return;
+
+  await oxmysql.prepare('UPDATE `accounts` SET `type` = ? WHERE `id` = ?', ['shared', data.accountId]);
+
+  return true;
+});

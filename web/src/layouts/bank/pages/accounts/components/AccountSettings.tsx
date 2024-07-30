@@ -9,6 +9,7 @@ import DeleteAccountModal from '@/layouts/bank/pages/accounts/modals/DeleteAccou
 import { useNavigate } from 'react-router-dom';
 import TransferAccountModal from '@/layouts/bank/pages/accounts/modals/TransferAccountModal';
 import RenameAccountModal from '../modals/RenameAccountModal';
+import ConvertAccountModal from '../modals/ConvertAccountModal';
 
 const AccountSettings: React.FC = () => {
   const modal = useModal();
@@ -36,6 +37,14 @@ const AccountSettings: React.FC = () => {
         <AccountButton
           label={locales.convert_to_shared}
           icon={Users}
+          onClick={() =>
+            modal.open({
+              title: locales.convert_account_title,
+              description: locales.convert_account_description,
+              size: 'lg',
+              children: <ConvertAccountModal accountId={account.id} />,
+            })
+          }
           disabled={account.type === 'shared' || account.type === 'group' || account.isDefault}
         />
         <AccountButton
@@ -53,7 +62,7 @@ const AccountSettings: React.FC = () => {
         <AccountButton
           label={locales.manage_access}
           icon={Shield}
-          disabled={account.type === 'personal'}
+          disabled={account.type === 'personal' || (account.role !== 'manager' && account.role !== 'owner')}
           onClick={() => navigate(`/accounts/manage-access/${account.id}`)}
         />
         <AccountButton
