@@ -30,7 +30,8 @@
     "@nativewrappers/fivem-server": "latest",
     "@overextended/ox_core": "^0.28.1",
     "@overextended/ox_lib": "latest",
-    "@overextended/oxmysql": "latest"
+    "@overextended/oxmysql": "latest",
+    "prettier-plugin-tailwindcss": "^0.6.5"
   },
   "engines": {
     "node": ">=16.9.1"
