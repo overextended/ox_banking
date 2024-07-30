@@ -1,36 +1,14 @@
 import { onClientCallback } from '@overextended/ox_lib/server';
-import type { AccessTableData, Account, AccountRole, DashboardData, Transaction } from '../typings';
+import type { AccessTableData, Account, DashboardData, Transaction } from '../typings';
 import { oxmysql } from '@overextended/oxmysql';
 import { Ox, GetPlayer } from '@overextended/ox_core/server';
-
-type GetAccountsReponse = {
-  id: Account['id'];
-  label?: Account['label'];
-  group?: Account['group'];
-  balance: Account['balance'];
-  isDefault?: Account['isDefault'];
-  owner: number;
-  type: Account['type'];
-  role: AccountRole;
-  firstName: string;
-  lastName: string;
-};
 
 onClientCallback('ox_banking:getAccounts', async (playerId): Promise<Account[]> => {
   const player = GetPlayer(playerId);
 
   if (!player) return;
 
-  const accessAccounts = await oxmysql.rawExecute<GetAccountsReponse[]>(
-    `
-    SELECT a.id, a.label, a.owner, a.group, a.balance, a.isDefault, a.type, b.firstName, b.lastName, c.role
-    FROM \`accounts_access\` c
-    LEFT JOIN accounts a ON a.id = c.accountId
-    LEFT JOIN characters b ON b.charId = a.owner
-    WHERE c.charId = ? AND a.type != 'inactive'
-    `,
-    [player.charId]
-  );
+  const accessAccounts = await player.getAccounts();
 
   const accounts: Account[] = accessAccounts.map((account) => ({
     group: account.group,
@@ -39,7 +17,7 @@ onClientCallback('ox_banking:getAccounts', async (playerId): Promise<Account[]> 
     isDefault: player.charId === account.owner ? account.isDefault : false,
     balance: account.balance,
     type: account.type,
-    owner: `${account.firstName} ${account.lastName}`,
+    owner: account.ownerName,
     role: account.role,
   }));
 
@@ -159,7 +137,7 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
     }[]
   >(
     `
-    SELECT amount, date, toId, fromId, message
+    SELECT amount, DATE_FORMAT(date, 'dd:mm:yy'), toId, fromId, message
     FROM accounts_transactions
     WHERE toId = ? OR fromId = ?
     ORDER BY date DESC

@@ -1,4 +1,6 @@
-export type AccountRole = 'contributor' | 'manager' | 'owner';
+import { OxAccountRoles } from '@overextended/ox_core';
+
+export type AccountRole = OxAccountRoles;
 export type AccessTableUser = {
   name: string;
   role: AccountRole;
