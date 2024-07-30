@@ -11,6 +11,7 @@ import { fetchNui } from '@/utils/fetchNui';
 import { useModal } from '@/components/ModalsProvider';
 import { queryClient } from '@/main';
 import { Account } from '~/typings';
+import { updateAccountProperty } from '@/state/accounts';
 
 interface Props {
   initialName: string;
@@ -43,20 +44,7 @@ const RenameAccountModal: React.FC<Props> = ({ initialName, accountId }) => {
       return;
     }
 
-    queryClient.setQueriesData(
-      { queryKey: ['accounts'] },
-      (data: { numberOfPages: number; accounts: Account[] } | undefined) => {
-        if (!data) return;
-
-        const targetAccount = data.accounts.find((acc) => acc.id === accountId);
-
-        if (!targetAccount) return;
-
-        const account = { ...targetAccount, label: values.name } as Account;
-
-        return { ...data, accounts: data.accounts.map((acc) => (acc.id === account.id ? account : acc)) };
-      }
-    );
+    updateAccountProperty(accountId, 'label', values.name);
     modal.close();
 
     return true;

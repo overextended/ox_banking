@@ -13,15 +13,20 @@ import { useModal } from '@/components/ModalsProvider';
 import { useSetActiveAccount } from '@/state/accounts';
 import { queryClient } from '@/main';
 import { Account } from '~/typings';
+import { updateAccountProperty } from '@/state/accounts';
 
 const TransferAccountModal: React.FC<{ accountId: number }> = ({ accountId }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const setActiveAccount = useSetActiveAccount();
   const modal = useModal();
 
-  const formSchema = React.useMemo(() => z.object({
-    stateId: z.string().min(1, locales.field_required.format(locales.state_id)),
-  }), []);
+  const formSchema = React.useMemo(
+    () =>
+      z.object({
+        stateId: z.string().min(1, locales.field_required.format(locales.state_id)),
+      }),
+    []
+  );
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -33,10 +38,14 @@ const TransferAccountModal: React.FC<{ accountId: number }> = ({ accountId }) =>
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
 
-    const resp = await fetchNui<true | 'state_id_not_exists'>('transferOwnership', {
-      accountId,
-      targetStateId: values.stateId,
-    }, { data: true, delay: 1500 });
+    const resp = await fetchNui<true | 'state_id_not_exists'>(
+      'transferOwnership',
+      {
+        accountId,
+        targetStateId: values.stateId,
+      },
+      { data: true, delay: 1500 }
+    );
 
     console.log(resp);
 
@@ -48,21 +57,7 @@ const TransferAccountModal: React.FC<{ accountId: number }> = ({ accountId }) =>
     }
 
     // todo: probably fetch the updated account instead of updating it as the name would need to be updated as well
-    queryClient.setQueriesData({ queryKey: ['accounts'] }, (data: {
-      numberOfPages: number;
-      accounts: Account[]
-    } | undefined) => {
-      if (!data) return;
-
-      console.log();
-      const targetAccount = data.accounts.find(acc => acc.id === accountId);
-
-      if (!targetAccount) return;
-
-      const account = { ...targetAccount, role: 'manager' } as Account;
-
-      return { ...data, accounts: data.accounts.map(acc => acc.id === account.id ? account : acc) };
-    });
+    updateAccountProperty(accountId, 'role', 'manager');
     setActiveAccount(null);
 
     setIsLoading(false);
@@ -71,7 +66,7 @@ const TransferAccountModal: React.FC<{ accountId: number }> = ({ accountId }) =>
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-4'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <FormField
           render={({ field }) => (
             <FormItem>
@@ -82,10 +77,10 @@ const TransferAccountModal: React.FC<{ accountId: number }> = ({ accountId }) =>
               <FormMessage />
             </FormItem>
           )}
-          name='stateId'
+          name="stateId"
         />
-        <p className='text-destructive text-sm'>This action is irreversible.</p>
-        <Button type='submit' className='w-full' variant='destructive' disabled={isLoading}>
+        <p className="text-destructive text-sm">This action is irreversible.</p>
+        <Button type="submit" className="w-full" variant="destructive" disabled={isLoading}>
           {isLoading ? <SpinningLoader /> : locales.confirm}
         </Button>
       </form>
