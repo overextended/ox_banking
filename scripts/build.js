@@ -56,7 +56,7 @@ if (await exists('./src/server')) {
 const buildCmd = production ? esbuild.build : esbuild.context;
 
 for (const context of environments) {
-  buildCmd({
+  await buildCmd({
     bundle: true,
     entryPoints: [`./src/${context}/index.ts`],
     outfile: `dist/${context}.js`,

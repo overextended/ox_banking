@@ -9,7 +9,7 @@
     "esModuleInterop": true,
     "allowUnreachableCode": false,
     "strictFunctionTypes": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noImplicitAny": true,
     "noImplicitThis": true,
     "noUnusedLocals": true
