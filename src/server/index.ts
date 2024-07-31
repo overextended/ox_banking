@@ -8,7 +8,7 @@ onClientCallback('ox_banking:getAccounts', async (playerId): Promise<Account[]> 
 
   if (!player) return;
 
-  const accessAccounts = await player.getAccounts();
+  const accessAccounts = await player.getAccounts(true);
 
   const accounts: Account[] = accessAccounts.map((account) => ({
     group: account.group,
