@@ -19,17 +19,23 @@ const AccountDetails: React.FC = () => {
       <div className="flex justify-between">
         <div className="flex flex-col gap-4">
           <div className="flex flex-col">
-            <p className="text-xs text-muted-foreground">{locales.account_name}</p>
+            <p className="text-muted-foreground text-xs">{locales.account_name}</p>
             <p>{account.label}</p>
           </div>
           <div className="flex flex-col">
-            <p className="text-xs text-muted-foreground">{locales.account_type}</p>
-            <p>{locales.personal_account}</p>
+            <p className="text-muted-foreground text-xs">{locales.account_type}</p>
+            <p>
+              {account.type === 'personal'
+                ? locales.personal_account
+                : account.type === 'shared'
+                  ? locales.shared_account
+                  : locales.group_account}
+            </p>
           </div>
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col">
-            <p className="text-xs text-muted-foreground">{locales.account_number}</p>
+            <p className="text-muted-foreground text-xs">{locales.account_number}</p>
             <div className="flex items-center gap-2">
               <p>{account.id}</p>
               <Tooltip delayDuration={200}>
@@ -43,12 +49,12 @@ const AccountDetails: React.FC = () => {
             </div>
           </div>
           <div className="flex flex-col">
-            <p className="text-xs text-muted-foreground">{locales.disposable_amount}</p>
+            <p className="text-muted-foreground text-xs">{locales.disposable_amount}</p>
             <p>{formatNumber(account.balance)}</p>
           </div>
         </div>
         <div className="flex flex-col">
-          <p className="text-xs text-muted-foreground">{locales.account_owner}</p>
+          <p className="text-muted-foreground text-xs">{locales.account_owner}</p>
           <p>{account.owner}</p>
         </div>
       </div>
