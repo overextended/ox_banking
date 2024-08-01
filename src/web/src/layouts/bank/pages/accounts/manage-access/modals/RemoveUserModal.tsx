@@ -15,7 +15,6 @@ const RemoveUserModal: React.FC<Props> = ({ targetStateId, accountId }) => {
   const modal = useModal();
   const [isLoading, setIsLoading] = React.useState(false);
 
-
   async function handleRemove() {
     setIsLoading(true);
 
@@ -28,9 +27,9 @@ const RemoveUserModal: React.FC<Props> = ({ targetStateId, accountId }) => {
   }
 
   return (
-    <div className='flex flex-col gap-4'>
-      <p className='text-sm'>{locales.remove_user_warning.format(targetStateId)}</p>
-      <Button variant='destructive' onClick={handleRemove} disabled={isLoading}>
+    <div className="flex flex-col gap-4">
+      <p className="text-sm">{locales.remove_user_warning.format(targetStateId)}</p>
+      <Button variant="destructive" className="self-end" onClick={handleRemove} disabled={isLoading}>
         {isLoading ? <SpinningLoader /> : locales.remove_account_access}
       </Button>
     </div>

@@ -22,25 +22,21 @@ const DeleteAccountModal: React.FC<Props> = ({ account }) => {
       <p className="text-sm">{locales.delete_account_message.format(account.label)}</p>
       <p className="text-destructive text-sm">{locales.action_irreversible}</p>
       {account.balance > 0 && <p className="text-destructive text-sm">{locales.delete_account_required_balance}</p>}
-      <div className="flex justify-end gap-2">
-        <Button variant="secondary" onClick={() => modal.close()}>
-          {locales.cancel}
-        </Button>
-        <Button
-          variant="destructive"
-          disabled={isLoading || account.balance > 0}
-          onClick={async () => {
-            setIsLoading(true);
-            await fetchNui('deleteAccount', account.id, { data: true, delay: 1500 });
-            await queryClient.invalidateQueries({ queryKey: ['accounts'] });
-            setActiveAccount(null);
-            setIsLoading(false);
-            modal.close();
-          }}
-        >
-          {isLoading ? <SpinningLoader /> : locales.delete_account}
-        </Button>
-      </div>
+      <Button
+        variant="destructive"
+        className="self-end"
+        disabled={isLoading || account.balance > 0}
+        onClick={async () => {
+          setIsLoading(true);
+          await fetchNui('deleteAccount', account.id, { data: true, delay: 1500 });
+          await queryClient.invalidateQueries({ queryKey: ['accounts'] });
+          setActiveAccount(null);
+          setIsLoading(false);
+          modal.close();
+        }}
+      >
+        {isLoading ? <SpinningLoader /> : locales.delete_account}
+      </Button>
     </div>
   );
 };

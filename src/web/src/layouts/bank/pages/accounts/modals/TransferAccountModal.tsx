@@ -80,8 +80,8 @@ const TransferAccountModal: React.FC<{ accountId: number }> = ({ accountId }) =>
           name="stateId"
         />
         <p className="text-destructive text-sm">This action is irreversible.</p>
-        <Button type="submit" className="w-full" variant="destructive" disabled={isLoading}>
-          {isLoading ? <SpinningLoader /> : locales.confirm}
+        <Button type="submit" className="self-end" variant="destructive" disabled={isLoading}>
+          {isLoading ? <SpinningLoader /> : locales.transfer_ownership}
         </Button>
       </form>
     </Form>

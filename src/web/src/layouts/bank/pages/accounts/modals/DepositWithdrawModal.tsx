@@ -16,7 +16,7 @@ import { queryClient } from '@/main';
 import { useCharacterState } from '@/state/character';
 
 const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> = ({ account, isDeposit }) => {
-  const [character, setCharacter] = useCharacterState()
+  const [character, setCharacter] = useCharacterState();
   const setActiveAccount = useSetActiveAccount();
   const formSchema = React.useMemo(
     () =>
@@ -60,7 +60,7 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
     if (!isDeposit && account.balance < amount)
       return form.setError('amount', {
         type: 'value',
-        message: locales.amount_greater_than_balance
+        message: locales.amount_greater_than_balance,
       });
 
     setIsLoading(true);
@@ -113,7 +113,7 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <FormField
           render={({ field }) => (
             <FormItem>
@@ -131,8 +131,8 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
           )}
           name="amount"
         />
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? <SpinningLoader /> : locales.confirm}
+        <Button type="submit" className="self-end" disabled={isLoading}>
+          {isLoading ? <SpinningLoader /> : isDeposit ? locales.deposit : locales.withdraw}
         </Button>
       </form>
     </Form>

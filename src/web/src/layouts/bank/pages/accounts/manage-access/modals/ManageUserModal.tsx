@@ -66,7 +66,7 @@ const ManageUserModal: React.FC<Props> = ({ targetStateId, defaultRole, accountI
   return (
     <div className="flex flex-col gap-4">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <FormField
             render={({ field }) => (
               <FormItem>
@@ -90,7 +90,7 @@ const ManageUserModal: React.FC<Props> = ({ targetStateId, defaultRole, accountI
             )}
             name="role"
           />
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="self-end" disabled={isLoading}>
             {isLoading ? <SpinningLoader /> : locales.confirm}
           </Button>
         </form>

@@ -66,8 +66,8 @@ const CreateAccountModal: React.FC = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? <SpinningLoader /> : locales.confirm}
+        <Button type="submit" className="self-end" disabled={isLoading}>
+          {isLoading ? <SpinningLoader /> : locales.create_account}
         </Button>
       </form>
     </Form>

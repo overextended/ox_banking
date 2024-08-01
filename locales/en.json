@@ -47,6 +47,7 @@
   "amount_greater_than_cash": "Amount is greater than available cash",
   "amount_greater_than_balance": "Amount is greater than available balance",
   "cash_balance": "Cash balance",
+  "add_user": "Add user",
   "new_account_user": "New account user",
   "search_names": "Search names...",
   "name": "Name",

@@ -22,7 +22,7 @@ const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => 
         stateId: z.string().min(1),
         role: z.string(),
       }),
-    [],
+    []
   );
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -35,10 +35,14 @@ const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
 
-    const resp = await fetchNui<true | string>('addUserToAccount', { accountId, ...values }, {
-      data: true,
-      delay: 1500,
-    });
+    const resp = await fetchNui<true | string>(
+      'addUserToAccount',
+      { accountId, ...values },
+      {
+        data: true,
+        delay: 1500,
+      }
+    );
 
     if (typeof resp === 'string') {
       setIsLoading(false);
@@ -55,7 +59,7 @@ const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => 
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <FormField
           render={({ field }) => (
             <FormItem>
@@ -66,7 +70,7 @@ const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => 
               <FormMessage />
             </FormItem>
           )}
-          name='stateId'
+          name="stateId"
         />
         <FormField
           render={({ field }) => (
@@ -78,8 +82,8 @@ const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => 
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value='manager'>{locales.manager}</SelectItem>
-                    <SelectItem value='contributor'>{locales.contributor}</SelectItem>
+                    <SelectItem value="manager">{locales.manager}</SelectItem>
+                    <SelectItem value="contributor">{locales.contributor}</SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -89,10 +93,10 @@ const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => 
               </FormDescription>
             </FormItem>
           )}
-          name='role'
+          name="role"
         />
-        <Button type='submit' className='w-full' disabled={isLoading}>
-          {isLoading ? <SpinningLoader /> : locales.confirm}
+        <Button type="submit" className="self-end" disabled={isLoading}>
+          {isLoading ? <SpinningLoader /> : locales.add_user}
         </Button>
       </form>
     </Form>

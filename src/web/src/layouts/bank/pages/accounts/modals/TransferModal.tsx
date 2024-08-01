@@ -34,7 +34,7 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
         target: z.string().min(1, locales.field_required.format(locales.target)),
         amount: z.string().min(1, locales.field_required.format(locales.amount)),
       }),
-    [],
+    []
   );
   const [internalTransfer, setInternalTransfer] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -76,9 +76,9 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
     const resp = await fetchNui<
       | true
       | {
-      field: 'transferType' | 'target' | 'amount';
-      error: string;
-    }
+          field: 'transferType' | 'target' | 'amount';
+          error: string;
+        }
     >(
       'transferMoney',
       {
@@ -90,7 +90,7 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
       {
         data: true,
         delay: 1500,
-      },
+      }
     );
 
     if (typeof resp === 'object' && resp.error) {
@@ -102,7 +102,7 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
     }
 
     // if the user has access to the account, refresh them
-    if (accounts.find(acc => acc.id === +values.target)) {
+    if (accounts.find((acc) => acc.id === +values.target)) {
       await queryClient.invalidateQueries({ queryKey: ['accounts'] });
     }
 
@@ -113,10 +113,10 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <FormField
           control={form.control}
-          name='transferType'
+          name="transferType"
           render={({ field }) => (
             <FormItem>
               <FormLabel>{locales.transfer_to}</FormLabel>
@@ -127,8 +127,8 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value='person'>{locales.person}</SelectItem>
-                  <SelectItem value='account'>{locales.account}</SelectItem>
+                  <SelectItem value="person">{locales.person}</SelectItem>
+                  <SelectItem value="account">{locales.account}</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -136,13 +136,13 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
           )}
         />
         {form.getValues('transferType') === 'account' && (
-          <div className='flex items-center gap-2'>
+          <div className="flex items-center gap-2">
             <Switch
-              id='internal-transfer'
+              id="internal-transfer"
               checked={internalTransfer}
               onCheckedChange={() => setInternalTransfer((prev) => !prev)}
             />
-            <label htmlFor='internal-transfer'>Internal transfer</label>
+            <label htmlFor="internal-transfer">Internal transfer</label>
           </div>
         )}
         <FormField
@@ -161,9 +161,11 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className='max-h-[150px]'>
-                      {accounts.map(account => (
-                        <SelectItem key={account.id} value={account.id.toString()}>{account.label}</SelectItem>
+                    <SelectContent className="max-h-[150px]">
+                      {accounts.map((account) => (
+                        <SelectItem key={account.id} value={account.id.toString()}>
+                          {account.label}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -174,7 +176,7 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
               <FormMessage />
             </FormItem>
           )}
-          name='target'
+          name="target"
         />
         <FormField
           render={({ field }) => (
@@ -187,10 +189,10 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
               <FormMessage />
             </FormItem>
           )}
-          name='amount'
+          name="amount"
         />
-        <Button type='submit' className='w-full' disabled={isLoading}>
-          {isLoading ? <SpinningLoader /> : locales.confirm}
+        <Button type="submit" className="self-end" disabled={isLoading}>
+          {isLoading ? <SpinningLoader /> : locales.transfer}
         </Button>
       </form>
     </Form>
