@@ -9,6 +9,12 @@ export default defineConfig({
   build: {
     outDir: '../../dist/web',
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        entryFileNames: 'script.js',
+        assetFileNames: 'styles.css',
+      },
+    },
   },
   server: {
     port: 3000,
