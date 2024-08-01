@@ -17,6 +17,17 @@ const CharacterAccounts: React.FC = () => {
 
   const MAX_ITEMS = React.useMemo(() => (page === 0 ? 3 : 4), [page]);
 
+  const sortedAccounts = React.useMemo(() => {
+    const accounts = accountsData.accounts;
+    const defaultAccount = accounts.find((account) => account.isDefault);
+
+    if (!defaultAccount) return [];
+
+    const restAccounts = accounts.filter((account) => !account.isDefault);
+
+    return [defaultAccount, ...restAccounts];
+  }, [accountsData]);
+
   return (
     <BaseCard title={locales.accounts} icon={CreditCard} className="overflow-visible">
       <div className="flex w-full items-center justify-center gap-4">
@@ -32,12 +43,12 @@ const CharacterAccounts: React.FC = () => {
                   children: <CreateAccountModal />,
                 })
               }
-              className="flex w-[250px] flex-col items-center justify-center rounded-lg border border-dashed bg-background p-4 shadow transition-all hover:-translate-y-1 hover:scale-105 hover:cursor-pointer hover:bg-secondary"
+              className="bg-background hover:bg-secondary flex w-[250px] flex-col items-center justify-center rounded-lg border border-dashed p-4 shadow transition-all hover:-translate-y-1 hover:scale-105 hover:cursor-pointer"
             >
               <Plus />
             </div>
           )}
-          {accountsData.accounts
+          {sortedAccounts
             .slice(page * (MAX_ITEMS === 3 ? MAX_ITEMS : MAX_ITEMS - 1), page * MAX_ITEMS + MAX_ITEMS)
             .map((account) => (
               <AccountCard
@@ -61,7 +72,7 @@ const CharacterAccounts: React.FC = () => {
           <div
             key={index}
             className={cn(
-              'h-[5px] w-[5px] rounded-full bg-muted transition-colors duration-500',
+              'bg-muted h-[5px] w-[5px] rounded-full transition-colors duration-500',
               page === index && 'bg-primary'
             )}
           />
