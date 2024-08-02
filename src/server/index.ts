@@ -226,8 +226,7 @@ onClientCallback(
 
     const success = await oxmysql.prepare('SELECT 1 FROM `characters` WHERE `stateId` = ?', [stateId]);
 
-    // todo locale
-    if (!success) return 'No person with provided state id found.';
+    if (!success) return 'state_id_not_exists';
 
     return await Ox.SetAccountAccess(accountId, stateId, role);
   }

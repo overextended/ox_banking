@@ -35,7 +35,7 @@ const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
 
-    const resp = await fetchNui<true | string>(
+    const resp = await fetchNui<true | keyof typeof locales>(
       'addUserToAccount',
       { accountId, ...values },
       {
@@ -46,7 +46,7 @@ const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => 
 
     if (typeof resp === 'string') {
       setIsLoading(false);
-      form.setError('stateId', { type: 'value', message: resp });
+      form.setError('stateId', { type: 'value', message: locales[resp] });
 
       return;
     }
