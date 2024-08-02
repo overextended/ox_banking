@@ -12,6 +12,8 @@ import { fetchNui } from '@/utils/fetchNui';
 import { Character } from '~/src/common/typings';
 import { useSetCharacter } from '@/state/character';
 import ManageAccess from '@/layouts/bank/pages/accounts/manage-access/ManageAccess';
+import { AccountPermissions, AccountRole } from '@/typings';
+import permissions, { setPermissions } from '../../permissions';
 
 const Bank: React.FC = () => {
   const setCharacter = useSetCharacter();
@@ -19,14 +21,18 @@ const Bank: React.FC = () => {
   const visible = useBankVisibility();
   const setVisible = useSetBankVisibility();
 
-  useNuiEvent('setInitData', (data: { locales: typeof locales }) => {
-    console.log('set');
-    setLocale(data.locales);
-  });
+  useNuiEvent(
+    'setInitData',
+    (data: { locales: typeof locales; permissions: Record<AccountRole, AccountPermissions> }) => {
+      setLocale(data.locales);
+      setPermissions(data.permissions);
+    }
+  );
 
   useNuiEvent('openBank', (data: Character) => {
     setVisible(true);
     setCharacter(data);
+    console.log(permissions);
   });
 
   const handleESC = (e: KeyboardEvent) => {

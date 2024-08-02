@@ -9,11 +9,13 @@ import { useModal } from '@/components/ModalsProvider';
 import { useActiveAccount } from '@/state/accounts/accounts';
 import locales from '@/locales';
 import TransferModal from '@/layouts/bank/pages/accounts/modals/TransferModal';
+import { hasPermission } from '../../../../../permissions';
 
 const AccountDetails: React.FC = () => {
   const modal = useModal();
   const account = useActiveAccount()!;
 
+  // @ts-ignore
   return (
     <BaseCard title="Details" icon={ScanText} className="flex-1">
       <div className="flex justify-between">
@@ -53,15 +55,23 @@ const AccountDetails: React.FC = () => {
             <p>{formatNumber(account.balance)}</p>
           </div>
         </div>
-        <div className="flex flex-col">
-          <p className="text-muted-foreground text-xs">{locales.account_owner}</p>
-          <p>{account.owner}</p>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col">
+            <p className="text-muted-foreground text-xs">{locales.account_owner}</p>
+            <p>{account.owner}</p>
+          </div>
+          <div className="flex flex-col">
+            <p className="text-muted-foreground text-xs">{locales.account_role}</p>
+            {/* @ts-expect-error */}
+            <p>{locales[account.role]}</p>
+          </div>
         </div>
       </div>
       <div className="flex h-full flex-col gap-2">
         <AccountButton
           label={locales.withdraw}
           icon={Wallet}
+          disabled={!hasPermission('withdraw', account.role)}
           onClick={() =>
             modal.open({
               title: locales.withdraw,
@@ -72,6 +82,7 @@ const AccountDetails: React.FC = () => {
         <AccountButton
           label={locales.deposit}
           icon={Landmark}
+          disabled={!hasPermission('deposit', account.role)}
           onClick={() =>
             modal.open({
               title: locales.deposit,
@@ -82,9 +93,10 @@ const AccountDetails: React.FC = () => {
         <AccountButton
           label={locales.transfer}
           icon={Repeat}
+          disabled={!hasPermission('withdraw', account.role)}
           onClick={() => modal.open({ title: locales.transfer, children: <TransferModal account={account} /> })}
         />
-        <AccountButton label={locales.logs} icon={History} />
+        <AccountButton disabled={!hasPermission('viewHistory', account.role)} label={locales.logs} icon={History} />
       </div>
     </BaseCard>
   );

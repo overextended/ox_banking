@@ -24,7 +24,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             label: 'Some name',
             owner: 'Some owner',
             type: 'shared',
-            role: 'owner',
+            role: 'viewer',
           },
           {
             id: 932124,
@@ -40,8 +40,8 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
             balance: 132032,
             label: 'Some name',
             owner: 'Some owner',
-            type: 'personal',
-            role: 'owner',
+            type: 'shared',
+            role: 'manager',
           },
           {
             id: 932126,

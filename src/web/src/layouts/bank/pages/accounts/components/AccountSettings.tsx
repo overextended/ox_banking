@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import TransferAccountModal from '@/layouts/bank/pages/accounts/modals/TransferAccountModal';
 import RenameAccountModal from '../modals/RenameAccountModal';
 import ConvertAccountModal from '../modals/ConvertAccountModal';
+import { hasPermission } from '../../../../../permissions';
 
 const AccountSettings: React.FC = () => {
   const modal = useModal();
@@ -31,7 +32,7 @@ const AccountSettings: React.FC = () => {
           disabled={
             account.type === 'personal' ||
             account.type === 'group' ||
-            (account.type === 'shared' && account.role !== 'owner')
+            (account.type === 'shared' && !hasPermission('transferOwnership', account.role))
           }
         />
         <AccountButton
@@ -55,21 +56,21 @@ const AccountSettings: React.FC = () => {
               children: <RenameAccountModal accountId={account.id} initialName={account.label} />,
             })
           }
-          disabled={account.role !== 'manager' && account.role !== 'owner'}
+          disabled={!hasPermission('manageAccount', account.role)}
           label={locales.rename}
           icon={Pencil}
         />
         <AccountButton
           label={locales.manage_access}
           icon={Shield}
-          disabled={account.type === 'personal' || (account.role !== 'manager' && account.role !== 'owner')}
+          disabled={account.type === 'personal' || !hasPermission('manageUser', account.role)}
           onClick={() => navigate(`/accounts/manage-access/${account.id}`)}
         />
         <AccountButton
           label={locales.delete_account}
           icon={Trash}
           variant="destructive"
-          disabled={account.isDefault}
+          disabled={account.isDefault || !hasPermission('closeAccount', account.role)}
           onClick={() =>
             modal.open({
               title: locales.delete_account,

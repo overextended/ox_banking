@@ -52,6 +52,7 @@
   "search_names": "Search names...",
   "name": "Name",
   "role": "Role",
+  "account_role": "Account role",
   "state_id": "State ID",
   "current_page": "Page %s of %s",
   "owner": "Owner",
