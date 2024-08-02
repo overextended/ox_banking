@@ -32,7 +32,6 @@ const Bank: React.FC = () => {
   useNuiEvent('openBank', (data: Character) => {
     setVisible(true);
     setCharacter(data);
-    console.log(permissions);
   });
 
   const handleESC = (e: KeyboardEvent) => {

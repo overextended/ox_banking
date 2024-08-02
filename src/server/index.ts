@@ -174,6 +174,10 @@ onClientCallback(
     }
   ): Promise<AccessTableData> => {
     const { accountId, page, search } = data;
+    const player = GetPlayer(playerId);
+
+    if (!player) return;
+    if (!(await player.hasAccountPermission(accountId, 'manageUser'))) return;
 
     const wildcard = `%${search}%`;
 
