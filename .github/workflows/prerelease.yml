@@ -46,7 +46,7 @@ jobs:
 
       - name: Bundle files
         run: |
-          zip -r ${{ github.event.repository.name }}.zip ${{ github.event.repository.name }} -x ".*" "node_modules" "scripts" "src" "tsconfig.json" "pnpm-lock.yaml" "package.json"
+          zip -r ${{ github.event.repository.name }}.zip . -x ".*" "node_modules" "scripts" "src" "tsconfig.json" "pnpm-lock.yaml" "package.json"
 
       - name: Bump package version
         run: |
