@@ -1,7 +1,7 @@
 {
   "name": "ox_banking",
   "author": "Overextended",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "description": "Banking system for ox_core",
   "type": "module",
