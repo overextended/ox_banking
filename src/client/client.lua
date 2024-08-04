@@ -45,8 +45,7 @@ local function findClosestAtm()
 
             while #(GetEntityCoords(cache.ped) - atmCoords) <= 1.5 and not IsNuiFocused() and not IsPauseMenuActive() do
                 if IsControlJustPressed(0, 38) then
-                    -- todo: open atm
-                    exports.ox_banking.openBank()
+                    exports.ox_banking.openATM()
                 end
 
                 Wait(0)

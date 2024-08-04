@@ -10,27 +10,42 @@ const usingTarget = GetConvarInt('ox_banking:target', 0) === 1;
 let hasLoadedUi = false;
 let isUiOpen = false;
 
+function initUI() {
+  if (hasLoadedUi) return;
+
+  const accountRoles: OxAccountRoles[] = GlobalState.accountRoles;
+
+  // @ts-expect-error
+  const permissions: Record<OxAccountRoles, OxAccountPermissions> = {};
+
+  accountRoles.forEach((role) => {
+    permissions[role] = GlobalState[`accountRole.${role}`] as OxAccountPermissions;
+  });
+
+  SendNUIMessage({
+    action: 'setInitData',
+    data: {
+      locales: getLocales(),
+      permissions,
+    },
+  });
+
+  hasLoadedUi = true;
+}
+
+const openATM = () => {
+  initUI();
+
+  isUiOpen = true;
+
+  SendTypedNUIMessage('openATM', null);
+  SetNuiFocus(true, true);
+};
+
+exports('openATM', openATM);
+
 const openBank = () => {
-  if (!hasLoadedUi) {
-    const accountRoles: OxAccountRoles[] = GlobalState.accountRoles;
-
-    // @ts-expect-error
-    const permissions: Record<OxAccountRoles, OxAccountPermissions> = {};
-
-    accountRoles.forEach((role) => {
-      permissions[role] = GlobalState[`accountRole.${role}`] as OxAccountPermissions;
-    });
-
-    SendNUIMessage({
-      action: 'setInitData',
-      data: {
-        locales: getLocales(),
-        permissions,
-      },
-    });
-
-    hasLoadedUi = true;
-  }
+  initUI();
 
   const playerCash: number = exports.ox_inventory.GetItemCount('money');
   isUiOpen = true;
@@ -63,8 +78,7 @@ if (usingTarget) {
       icon: 'fa-solid fa-money-check',
       label: 'Access ATM',
       onSelect: () => {
-        // todo: open atm
-        openBank();
+        openATM();
       },
     }
   );
