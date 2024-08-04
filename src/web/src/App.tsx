@@ -3,6 +3,7 @@ import Bank from '@/layouts/bank/Bank';
 import DeveloperDrawer from './layouts/dev/DeveloperDrawer';
 import { isEnvBrowser } from './utils/misc';
 import ModalsProvider from './components/ModalsProvider';
+import ATM from '@/layouts/atm/ATM';
 
 const App: React.FC = () => {
   return (
@@ -10,6 +11,7 @@ const App: React.FC = () => {
       <ModalsProvider>
         <Bank />
         {isEnvBrowser() && <DeveloperDrawer />}
+        <ATM />
       </ModalsProvider>
     </div>
   );
