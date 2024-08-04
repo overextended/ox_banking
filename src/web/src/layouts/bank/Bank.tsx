@@ -54,14 +54,12 @@ const Bank: React.FC = () => {
           id="bank-container"
           ref={setContainer}
         >
-          <ModalsProvider>
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/accounts" element={<Accounts />} />
-              <Route path="/accounts/manage-access/:accountId" element={<ManageAccess />} />
-            </Routes>
-          </ModalsProvider>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/accounts" element={<Accounts />} />
+            <Route path="/accounts/manage-access/:accountId" element={<ManageAccess />} />
+          </Routes>
         </div>
       )}
     </>
