@@ -17,17 +17,6 @@ const CharacterAccounts: React.FC = () => {
 
   const MAX_ITEMS = React.useMemo(() => (page === 0 ? 3 : 4), [page]);
 
-  const sortedAccounts = React.useMemo(() => {
-    const accounts = accountsData.accounts;
-    const defaultAccount = accounts.find((account) => account.isDefault);
-
-    if (!defaultAccount) return [];
-
-    const restAccounts = accounts.filter((account) => !account.isDefault);
-
-    return [defaultAccount, ...restAccounts];
-  }, [accountsData]);
-
   return (
     <BaseCard title={locales.accounts} icon={CreditCard} className="overflow-visible">
       <div className="flex w-full items-center justify-center gap-4">
@@ -48,7 +37,7 @@ const CharacterAccounts: React.FC = () => {
               <Plus />
             </div>
           )}
-          {sortedAccounts
+          {accountsData.accounts
             .slice(page * (MAX_ITEMS === 3 ? MAX_ITEMS : MAX_ITEMS - 1), page * MAX_ITEMS + MAX_ITEMS)
             .map((account) => (
               <AccountCard
