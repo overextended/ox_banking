@@ -13,6 +13,7 @@ import SpinningLoader from '../../components/SpinningLoader';
 import locales from '@/locales';
 import { Account } from '../../../../common/typings';
 import CustomWithdrawAmount from './components/CustomWithdrawAmount';
+import { delay } from '@/utils/misc';
 
 const Atm: React.FC = () => {
   const [visible, setVisible] = useAtmVisibilityState();
@@ -34,10 +35,9 @@ const Atm: React.FC = () => {
   const handleWithdraw = React.useCallback(
     async (amount: number) => {
       setIsWithdrawing(true);
+      await delay(500);
       const resp = await fetchNui('withdrawMoney', { accountId: selectedAccount?.id, amount }, { data: true }).then();
-
-      // todo: update account balance in ui
-
+      if (resp) selectedAccount.balance -= amount;
       setIsWithdrawing(false);
     },
     [selectedAccount]
