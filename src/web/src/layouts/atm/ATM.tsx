@@ -10,6 +10,7 @@ import AccountSelector from './components/AccountSelector';
 import QuickWithdraw from './components/QuickWithdraw';
 import { fetchNui } from '../../utils/fetchNui';
 import SpinningLoader from '../../components/SpinningLoader';
+import locales from '@/locales';
 
 const Atm: React.FC = () => {
   const [visible, setVisible] = useAtmVisibilityState();
@@ -34,9 +35,9 @@ const Atm: React.FC = () => {
             <>
               <AccountSelector />
               <QuickWithdraw />
-              <BaseCard title="Custom amount" icon={Settings2}>
-                <Input placeholder="Amount..." />
-                <Button className="self-end">Withdraw</Button>
+              <BaseCard title={locales.custom_amount} icon={Settings2}>
+                <Input placeholder={locales.amount_placeholder} />
+                <Button className="self-end">{locales.withdraw}</Button>
               </BaseCard>
               <div className="flex flex-col">
                 <Button
@@ -48,7 +49,7 @@ const Atm: React.FC = () => {
                   }}
                 >
                   <LogOut size={20} />
-                  Exit
+                  {locales.exit}
                 </Button>
               </div>
             </>
