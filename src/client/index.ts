@@ -9,6 +9,7 @@ import { OxAccountPermissions, OxAccountRoles } from '@overextended/ox_core';
 const usingTarget = GetConvarInt('ox_banking:target', 0) === 1;
 let hasLoadedUi = false;
 let isUiOpen = false;
+let isATMopen = false;
 
 function initUI() {
   if (hasLoadedUi) return;
@@ -37,6 +38,7 @@ const openATM = () => {
   initUI();
 
   isUiOpen = true;
+  isATMopen = true;
 
   SendTypedNUIMessage('openATM', null);
   SetNuiFocus(true, true);
@@ -111,12 +113,13 @@ if (usingTarget) {
 
 RegisterNuiCallback('exit', () => {
   isUiOpen = false;
+  isATMopen = false;
 
   SetNuiFocus(false, false);
 });
 
 on('ox_inventory:itemCount', (itemName: string, count: number) => {
-  if (!isUiOpen || itemName !== 'money') return;
+  if (!isUiOpen || isATMopen || itemName !== 'money') return;
 
   SendTypedNUIMessage<Character>('openBank', { cash: count });
 });

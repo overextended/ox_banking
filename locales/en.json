@@ -76,5 +76,5 @@
   "action_irreversible": "This action is irreversible",
   "quick_withdraw": "Quick withdraw",
   "custom_amount": "Custom amount",
-  "amount_placeholder": "Amount..."
+  "amount_required_number": "Amount must be a number"
 }

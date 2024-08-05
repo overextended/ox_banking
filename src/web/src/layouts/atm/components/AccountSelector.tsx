@@ -6,8 +6,13 @@ import { formatNumber } from '@/utils/formatNumber';
 import { Button } from '@/components/ui/button';
 import BaseCard from '../../bank/components/BaseCard';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import { Account } from '@/typings';
 
-const AccountSelector: React.FC = () => {
+interface Props {
+  setSelectedAccount: React.Dispatch<React.SetStateAction<Account>>;
+}
+
+const AccountSelector: React.FC<Props> = ({ setSelectedAccount }) => {
   const { accounts } = useAccounts();
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
@@ -18,9 +23,11 @@ const AccountSelector: React.FC = () => {
     }
 
     setCurrent(api.selectedScrollSnap());
+    setSelectedAccount(accounts[api.selectedScrollSnap()]);
 
     api.on('select', () => {
       setCurrent(api.selectedScrollSnap());
+      setSelectedAccount(accounts[api.selectedScrollSnap()]);
     });
   }, [api]);
 
