@@ -35,9 +35,7 @@ const Atm: React.FC = () => {
     async (amount: number) => {
       setIsWithdrawing(true);
       const resp = await fetchNui('withdrawMoney', { accountId: selectedAccount?.id, amount }, { data: true }).then();
-
-      // todo: update account balance in ui
-
+      if (resp) selectedAccount.balance = selectedAccount.balance - amount;
       setIsWithdrawing(false);
     },
     [selectedAccount]
