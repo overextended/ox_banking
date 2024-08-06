@@ -10,10 +10,12 @@ import { useActiveAccount } from '@/state/accounts/accounts';
 import locales from '@/locales';
 import TransferModal from '@/layouts/bank/pages/accounts/modals/TransferModal';
 import { hasPermission } from '../../../../../permissions';
+import { useNavigate } from 'react-router-dom';
 
 const AccountDetails: React.FC = () => {
   const modal = useModal();
   const account = useActiveAccount()!;
+  const navigate = useNavigate();
 
   // @ts-ignore
   return (
@@ -96,7 +98,12 @@ const AccountDetails: React.FC = () => {
           disabled={!hasPermission('withdraw', account.role)}
           onClick={() => modal.open({ title: locales.transfer, children: <TransferModal account={account} /> })}
         />
-        <AccountButton disabled={!hasPermission('viewHistory', account.role)} label={locales.logs} icon={History} />
+        <AccountButton
+          onClick={() => navigate(`/accounts/logs/${account.id}`)}
+          disabled={!hasPermission('viewHistory', account.role)}
+          label={locales.logs}
+          icon={History}
+        />
       </div>
     </BaseCard>
   );

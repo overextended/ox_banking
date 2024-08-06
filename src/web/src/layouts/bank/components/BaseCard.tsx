@@ -11,8 +11,8 @@ interface Props {
 
 const BaseCard: React.FC<Props> = (props) => {
   return (
-    <div className={cn('flex flex-col gap-4 rounded-lg bg-card p-4 shadow', props.className)}>
-      <div className="flex items-center justify-between text-muted-foreground">
+    <div className={cn('bg-card flex flex-col gap-4 rounded-lg p-4 shadow', props.className)}>
+      <div className="text-muted-foreground flex items-center justify-between">
         <h2 className="font-bold">{props.title}</h2>
         <props.icon />
       </div>
