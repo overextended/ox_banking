@@ -128,6 +128,11 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
     [account.id, account.id, account.id, account.id]
   );
 
+  overview.forEach((day) => {
+    day.income = parseInt(String(day.income));
+    day.expenses = parseInt(String(day.expenses));
+  });
+
   const lastTransactions = await oxmysql.rawExecute<
     {
       amount: number;
