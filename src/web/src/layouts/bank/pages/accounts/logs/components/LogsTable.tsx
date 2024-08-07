@@ -5,7 +5,8 @@ import { useLogs } from '@/state/accounts';
 import { Button } from '@/components/ui/button';
 
 const LogsTable: React.FC<{ accountId: number }> = ({ accountId }) => {
-  const { data } = useLogs(accountId);
+  const [page, setPage] = React.useState(0);
+  const { data } = useLogs(accountId, page);
 
   return (
     <div className="flex h-full flex-col justify-between">
@@ -23,11 +24,13 @@ const LogsTable: React.FC<{ accountId: number }> = ({ accountId }) => {
         ))}
       </div>
       <div className="nd flex items-center gap-4 self-end">
-        <Button size="icon">
+        <Button size="icon" onClick={() => setPage((prev) => --prev)} disabled={page === 0}>
           <ChevronLeft size={20} />
         </Button>
-        <p>0 / {data.numberOfPages}</p>
-        <Button size="icon">
+        <p>
+          {page + 1} / {data.numberOfPages}
+        </p>
+        <Button size="icon" onClick={() => setPage((prev) => ++prev)} disabled={page + 1 === data.numberOfPages}>
           <ChevronRight size={20} />
         </Button>
       </div>

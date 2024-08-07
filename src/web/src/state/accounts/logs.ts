@@ -27,14 +27,14 @@ const DEBUG_TRANSACTIONS: { numberOfPages: number; logs: RawLogItem[] } = {
   ],
 };
 
-export const useLogs = (accountId: number) =>
+export const useLogs = (accountId: number, page: number) =>
   useSuspenseQuery<{ numberOfPages: number; logs: LogItem[] }>(
     {
-      queryKey: ['logs', accountId],
+      queryKey: ['logs', accountId, page],
       queryFn: async () => {
         const data = await fetchNui<{ numberOfPages: number; logs: RawLogItem[] }>(
           'getLogs',
-          { accountId },
+          { accountId, page },
           { data: DEBUG_TRANSACTIONS, delay: 3000 }
         );
 

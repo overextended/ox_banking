@@ -322,7 +322,7 @@ onClientCallback('ox_banking:convertAccountToShared', async (playerId, data: { a
   return true;
 });
 
-onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: number }) => {
+onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: number; page: number }) => {
   const player = GetPlayer(playerId);
 
   if (!player) return;
@@ -331,7 +331,7 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
 
   if (!hasPermission) return;
 
-  const { accountId } = data;
+  const { accountId, page } = data;
   const queryData = await oxmysql.prepare<RawLogItem[]>(
     `
           SELECT ac.id, ac.toId, ac.fromBalance, ac.toBalance, ac.message, ac.amount, DATE_FORMAT(ac.date, '%Y-%m-%d %H:%i') AS date, CONCAT(c.firstName, " ", c.lastName) AS name
@@ -340,14 +340,18 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
           WHERE fromId = ? OR toId = ?
           ORDER BY ac.id DESC
           LIMIT 9
+          OFFSET ?
         `,
+    [accountId, accountId, page * 9]
+  );
+
+  const totalLogsCount = await oxmysql.prepare(
+    'SELECT COUNT(*) FROM accounts_transactions WHERE `toId` = ? OR `fromId` = ?',
     [accountId, accountId]
   );
 
-  console.log(queryData);
-
   return {
-    numberOfPages: 1,
+    numberOfPages: Math.ceil(totalLogsCount / 9),
     logs: queryData,
   };
 });
