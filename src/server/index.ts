@@ -1,5 +1,5 @@
 import { onClientCallback } from '@overextended/ox_lib/server';
-import type { AccessTableData, Account, DashboardData, Transaction } from '../common/typings';
+import type { AccessTableData, Account, DashboardData, RawLogItem, Transaction } from '../common/typings';
 import { oxmysql } from '@overextended/oxmysql';
 import { Ox, GetPlayer } from '@overextended/ox_core/server';
 
@@ -320,4 +320,34 @@ onClientCallback('ox_banking:convertAccountToShared', async (playerId, data: { a
   await oxmysql.prepare('UPDATE `accounts` SET `type` = ? WHERE `id` = ?', ['shared', data.accountId]);
 
   return true;
+});
+
+onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: number }) => {
+  const player = GetPlayer(playerId);
+
+  if (!player) return;
+
+  const hasPermission = await player.hasAccountPermission(data.accountId, 'viewHistory');
+
+  if (!hasPermission) return;
+
+  const { accountId } = data;
+  const queryData = await oxmysql.prepare<RawLogItem[]>(
+    `
+          SELECT ac.id, ac.toId, ac.fromBalance, ac.toBalance, ac.message, ac.amount, DATE_FORMAT(ac.date, '%Y-%m-%d %H:%i') AS date, CONCAT(c.firstName, " ", c.lastName) AS name
+          FROM accounts_transactions ac
+          LEFT JOIN characters c ON c.charId = ac.actorId
+          WHERE fromId = ? OR toId = ?
+          ORDER BY ac.id DESC
+          LIMIT 9
+        `,
+    [accountId, accountId]
+  );
+
+  console.log(queryData);
+
+  return {
+    numberOfPages: 1,
+    logs: queryData,
+  };
 });

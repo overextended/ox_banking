@@ -35,3 +35,19 @@ export interface AccessTableData {
   numberOfPages: number;
   users: AccessTableUser[];
 }
+
+export interface RawLogItem {
+  id: number;
+  toId: number;
+  name: string;
+  message: string;
+  amount: number;
+  date: string;
+  fromBalance?: number;
+  toBalance?: number;
+}
+
+export type LogItem = RawLogItem & {
+  type: 'inbound' | 'outbound';
+  newBalance: number;
+};

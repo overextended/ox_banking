@@ -138,3 +138,4 @@ serverNuiCallback('withdrawMoney');
 serverNuiCallback('transferMoney');
 serverNuiCallback('renameAccount');
 serverNuiCallback('convertAccountToShared');
+serverNuiCallback('getLogs');
