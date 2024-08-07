@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatNumber } from '../../../../../../utils/formatNumber';
+import { formatNumber } from '@/utils/formatNumber';
 import { ArrowDownRight, ArrowUpRight } from 'lucide-react';
 import { AvatarFallback } from '@/components/ui/avatar';
 import { Avatar } from '@/components/ui/avatar';

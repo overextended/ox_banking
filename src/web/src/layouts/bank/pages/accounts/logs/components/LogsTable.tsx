@@ -1,39 +1,34 @@
 import React from 'react';
-import LogsTableItem from './LogsTableItem';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLogs } from '@/state/accounts';
-import { Button } from '@/components/ui/button';
+import LogsTableHead from './LogsTableHead';
+import LogsTableBody from './LogsTableBody';
+import LogsTableFooter from './LogsTableFooter';
+import LogsTableSkeleton from './LogsTableSkeleton';
 
 const LogsTable: React.FC<{ accountId: number }> = ({ accountId }) => {
   const [page, setPage] = React.useState(0);
-  const { data } = useLogs(accountId, page);
+  const [maxPages, setMaxPages] = React.useState(0);
+  const { data, isLoading } = useLogs(accountId, page);
+
+  React.useEffect(() => {
+    setMaxPages((prev) => data?.numberOfPages ?? prev);
+  }, [data]);
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full flex-col justify-between">
+        <LogsTableSkeleton page={page} maxPages={maxPages} setPage={setPage} />
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-full flex-col justify-between">
       <div>
-        <div className="text-muted-foreground mb-2 grid grid-cols-[36px,repeat(5,1fr)] gap-2 border-b py-2 text-center text-sm">
-          <p></p>
-          <p>Name</p>
-          <p>Message</p>
-          <p>Amount</p>
-          <p>New balance</p>
-          <p>Timestamp</p>
-        </div>
-        {data.logs.map((transaction) => (
-          <LogsTableItem key={transaction.id} {...transaction} />
-        ))}
+        <LogsTableHead />
+        <LogsTableBody logs={data?.logs ?? []} />
       </div>
-      <div className="nd flex items-center gap-4 self-end">
-        <Button size="icon" onClick={() => setPage((prev) => --prev)} disabled={page === 0}>
-          <ChevronLeft size={20} />
-        </Button>
-        <p>
-          {page + 1} / {data.numberOfPages}
-        </p>
-        <Button size="icon" onClick={() => setPage((prev) => ++prev)} disabled={page + 1 === data.numberOfPages}>
-          <ChevronRight size={20} />
-        </Button>
-      </div>
+      <LogsTableFooter page={page} setPage={setPage} maxPages={maxPages} />
     </div>
   );
 };

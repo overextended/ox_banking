@@ -1,7 +1,8 @@
 import { type RawLogItem, type LogItem } from '~/src/common/typings';
 import { queryClient } from '../../main';
 import { fetchNui } from '../../utils/fetchNui';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { delay } from '../../utils/misc';
 
 const DEBUG_TRANSACTIONS: { numberOfPages: number; logs: RawLogItem[] } = {
   numberOfPages: 3,
@@ -28,14 +29,16 @@ const DEBUG_TRANSACTIONS: { numberOfPages: number; logs: RawLogItem[] } = {
 };
 
 export const useLogs = (accountId: number, page: number) =>
-  useSuspenseQuery<{ numberOfPages: number; logs: LogItem[] }>(
+  useQuery<{ numberOfPages: number; logs: LogItem[] }>(
     {
       queryKey: ['logs', accountId, page],
       queryFn: async () => {
+        await delay(500);
+
         const data = await fetchNui<{ numberOfPages: number; logs: RawLogItem[] }>(
           'getLogs',
           { accountId, page },
-          { data: DEBUG_TRANSACTIONS, delay: 3000 }
+          { data: DEBUG_TRANSACTIONS, delay: 10000 }
         );
 
         return {

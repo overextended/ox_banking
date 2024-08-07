@@ -4,7 +4,7 @@ import BaseCard from '@/layouts/bank/components/BaseCard';
 import locales from '@/locales';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useActiveAccount } from '../../../../../state/accounts';
+import { useActiveAccount } from '@/state/accounts';
 import LogsTable from './components/LogsTable';
 
 const Logs: React.FC = () => {
@@ -20,9 +20,7 @@ const Logs: React.FC = () => {
           <Button>Date range</Button>
           <Button>Type</Button>
         </div>
-        <React.Suspense fallback={<>Loading...</>}>
-          <LogsTable accountId={account.id} />
-        </React.Suspense>
+        <LogsTable accountId={account.id} />
       </BaseCard>
     </div>
   );
