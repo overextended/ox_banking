@@ -42,7 +42,6 @@ export const useLogs = () => {
 
       await delay(500);
 
-      console.log('fetch', filters.page);
       const data = await fetchNui<{ numberOfPages: number; logs: RawLogItem[] }>(
         'getLogs',
         { accountId, page: filters.page },
