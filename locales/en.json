@@ -76,5 +76,6 @@
   "action_irreversible": "This action is irreversible",
   "quick_withdraw": "Quick withdraw",
   "custom_amount": "Custom amount",
-  "amount_required_number": "Amount must be a number"
+  "amount_required_number": "Amount must be a number",
+  "logs_search": "Search by name or message..."
 }
