@@ -32,6 +32,7 @@ export const useLogs = (accountId: number, page: number) =>
   useQuery<{ numberOfPages: number; logs: LogItem[] }>(
     {
       queryKey: ['logs', accountId, page],
+      gcTime: 0,
       queryFn: async () => {
         await delay(500);
 
