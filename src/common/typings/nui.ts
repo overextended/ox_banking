@@ -51,3 +51,8 @@ export type LogItem = RawLogItem & {
   type: 'inbound' | 'outbound';
   newBalance: number;
 };
+
+export type LogsFilters = {
+  search: string;
+  page: number;
+};

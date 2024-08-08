@@ -1,4 +1,4 @@
-import { type RawLogItem, type LogItem } from '~/src/common/typings';
+import { type RawLogItem, type LogItem, LogsFilters } from '~/src/common/typings';
 import { fetchNui } from '../../utils/fetchNui';
 import { delay } from '../../utils/misc';
 import atomWithDebounce from '../../utils/atomWithDebounce';
@@ -44,7 +44,7 @@ export const useLogs = () => {
 
       const data = await fetchNui<{ numberOfPages: number; logs: RawLogItem[] }>(
         'getLogs',
-        { accountId, page: filters.page },
+        { accountId, filters },
         { data: DEBUG_TRANSACTIONS }
       );
 
@@ -76,7 +76,7 @@ export const useLogs = () => {
   return { data, isLoading };
 };
 
-const logsFiltersDebounceAtom = atomWithDebounce(
+const logsFiltersDebounceAtom = atomWithDebounce<LogsFilters>(
   {
     search: '',
     page: 0,

@@ -1,5 +1,5 @@
 import { onClientCallback } from '@overextended/ox_lib/server';
-import type { AccessTableData, Account, DashboardData, RawLogItem, Transaction } from '../common/typings';
+import type { AccessTableData, Account, DashboardData, LogsFilters, RawLogItem, Transaction } from '../common/typings';
 import { oxmysql } from '@overextended/oxmysql';
 import { Ox, GetPlayer } from '@overextended/ox_core/server';
 
@@ -322,7 +322,7 @@ onClientCallback('ox_banking:convertAccountToShared', async (playerId, data: { a
   return true;
 });
 
-onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: number; page: number }) => {
+onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: number; filters: LogsFilters }) => {
   const player = GetPlayer(playerId);
 
   if (!player) return;
@@ -331,23 +331,31 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
 
   if (!hasPermission) return;
 
-  const { accountId, page } = data;
-  const queryData = await oxmysql.prepare<RawLogItem[]>(
+  const { accountId, filters } = data;
+
+  const search = `%${filters.search}%`;
+
+  const queryData = await oxmysql.rawExecute<RawLogItem[]>(
     `
-          SELECT ac.id, ac.toId, ac.fromBalance, ac.toBalance, ac.message, ac.amount, DATE_FORMAT(ac.date, '%Y-%m-%d %H:%i') AS date, CONCAT(c.firstName, " ", c.lastName) AS name
+          SELECT ac.id, ac.toId, ac.fromBalance, ac.toBalance, ac.message, ac.amount, DATE_FORMAT(ac.date, '%Y-%m-%d %H:%i') AS date, CONCAT(c.firstName, ' ', c.lastName) AS name
           FROM accounts_transactions ac
           LEFT JOIN characters c ON c.charId = ac.actorId
-          WHERE fromId = ? OR toId = ?
+          WHERE (fromId = ? OR toId = ?) AND (ac.message LIKE ? OR CONCAT(c.firstName, ' ', c.lastName) LIKE ?)
           ORDER BY ac.id DESC
           LIMIT 9
           OFFSET ?
         `,
-    [accountId, accountId, page * 9]
+    [accountId, accountId, search, search, filters.page * 9]
   );
 
   const totalLogsCount = await oxmysql.prepare(
-    'SELECT COUNT(*) FROM accounts_transactions WHERE `toId` = ? OR `fromId` = ?',
-    [accountId, accountId]
+    `
+          SELECT COUNT(*)
+          FROM accounts_transactions ac
+          LEFT JOIN characters c ON c.charId = ac.actorId
+          WHERE (ac.toId = ? OR ac.fromId = ?) AND (ac.message LIKE ? OR CONCAT(c.firstName, ' ', c.lastName) LIKE ?)
+        `,
+    [accountId, accountId, search, search]
   );
 
   return {
