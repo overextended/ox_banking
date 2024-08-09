@@ -77,5 +77,8 @@
   "quick_withdraw": "Quick withdraw",
   "custom_amount": "Custom amount",
   "amount_required_number": "Amount must be a number",
-  "logs_search": "Search by name or message..."
+  "logs_search": "Search by name or message...",
+  "message": "Message",
+  "new_balance": "New balance",
+  "date": "Date"
 }
