@@ -339,11 +339,21 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
   let queryParams: any[] = [accountId, accountId, search, search];
 
   if (filters.date) {
-    // Dates from filters are all set to midnight, so we set all the dates we fetch from the DB to be 1 minute after
-    // midnight to fit into the BETWEEN scope
-    dateSearchString = `AND (DATE_FORMAT(ac.date, '%Y-%m-%dT00:01.000Z') BETWEEN ? AND ?)`;
-    console.log(JSON.stringify(filters.date, null, 2));
-    queryParams.push(filters.date.from, filters.date.to ?? filters.date.from);
+    const rawDates = {
+      from: new Date(filters.date.from),
+      to: new Date(filters.date.to ?? filters.date.from)
+    }
+    // Set the 'from' date to start at 00:00:00
+    rawDates.from.setHours(0, 0, 0, 0);
+    // Set the 'to' date to finish at 23:59:59
+    rawDates.to.setHours(23, 59, 59, 999);
+
+    const formatedDates = {
+      from: rawDates.from.getTime() / 1000,
+      to: rawDates.to.getTime() / 1000
+    }
+    dateSearchString = `AND (UNIX_TIMESTAMP(ac.date) BETWEEN ? AND ?)`;
+    queryParams.push(formatedDates.from, formatedDates.to);
   }
 
   queryParams.push(filters.page * 9);
