@@ -42,6 +42,7 @@ export const useLogs = () => {
 
       await delay(500);
 
+      console.log(JSON.stringify(filters, null, 2));
       const data = await fetchNui<{ numberOfPages: number; logs: RawLogItem[] }>(
         'getLogs',
         { accountId, filters },

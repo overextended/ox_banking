@@ -335,17 +335,30 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
 
   const search = `%${filters.search}%`;
 
+  let dateSearchString = '';
+  let queryParams: any[] = [accountId, accountId, search, search];
+
+  if (filters.date) {
+    // Dates from filters are all set to midnight, so we set all the dates we fetch from the DB to be 1 minute after
+    // midnight to fit into the BETWEEN scope
+    dateSearchString = `AND (DATE_FORMAT(ac.date, '%Y-%m-%dT00:01.000Z') BETWEEN ? AND ?)`;
+    console.log(JSON.stringify(filters.date, null, 2));
+    queryParams.push(filters.date.from, filters.date.to ?? filters.date.from);
+  }
+
+  queryParams.push(filters.page * 9);
+
   const queryData = await oxmysql.rawExecute<RawLogItem[]>(
     `
           SELECT ac.id, ac.toId, ac.fromBalance, ac.toBalance, ac.message, ac.amount, DATE_FORMAT(ac.date, '%Y-%m-%d %H:%i') AS date, CONCAT(c.firstName, ' ', c.lastName) AS name
           FROM accounts_transactions ac
           LEFT JOIN characters c ON c.charId = ac.actorId
-          WHERE (fromId = ? OR toId = ?) AND (ac.message LIKE ? OR CONCAT(c.firstName, ' ', c.lastName) LIKE ?)
+          WHERE (fromId = ? OR toId = ?) AND (ac.message LIKE ? OR CONCAT(c.firstName, ' ', c.lastName) LIKE ?) ${dateSearchString}
           ORDER BY ac.id DESC
           LIMIT 9
           OFFSET ?
         `,
-    [accountId, accountId, search, search, filters.page * 9]
+    queryParams
   );
 
   const totalLogsCount = await oxmysql.prepare(

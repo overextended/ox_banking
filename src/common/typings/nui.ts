@@ -1,4 +1,5 @@
 import { OxAccountPermissions, OxAccountRoles } from '@overextended/ox_core';
+import { DateRange } from 'react-day-picker';
 
 export type AccountRole = OxAccountRoles;
 export type AccountPermissions = OxAccountPermissions;
@@ -55,4 +56,5 @@ export type LogItem = RawLogItem & {
 export type LogsFilters = {
   search: string;
   page: number;
+  date?: DateRange;
 };
