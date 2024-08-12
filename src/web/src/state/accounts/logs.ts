@@ -52,7 +52,7 @@ export const useLogs = () => {
       return {
         numberOfPages: data.numberOfPages,
         logs: data.logs.map((log) => {
-          const newBalance = log.fromBalance ?? (log.toBalance as number);
+          const newBalance = log.toId === accountId ? log.toBalance : log.fromBalance;
 
           return {
             id: log.id,
