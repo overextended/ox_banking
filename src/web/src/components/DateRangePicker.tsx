@@ -12,11 +12,6 @@ export function DateRangePicker({ className }: React.HTMLAttributes<HTMLDivEleme
   const setFilters = useSetLogsFiltersDebounce();
   const [date, setDate] = React.useState<DateRange | undefined>(undefined);
 
-  React.useEffect(() => {
-    console.log('date.from.toString', date?.from?.toString());
-    setFilters((prev) => ({ ...prev, date, page: 0 }));
-  }, [date]);
-
   return (
     <div className={cn('grid gap-2', className)}>
       <Popover>
@@ -45,7 +40,10 @@ export function DateRangePicker({ className }: React.HTMLAttributes<HTMLDivEleme
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={setDate}
+            onSelect={(date) => {
+              setDate(date);
+              setFilters((prev) => ({ ...prev, date, page: 0 }));
+            }}
             disabled={{ after: new Date() }}
             numberOfMonths={2}
           />
