@@ -337,6 +337,7 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
 
   let dateSearchString = '';
   let queryParams: any[] = [accountId, accountId, search, search];
+  let countQueryParams: any[] = [accountId, accountId, search, search];
 
   if (filters.date) {
     const rawDates = {
@@ -355,6 +356,7 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
 
     dateSearchString = `AND (DATE(ac.date) BETWEEN ? AND ?)`;
     queryParams.push(formattedDates.from, formattedDates.to);
+    countQueryParams.push(formattedDates.from, formattedDates.to);
   }
 
   queryParams.push(filters.page * 9);
@@ -377,9 +379,9 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
           SELECT COUNT(*)
           FROM accounts_transactions ac
           LEFT JOIN characters c ON c.charId = ac.actorId
-          WHERE (ac.toId = ? OR ac.fromId = ?) AND (ac.message LIKE ? OR CONCAT(c.firstName, ' ', c.lastName) LIKE ?)
+          WHERE (ac.toId = ? OR ac.fromId = ?) AND (ac.message LIKE ? OR CONCAT(c.firstName, ' ', c.lastName) LIKE ?) ${dateSearchString}
         `,
-    [accountId, accountId, search, search]
+    countQueryParams
   );
 
   return {
