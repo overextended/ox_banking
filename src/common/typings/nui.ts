@@ -57,4 +57,5 @@ export type LogsFilters = {
   search: string;
   page: number;
   date?: DateRange;
+  type?: 'inbound' | 'outbound' | 'combined';
 };

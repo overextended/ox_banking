@@ -80,5 +80,9 @@
   "logs_search": "Search by name or message...",
   "message": "Message",
   "new_balance": "New balance",
-  "date": "Date"
+  "date": "Date",
+  "transaction_type": "Transaction type",
+  "transaction_type_combined": "Combined",
+  "transaction_type_inbound": "Inbound",
+  "transaction_type_outbound": "Outbound"
 }

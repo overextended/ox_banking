@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import React from 'react';
 import { DateRangePicker } from '@/components/DateRangePicker';
 import { useLogsFilters, useSetLogsFiltersDebounce } from '@/state/accounts';
-import { DateRange } from 'react-day-picker';
+import LogsTypeSelect from './LogsTypeSelect';
 
 const LogsFilters: React.FC = () => {
   const filters = useLogsFilters();
@@ -11,7 +11,7 @@ const LogsFilters: React.FC = () => {
   return (
     <div className="flex items-center gap-2">
       <DateRangePicker />
-      <Button>Type</Button>
+      <LogsTypeSelect />
     </div>
   );
 };

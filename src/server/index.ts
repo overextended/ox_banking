@@ -338,6 +338,15 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
   let dateSearchString = '';
   let queryParams: any[] = [accountId, accountId, search, search];
 
+  let typeQueryString = ``;
+
+  if (filters.type && filters.type !== 'combined') {
+    typeQueryString += 'AND (';
+    filters.type === 'outbound' ? (typeQueryString += 'fromId = ?)') : (typeQueryString += 'toId = ?)');
+
+    queryParams.push(accountId);
+  }
+
   if (filters.date) {
     const rawDates = {
       from: new Date(filters.date.from),
@@ -357,7 +366,7 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
     queryParams.push(formattedDates.from, formattedDates.to);
   }
 
-  const queryWhere = `WHERE (fromId = ? OR toId = ?) AND (ac.message LIKE ? OR CONCAT(c.firstName, ' ', c.lastName) LIKE ?) ${dateSearchString}`;
+  const queryWhere = `WHERE (fromId = ? OR toId = ?) AND (ac.message LIKE ? OR CONCAT(c.firstName, ' ', c.lastName) LIKE ?) ${typeQueryString} ${dateSearchString}`;
   const countQueryParams = [...queryParams];
 
   queryParams.push(filters.page * 9);
