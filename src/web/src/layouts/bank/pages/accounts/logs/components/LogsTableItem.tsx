@@ -3,19 +3,24 @@ import { formatNumber } from '@/utils/formatNumber';
 import { ArrowDownRight, ArrowUpRight } from 'lucide-react';
 import { AvatarFallback } from '@/components/ui/avatar';
 import { Avatar } from '@/components/ui/avatar';
+import { useModal } from '@/components/ModalsProvider';
+import TransactionModal from '@/components/TransactionModal';
+import { LogItemProps } from '@/typings';
+import locales from '@/locales';
 
-interface Props {
-  name: string;
-  message: string;
-  amount: number;
-  newBalance: number;
-  type: 'outbound' | 'inbound';
-  date: string;
-}
+const LogsTableItem: React.FC<LogItemProps> = ({ name, message, amount, newBalance, date, type }) => {
+  const modal = useModal();
 
-const LogsTableItem: React.FC<Props> = ({ name, message, amount, newBalance, date, type }) => {
   return (
-    <div className="hover:bg-secondary grid grid-cols-[36px,repeat(5,1fr)] place-items-center gap-2 rounded-lg p-2 text-center hover:cursor-pointer">
+    <div
+      className="hover:bg-secondary grid grid-cols-[36px,repeat(5,1fr)] place-items-center gap-2 rounded-lg p-2 text-center hover:cursor-pointer"
+      onClick={() =>
+        modal.open({
+          title: locales.transaction_details,
+          children: <TransactionModal {...{ name, message, amount, newBalance, date, type }} />,
+        })
+      }
+    >
       <Avatar className="h-9 w-9">
         <AvatarFallback>
           {type === 'outbound' ? (

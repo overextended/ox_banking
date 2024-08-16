@@ -84,5 +84,6 @@
   "transaction_type": "Transaction type",
   "transaction_type_combined": "Combined",
   "transaction_type_inbound": "Inbound",
-  "transaction_type_outbound": "Outbound"
+  "transaction_type_outbound": "Outbound",
+  "transaction_details": "Transaction details"
 }
