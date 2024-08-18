@@ -1,5 +1,5 @@
 import React from 'react';
-import { Copy, History, Landmark, Repeat, ScanText, Wallet } from 'lucide-react';
+import { Copy, History, Landmark, ReceiptText, Repeat, ScanText, Wallet } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { formatNumber } from '@/utils/formatNumber';
 import AccountButton from '@/layouts/bank/pages/accounts/components/AccountButton';
@@ -9,7 +9,7 @@ import { useModal } from '@/components/ModalsProvider';
 import { useActiveAccount } from '@/state/accounts/accounts';
 import locales from '@/locales';
 import TransferModal from '@/layouts/bank/pages/accounts/modals/TransferModal';
-import { hasPermission } from '../../../../../permissions';
+import { hasPermission } from '@/permissions';
 import { useNavigate } from 'react-router-dom';
 
 const AccountDetails: React.FC = () => {
@@ -17,7 +17,6 @@ const AccountDetails: React.FC = () => {
   const account = useActiveAccount()!;
   const navigate = useNavigate();
 
-  // @ts-ignore
   return (
     <BaseCard title="Details" icon={ScanText} className="flex-1">
       <div className="flex justify-between">
@@ -97,6 +96,12 @@ const AccountDetails: React.FC = () => {
           icon={Repeat}
           disabled={!hasPermission('withdraw', account.role)}
           onClick={() => modal.open({ title: locales.transfer, children: <TransferModal account={account} /> })}
+        />
+        <AccountButton
+          onClick={() => navigate(`/accounts/invoices/${account.id}`)}
+          disabled={!hasPermission('manageAccount', account.role)}
+          label={locales.invoices}
+          icon={ReceiptText}
         />
         <AccountButton
           onClick={() => navigate(`/accounts/logs/${account.id}`)}

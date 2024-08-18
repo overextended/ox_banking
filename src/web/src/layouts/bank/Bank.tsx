@@ -13,6 +13,7 @@ import { useSetCharacter } from '@/state/character';
 import ManageAccess from '@/layouts/bank/pages/accounts/manage-access/ManageAccess';
 import { useExitListener } from '../../hooks/useExitListener';
 import Logs from './pages/accounts/logs/Logs';
+import Invoices from './pages/accounts/invoices/Invoices';
 
 const Bank: React.FC = () => {
   const setCharacter = useSetCharacter();
@@ -41,6 +42,7 @@ const Bank: React.FC = () => {
             <Route path="/accounts" element={<Accounts />} />
             <Route path="/accounts/manage-access/:accountId" element={<ManageAccess />} />
             <Route path="/accounts/logs/:accountId" element={<Logs />} />
+            <Route path="/accounts/invoices/:accountId" element={<Invoices />} />
           </Routes>
         </div>
       )}

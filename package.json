@@ -45,7 +45,7 @@
     "fast-printf": "^1.6.9",
     "jotai": "^2.9.1",
     "jotai-tanstack-query": "^0.7.2",
-    "lucide-react": "^0.290.0",
+    "lucide-react": "^0.428.0",
     "prettier": "^3.3.3",
     "react": "^18.3.1",
     "react-day-picker": "8.10.1",
