@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReceiptText } from 'lucide-react';
+import { ReceiptText, SearchIcon } from 'lucide-react';
 import locales from '@/locales';
 import BaseCard from '@/layouts/bank/components/BaseCard';
 import { Input } from '@/components/ui/input';
@@ -38,7 +38,7 @@ const Invoices: React.FC = () => {
     <div className="flex h-full w-full flex-col gap-2 p-2">
       <BaseCard title={locales.invoices} icon={ReceiptText} className="h-full gap-4">
         <div>
-          <Input placeholder="Search..." />
+          <Input placeholder="Search..." startIcon={SearchIcon} />
         </div>
         <div className="flex items-center justify-between">
           <DateRangePicker />
