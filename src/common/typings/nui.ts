@@ -59,3 +59,10 @@ export type LogsFilters = {
   date?: DateRange;
   type?: 'inbound' | 'outbound' | 'combined';
 };
+
+export type InvoicesFilters = {
+  search: string;
+  page: number;
+  type: 'unpaid' | 'paid' | 'sent';
+  date?: DateRange;
+};

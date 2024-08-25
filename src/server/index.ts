@@ -1,7 +1,16 @@
 import { onClientCallback } from '@overextended/ox_lib/server';
-import type { AccessTableData, Account, DashboardData, LogsFilters, RawLogItem, Transaction } from '../common/typings';
+import type {
+  AccessTableData,
+  Account,
+  DashboardData,
+  InvoicesFilters,
+  LogsFilters,
+  RawLogItem,
+  Transaction,
+} from '../common/typings';
 import { oxmysql } from '@overextended/oxmysql';
 import { Ox, GetPlayer } from '@overextended/ox_core/server';
+import type { DateRange } from 'react-day-picker';
 
 onClientCallback('ox_banking:getAccounts', async (playerId): Promise<Account[]> => {
   const player = GetPlayer(playerId);
@@ -348,22 +357,10 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
   }
 
   if (filters.date) {
-    const rawDates = {
-      from: new Date(filters.date.from),
-      to: new Date(filters.date.to ?? filters.date.from),
-    };
-
-    const formattedDates = {
-      from: new Date(
-        Date.UTC(rawDates.from.getFullYear(), rawDates.from.getMonth(), rawDates.from.getDate(), 0, 0, 0)
-      ).toISOString(),
-      to: new Date(
-        Date.UTC(rawDates.to.getFullYear(), rawDates.to.getMonth(), rawDates.to.getDate(), 23, 59, 59)
-      ).toISOString(),
-    };
+    const date = getFormattedDates(filters.date);
 
     dateSearchString = `AND (DATE(ac.date) BETWEEN ? AND ?)`;
-    queryParams.push(formattedDates.from, formattedDates.to);
+    queryParams.push(date.from, date.to);
   }
 
   const queryWhere = `WHERE (fromId = ? OR toId = ?) AND (ac.message LIKE ? OR CONCAT(c.firstName, ' ', c.lastName) LIKE ?) ${typeQueryString} ${dateSearchString}`;
@@ -399,3 +396,121 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
     logs: queryData,
   };
 });
+
+onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: number; filters: InvoicesFilters }) => {
+  const player = GetPlayer(playerId);
+
+  if (!player) return;
+
+  const { accountId } = data;
+
+  const hasPermission = await player.hasAccountPermission(accountId, 'payInvoice');
+
+  if (!hasPermission) return;
+
+  // TODO: Remove - dev debug filters
+  const filters = {
+    search: '',
+    page: 0,
+    type: 'sent',
+    date: undefined,
+  } as InvoicesFilters;
+
+  const search = `%${filters.search}%`;
+
+  let queryParams: any[] = [];
+
+  let dateSearchString = '';
+  let columnSearchString = '';
+  let typeSearchString = '';
+
+  let query = '';
+
+  switch (filters.type) {
+    case 'unpaid':
+      typeSearchString = '(ai.toId = ? AND ai.paidAt IS NULL)';
+      columnSearchString = '(a.label LIKE ? OR ai.message LIKE ?)';
+
+      queryParams.push(accountId, search, search);
+
+      query = `
+          SELECT a.label, ai.amount, ai.message, DATE_FORMAT(ai.dueDate, '%Y-%m-%d %H:%i') as dueDate, ai.id FROM accounts_invoices ai
+          LEFT JOIN accounts a ON ai.fromId = a.id
+          LEFT JOIN characters c ON ai.creatorId = c.charId
+      `;
+
+      break;
+    case 'paid':
+      typeSearchString = '(ai.toId = ? AND ai.paidAt IS NOT NULL)';
+      columnSearchString = `(CONCAT(c.firstName, ' ', c.lastName) LIKE ? OR ai.message LIKE ?)`;
+
+      queryParams.push(accountId, search, search);
+
+      query = `
+        SELECT ai.id, CONCAT(c.firstName, ' ', c.lastName) as name, a.label, ai.amount, ai.message, DATE_FORMAT(ai.paidAt, '%Y-%m-%d %H:%i') as paidAt FROM accounts_invoices ai
+        LEFT JOIN accounts a ON ai.fromId = a.id
+        LEFT JOIN characters c ON ai.payerId = c.charId
+      `;
+
+      break;
+    case 'sent':
+      typeSearchString = '(ai.fromId = ?)';
+      columnSearchString = `(CONCAT(c.firstName, ' ', c.lastName) LIKE ? OR ai.message LIKE ? OR a.label LIKE ?)`;
+
+      queryParams.push(accountId, search, search, search);
+
+      query = `
+        SELECT ai.id, CONCAT(c.firstName, ' ', c.lastName) as name, a.label, ai.amount, ai.message, DATE_FORMAT(ai.sentAt, '%Y-%m-%d %H:%i') as sentAt, DATE_FORMAT(ai.dueDate, '%Y-%m-%d %H:%i') as dueDate FROM accounts_invoices ai
+        LEFT JOIN accounts a ON ai.toId = a.id
+        LEFT JOIN characters c ON ai.creatorId = c.charId
+      `;
+
+      break;
+  }
+
+  if (filters.date) {
+    const date = getFormattedDates(filters.date);
+
+    dateSearchString = `AND (DATE(ai.sentAt) BETWEEN ? AND ?)`;
+    queryParams.push(date.from, date.to);
+  }
+
+  const whereStatement = `WHERE ${typeSearchString} AND ${columnSearchString} ${dateSearchString}`;
+
+  queryParams.push(filters.page * 9);
+
+  const result = await oxmysql
+    .rawExecute(
+      `
+    ${query}
+    ${whereStatement}
+    ORDER BY ai.id DESC
+    LIMIT 9
+    OFFSET ?
+  `,
+      queryParams
+    )
+    .catch((e) => console.log(e));
+
+  console.log(result);
+
+  return result;
+});
+
+function getFormattedDates(date: DateRange) {
+  const rawDates = {
+    from: new Date(date.from),
+    to: new Date(date.to ?? date.from),
+  };
+
+  const formattedDates = {
+    from: new Date(
+      Date.UTC(rawDates.from.getFullYear(), rawDates.from.getMonth(), rawDates.from.getDate(), 0, 0, 0)
+    ).toISOString(),
+    to: new Date(
+      Date.UTC(rawDates.to.getFullYear(), rawDates.to.getMonth(), rawDates.to.getDate(), 23, 59, 59)
+    ).toISOString(),
+  };
+
+  return formattedDates;
+}
