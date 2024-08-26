@@ -1,24 +1,24 @@
 import React from 'react';
 import { formatNumber } from '@/utils/formatNumber';
 
-const PaidInvoiceDetailsModal: React.FC = () => {
+const SentInvoiceDetailsModal: React.FC = () => {
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <p className="text-muted-foreground text-xs">Payment to</p>
+        <p className="text-muted-foreground text-xs">Sent to</p>
         <p className="text-sm">SomeCompany LLC</p>
+      </div>
+      <div>
+        <p className="text-muted-foreground text-xs">Sent by</p>
+        <p className="text-sm">Some Name</p>
+      </div>
+      <div>
+        <p className="text-muted-foreground text-xs">Sent at</p>
+        <p className="text-sm">20/03/2025 13:40</p>
       </div>
       <div>
         <p className="text-muted-foreground text-xs">Due date</p>
         <p className="text-sm">20/03/2025 13:40</p>
-      </div>
-      <div>
-        <p className="text-muted-foreground text-xs">Paid at</p>
-        <p className="text-sm">20/03/2025 13:40</p>
-      </div>
-      <div>
-        <p className="text-muted-foreground text-xs">Paid by</p>
-        <p className="text-sm">Some Name</p>
       </div>
       <div>
         <p className="text-muted-foreground text-xs">Message</p>
@@ -36,4 +36,4 @@ const PaidInvoiceDetailsModal: React.FC = () => {
   );
 };
 
-export default PaidInvoiceDetailsModal;
+export default SentInvoiceDetailsModal;
