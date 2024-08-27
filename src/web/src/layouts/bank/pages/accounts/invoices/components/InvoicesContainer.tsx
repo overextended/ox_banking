@@ -21,40 +21,49 @@ const InvoicesContainer: React.FC<{ accountId: number }> = ({ accountId }) => {
   const setFilters = useSetInvoicesFiltersDebounce();
   const isDebouncing = useIsInvoicesFiltersDebouncing();
 
-  const query = useQuery<Array<UnpaidInvoice | PaidInvoice | SentInvoice>>(
+  const [maxPages, setMaxPages] = React.useState(0);
+
+  const query = useQuery<{ invoices: Array<UnpaidInvoice | PaidInvoice | SentInvoice>; numberOfPages: number }>(
     {
       queryKey: ['invoices', accountId, debouncedFilters],
       gcTime: 0,
       staleTime: 0,
       queryFn: async () => {
-        return await fetchNui<Array<UnpaidInvoice | PaidInvoice | SentInvoice>>(
+        const data = await fetchNui<{
+          invoices: Array<UnpaidInvoice | PaidInvoice | SentInvoice>;
+          numberOfPages: number;
+        }>(
           'getInvoices',
+          { accountId, filters: debouncedFilters },
           {
-            accountId,
-            filters: debouncedFilters,
-          },
-          {
-            data: [
-              {
-                id: 0,
-                type: 'unpaid',
-                label: 'SomeOtherAccount LLC',
-                message: 'Bill',
-                amount: 3000,
-                dueDate: '2024/08/28 13:00',
-              },
-              {
-                id: 1,
-                type: 'unpaid',
-                label: 'SomeOtherAccount LLC',
-                message: 'Bill',
-                amount: 3000,
-                dueDate: '2024/08/28 13:00',
-              },
-            ] satisfies UnpaidInvoice[],
+            data: {
+              numberOfPages: 1,
+              invoices: [
+                {
+                  id: 0,
+                  type: 'unpaid',
+                  label: 'SomeOtherAccount LLC',
+                  message: 'Bill',
+                  amount: 3000,
+                  dueDate: '2024/08/28 13:00',
+                },
+                {
+                  id: 1,
+                  type: 'unpaid',
+                  label: 'SomeOtherAccount LLC',
+                  message: 'Bill',
+                  amount: 3000,
+                  dueDate: '2024/08/28 13:00',
+                },
+              ] satisfies UnpaidInvoice[],
+            },
             delay: 3000,
           }
         );
+
+        setMaxPages(data.numberOfPages);
+
+        return data;
       },
     },
     queryClient
@@ -66,12 +75,16 @@ const InvoicesContainer: React.FC<{ accountId: number }> = ({ accountId }) => {
         <SkeletonInvoices />
       ) : (
         <>
-          {filters.type === 'unpaid' && <UnpaidInvoicesTable invoices={query.data as UnpaidInvoice[]} />}
-          {filters.type === 'paid' && <PaidInvoicesTable invoices={query.data as PaidInvoice[]} />}
-          {filters.type === 'sent' && <SentInvoicesTable invoices={query.data as SentInvoice[]} />}
+          {filters.type === 'unpaid' && <UnpaidInvoicesTable invoices={query.data!.invoices as UnpaidInvoice[]} />}
+          {filters.type === 'paid' && <PaidInvoicesTable invoices={query.data!.invoices as PaidInvoice[]} />}
+          {filters.type === 'sent' && <SentInvoicesTable invoices={query.data!.invoices as SentInvoice[]} />}
         </>
       )}
-      <Pagination maxPages={3} page={filters.page} setPage={(page) => setFilters((prev) => ({ ...prev, page }))} />
+      <Pagination
+        maxPages={maxPages}
+        page={filters.page}
+        setPage={(page) => setFilters((prev) => ({ ...prev, page }))}
+      />
     </div>
   );
 };

@@ -417,6 +417,7 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
   let typeSearchString = '';
 
   let query = '';
+  let queryJoins = '';
 
   switch (filters.type) {
     case 'unpaid':
@@ -424,6 +425,11 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
       columnSearchString = '(a.label LIKE ? OR ai.message LIKE ?)';
 
       queryParams.push(accountId, search, search);
+
+      queryJoins = `
+        LEFT JOIN accounts a ON ai.fromId = a.id
+        LEFT JOIN characters c ON ai.creatorId = c.charId
+      `;
 
       query = `
           SELECT
@@ -434,8 +440,7 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
             DATE_FORMAT(ai.dueDate, '%Y-%m-%d %H:%i') as dueDate,
             'unpaid' AS type
           FROM accounts_invoices ai
-          LEFT JOIN accounts a ON ai.fromId = a.id
-          LEFT JOIN characters c ON ai.creatorId = c.charId
+          ${queryJoins}
       `;
 
       break;
@@ -444,6 +449,11 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
       columnSearchString = `(CONCAT(c.firstName, ' ', c.lastName) LIKE ? OR ai.message LIKE ?)`;
 
       queryParams.push(accountId, search, search);
+
+      queryJoins = `
+        LEFT JOIN accounts a ON ai.fromId = a.id
+        LEFT JOIN characters c ON ai.payerId = c.charId
+      `;
 
       query = `
         SELECT
@@ -455,8 +465,7 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
           DATE_FORMAT(ai.paidAt, '%Y-%m-%d %H:%i') as paidAt,
           'paid' AS type
         FROM accounts_invoices ai
-        LEFT JOIN accounts a ON ai.fromId = a.id
-        LEFT JOIN characters c ON ai.payerId = c.charId
+        ${queryJoins}
       `;
 
       break;
@@ -465,6 +474,11 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
       columnSearchString = `(CONCAT(c.firstName, ' ', c.lastName) LIKE ? OR ai.message LIKE ? OR a.label LIKE ?)`;
 
       queryParams.push(accountId, search, search, search);
+
+      queryJoins = `
+        LEFT JOIN accounts a ON ai.toId = a.id
+        LEFT JOIN characters c ON ai.creatorId = c.charId
+      `;
 
       query = `
         SELECT
@@ -482,8 +496,7 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
           END AS status,
           'sent' AS type
         FROM accounts_invoices ai
-        LEFT JOIN accounts a ON ai.toId = a.id
-        LEFT JOIN characters c ON ai.creatorId = c.charId
+        ${queryJoins}
       `;
 
       break;
@@ -492,13 +505,14 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
   if (filters.date) {
     const date = getFormattedDates(filters.date);
 
+    // todo: fix date filtering
     dateSearchString = `AND (DATE(ai.sentAt) BETWEEN ? AND ?)`;
     queryParams.push(date.from, date.to);
   }
 
   const whereStatement = `WHERE ${typeSearchString} AND ${columnSearchString} ${dateSearchString}`;
 
-  queryParams.push(filters.page * 9);
+  queryParams.push(filters.page * 6);
 
   const result = await oxmysql
     .rawExecute(
@@ -513,9 +527,23 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
     )
     .catch((e) => console.log(e));
 
-  console.log(result);
+  queryParams.pop();
+  const totalInvoices = await oxmysql
+    .prepare(
+      `
+        SELECT COUNT(*)
+        FROM accounts_invoices ai
+        ${queryJoins}
+        ${whereStatement}`,
+      queryParams
+    )
+    .catch((e) => console.log(e));
+  const numberOfPages = Math.ceil(totalInvoices / 6);
 
-  return result;
+  return {
+    invoices: result,
+    numberOfPages,
+  };
 });
 
 function getFormattedDates(date: DateRange) {
