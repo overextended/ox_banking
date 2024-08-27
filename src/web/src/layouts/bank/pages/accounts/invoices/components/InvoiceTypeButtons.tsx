@@ -1,32 +1,31 @@
 import { Button } from '@/components/ui/button';
 import React from 'react';
+import { useInvoicesFilters, useSetInvoicesFiltersDebounce } from '@/state/accounts/invoices';
 
-interface Props {
-  tab: 'paid' | 'unpaid' | 'sent';
-  setTab: (tab: 'paid' | 'unpaid' | 'sent') => void;
-}
+const InvoiceTypeButtons: React.FC = () => {
+  const filters = useInvoicesFilters();
+  const setFilters = useSetInvoicesFiltersDebounce();
 
-const InvoiceTypeButtons: React.FC<Props> = ({ tab, setTab }) => {
   return (
     <div className="rounded-lg border shadow-sm">
       <Button
-        onClick={() => setTab('unpaid')}
+        onClick={() => setFilters((prev) => ({ ...prev, type: 'unpaid', page: 0 }))}
         className="h-[34px] rounded-br-none rounded-tr-none"
-        variant={tab === 'unpaid' ? 'default' : 'ghost'}
+        variant={filters.type === 'unpaid' ? 'default' : 'ghost'}
       >
         Unpaid invoices
       </Button>
       <Button
-        onClick={() => setTab('paid')}
+        onClick={() => setFilters((prev) => ({ ...prev, type: 'paid', page: 0 }))}
         className="h-[34px] rounded-none"
-        variant={tab === 'paid' ? 'default' : 'ghost'}
+        variant={filters.type === 'paid' ? 'default' : 'ghost'}
       >
         Paid invoices
       </Button>
       <Button
-        onClick={() => setTab('sent')}
+        onClick={() => setFilters((prev) => ({ ...prev, type: 'sent', page: 0 }))}
         className="h-[34px] rounded-bl-none rounded-tl-none"
-        variant={tab === 'sent' ? 'default' : 'ghost'}
+        variant={filters.type === 'sent' ? 'default' : 'ghost'}
       >
         Sent invoices
       </Button>

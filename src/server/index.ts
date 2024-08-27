@@ -402,19 +402,11 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
 
   if (!player) return;
 
-  const { accountId } = data;
+  const { accountId, filters } = data;
 
   const hasPermission = await player.hasAccountPermission(accountId, 'payInvoice');
 
   if (!hasPermission) return;
-
-  // TODO: Remove - dev debug filters
-  const filters = {
-    search: '',
-    page: 0,
-    type: 'sent',
-    date: undefined,
-  } as InvoicesFilters;
 
   const search = `%${filters.search}%`;
 
@@ -434,7 +426,14 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
       queryParams.push(accountId, search, search);
 
       query = `
-          SELECT a.label, ai.amount, ai.message, DATE_FORMAT(ai.dueDate, '%Y-%m-%d %H:%i') as dueDate, ai.id FROM accounts_invoices ai
+          SELECT
+            ai.id,
+            a.label,
+            ai.amount,
+            ai.message,
+            DATE_FORMAT(ai.dueDate, '%Y-%m-%d %H:%i') as dueDate,
+            'unpaid' AS type
+          FROM accounts_invoices ai
           LEFT JOIN accounts a ON ai.fromId = a.id
           LEFT JOIN characters c ON ai.creatorId = c.charId
       `;
@@ -447,7 +446,15 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
       queryParams.push(accountId, search, search);
 
       query = `
-        SELECT ai.id, CONCAT(c.firstName, ' ', c.lastName) as name, a.label, ai.amount, ai.message, DATE_FORMAT(ai.paidAt, '%Y-%m-%d %H:%i') as paidAt FROM accounts_invoices ai
+        SELECT
+          ai.id,
+          CONCAT(c.firstName, ' ', c.lastName) as paidBy,
+          a.label,
+          ai.amount,
+          ai.message,
+          DATE_FORMAT(ai.paidAt, '%Y-%m-%d %H:%i') as paidAt,
+          'paid' AS type
+        FROM accounts_invoices ai
         LEFT JOIN accounts a ON ai.fromId = a.id
         LEFT JOIN characters c ON ai.payerId = c.charId
       `;
@@ -460,7 +467,21 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
       queryParams.push(accountId, search, search, search);
 
       query = `
-        SELECT ai.id, CONCAT(c.firstName, ' ', c.lastName) as name, a.label, ai.amount, ai.message, DATE_FORMAT(ai.sentAt, '%Y-%m-%d %H:%i') as sentAt, DATE_FORMAT(ai.dueDate, '%Y-%m-%d %H:%i') as dueDate FROM accounts_invoices ai
+        SELECT
+          ai.id,
+          CONCAT(c.firstName, ' ', c.lastName) as sentBy,
+          a.label,
+          ai.amount,
+          ai.message,
+          DATE_FORMAT(ai.sentAt, '%Y-%m-%d %H:%i') as sentAt,
+          DATE_FORMAT(ai.dueDate, '%Y-%m-%d %H:%i') as dueDate,
+          CASE
+            WHEN ai.payerId IS NOT NULL THEN 'paid'
+            WHEN NOW() > ai.dueDate THEN 'overdue'
+            ELSE 'sent'
+          END AS status,
+          'sent' AS type
+        FROM accounts_invoices ai
         LEFT JOIN accounts a ON ai.toId = a.id
         LEFT JOIN characters c ON ai.creatorId = c.charId
       `;
@@ -485,7 +506,7 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
     ${query}
     ${whereStatement}
     ORDER BY ai.id DESC
-    LIMIT 9
+    LIMIT 6
     OFFSET ?
   `,
       queryParams

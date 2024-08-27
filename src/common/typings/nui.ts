@@ -66,3 +66,30 @@ export type InvoicesFilters = {
   type: 'unpaid' | 'paid' | 'sent';
   date?: DateRange;
 };
+
+export type BaseInvoice = {
+  id: number;
+  type: 'unpaid' | 'paid' | 'sent';
+  label: string;
+  message: string;
+  amount: number;
+};
+
+export type UnpaidInvoice = BaseInvoice & {
+  type: 'unpaid';
+  dueDate: string;
+};
+
+export type PaidInvoice = BaseInvoice & {
+  type: 'paid';
+  paidBy: string;
+  paidAt: string;
+};
+
+export type SentInvoice = BaseInvoice & {
+  type: 'sent';
+  sentBy: string;
+  sentAt: string;
+  dueDate: string;
+  status: 'paid' | 'sent' | 'overdue';
+};

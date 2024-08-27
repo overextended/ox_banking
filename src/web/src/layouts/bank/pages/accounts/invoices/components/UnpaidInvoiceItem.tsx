@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/button';
 import { useModal } from '@/components/ModalsProvider';
 import UnpaidInvoiceDetailsModal from '../modals/UnpaidInvoiceDetailsModal';
 import PayInvoiceModal from '../modals/PayInvoiceModal';
+import { UnpaidInvoice } from '~/src/common/typings';
 
-const UnpaidInvoiceItem: React.FC = () => {
+const UnpaidInvoiceItem: React.FC<{ invoice: UnpaidInvoice }> = ({ invoice }) => {
   const modal = useModal();
 
   return (
@@ -15,8 +16,8 @@ const UnpaidInvoiceItem: React.FC = () => {
           <FileText size={20} />
         </div>
         <div className="flex flex-col gap-1">
-          <p>SomeCompany LLC</p>
-          <p className="text-muted-foreground text-xs">Due by: 12/03/2025</p>
+          <p>{invoice.label}</p>
+          <p className="text-muted-foreground text-xs">Due by: {invoice.dueDate}</p>
         </div>
       </div>
 
@@ -44,4 +45,4 @@ const UnpaidInvoiceItem: React.FC = () => {
   );
 };
 
-export default UnpaidInvoiceItem;
+export default React.memo(UnpaidInvoiceItem);

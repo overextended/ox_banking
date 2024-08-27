@@ -1,16 +1,13 @@
-import { formatNumber } from '@/utils/formatNumber';
 import React from 'react';
 import SentInvoiceItem from './SentInvoiceItem';
+import { SentInvoice } from '~/src/common/typings';
 
-const SentInvoicesTable: React.FC = () => {
+const SentInvoicesTable: React.FC<{ invoices: SentInvoice[] }> = ({ invoices }) => {
   return (
     <div className="flex flex-col gap-2">
-      <SentInvoiceItem status="sent" />
-      <SentInvoiceItem status="overdue" />
-      <SentInvoiceItem status="paid" />
-      <SentInvoiceItem status="sent" />
-      <SentInvoiceItem status="sent" />
-      <SentInvoiceItem status="sent" />
+      {invoices.map((invoice) => (
+        <SentInvoiceItem key={invoice.id} invoice={invoice} />
+      ))}
     </div>
   );
 };

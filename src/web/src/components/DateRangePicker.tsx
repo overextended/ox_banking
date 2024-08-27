@@ -6,10 +6,11 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { useSetLogsFiltersDebounce } from '../state/accounts';
 
-export function DateRangePicker({ className }: React.HTMLAttributes<HTMLDivElement>) {
-  const setFilters = useSetLogsFiltersDebounce();
+export function DateRangePicker({
+  className,
+  setValue,
+}: React.HTMLAttributes<HTMLDivElement> & { setValue: (date?: DateRange) => void }) {
   const [date, setDate] = React.useState<DateRange | undefined>(undefined);
 
   return (
@@ -42,7 +43,7 @@ export function DateRangePicker({ className }: React.HTMLAttributes<HTMLDivEleme
             selected={date}
             onSelect={(date) => {
               setDate(date);
-              setFilters((prev) => ({ ...prev, date, page: 0 }));
+              setValue(date);
             }}
             disabled={{ after: new Date() }}
             numberOfMonths={2}

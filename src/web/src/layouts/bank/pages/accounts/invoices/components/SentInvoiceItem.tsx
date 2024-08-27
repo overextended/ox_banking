@@ -4,12 +4,9 @@ import { Button } from '@/components/ui/button';
 import { useModal } from '@/components/ModalsProvider';
 import SentInvoiceDetailsModal from '../modals/SentInvoiceDetailsModal';
 import { cn } from '@/lib/utils';
+import { SentInvoice } from '~/src/common/typings';
 
-interface Props {
-  status: 'sent' | 'paid' | 'overdue';
-}
-
-const SentInvoiceItem: React.FC<Props> = ({ status }) => {
+const SentInvoiceItem: React.FC<{ invoice: SentInvoice }> = ({ invoice }) => {
   const modal = useModal();
 
   return (
@@ -18,9 +15,9 @@ const SentInvoiceItem: React.FC<Props> = ({ status }) => {
         <div
           className={cn(
             'h-9 w-9 rounded-lg p-2',
-            status === 'sent' && 'bg-yellow-400/20 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-500',
-            status === 'paid' && 'bg-green-400/20 text-green-700 dark:bg-green-500/20 dark:text-green-500',
-            status === 'overdue' && 'bg-red-400/20 text-red-700 dark:bg-red-500/20 dark:text-red-500'
+            invoice.status === 'sent' && 'bg-yellow-400/20 text-yellow-700 dark:bg-yellow-500/20 dark:text-yellow-500',
+            invoice.status === 'paid' && 'bg-green-400/20 text-green-700 dark:bg-green-500/20 dark:text-green-500',
+            invoice.status === 'overdue' && 'bg-red-400/20 text-red-700 dark:bg-red-500/20 dark:text-red-500'
           )}
         >
           {status === 'sent' ? (
@@ -32,9 +29,9 @@ const SentInvoiceItem: React.FC<Props> = ({ status }) => {
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <p>SomeCompany LLC</p>
+          <p>{invoice.label}</p>
           <p className="text-muted-foreground text-xs">
-            Status: {status === 'sent' ? 'SENT' : status === 'paid' ? 'PAID' : 'OVERDUE'}
+            Status: {invoice.status === 'sent' ? 'SENT' : invoice.status === 'paid' ? 'PAID' : 'OVERDUE'}
           </p>
         </div>
       </div>

@@ -3,8 +3,9 @@ import { FileCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useModal } from '@/components/ModalsProvider';
 import PaidInvoiceDetailsModal from '../modals/PaidInvoiceDetailsModal';
+import { PaidInvoice } from '~/src/common/typings';
 
-const PaidInvoiceItem: React.FC = () => {
+const PaidInvoiceItem: React.FC<{ invoice: PaidInvoice }> = ({ invoice }) => {
   const modal = useModal();
 
   return (
@@ -14,8 +15,8 @@ const PaidInvoiceItem: React.FC = () => {
           <FileCheck size={20} />
         </div>
         <div className="flex flex-col gap-1">
-          <p>SomeCompany LLC</p>
-          <p className="text-muted-foreground text-xs">Paid at: 12/03/2025</p>
+          <p>{invoice.label}</p>
+          <p className="text-muted-foreground text-xs">Paid at: {invoice.paidAt}</p>
         </div>
       </div>
 

@@ -1,18 +1,13 @@
-import { Button } from '@/components/ui/button';
-import { formatNumber } from '@/utils/formatNumber';
 import React from 'react';
-import { Receipt } from 'lucide-react';
 import UnpaidInvoiceItem from './UnpaidInvoiceItem';
+import { UnpaidInvoice } from '~/src/common/typings';
 
-const UnpaidInvoicesTable: React.FC = () => {
+const UnpaidInvoicesTable: React.FC<{ invoices: UnpaidInvoice[] }> = ({ invoices }) => {
   return (
     <div className="flex flex-col gap-2">
-      <UnpaidInvoiceItem />
-      <UnpaidInvoiceItem />
-      <UnpaidInvoiceItem />
-      <UnpaidInvoiceItem />
-      <UnpaidInvoiceItem />
-      <UnpaidInvoiceItem />
+      {invoices.map((invoice) => (
+        <UnpaidInvoiceItem key={invoice.id} invoice={invoice} />
+      ))}
     </div>
   );
 };

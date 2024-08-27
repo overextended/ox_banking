@@ -1,16 +1,13 @@
-import { formatNumber } from '@/utils/formatNumber';
 import React from 'react';
 import PaidInvoiceItem from './PaidInvoiceItem';
+import { PaidInvoice } from '~/src/common/typings';
 
-const PaidInvoicesTable: React.FC = () => {
+const PaidInvoicesTable: React.FC<{ invoices: PaidInvoice[] }> = ({ invoices }) => {
   return (
     <div className="flex flex-col gap-2">
-      <PaidInvoiceItem />
-      <PaidInvoiceItem />
-      <PaidInvoiceItem />
-      <PaidInvoiceItem />
-      <PaidInvoiceItem />
-      <PaidInvoiceItem />
+      {invoices.map((invoice) => (
+        <PaidInvoiceItem key={invoice.id} invoice={invoice} />
+      ))}
     </div>
   );
 };
