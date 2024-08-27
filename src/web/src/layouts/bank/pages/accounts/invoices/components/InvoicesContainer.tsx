@@ -13,12 +13,13 @@ import { queryClient } from '@/main';
 import { PaidInvoice, SentInvoice, UnpaidInvoice } from '~/src/common/typings';
 import { fetchNui } from '@/utils/fetchNui';
 import { useIsInvoicesFiltersDebouncing } from '@/state/accounts/invoices';
+import SkeletonInvoices from './SkeletonInvoices';
 
 const InvoicesContainer: React.FC<{ accountId: number }> = ({ accountId }) => {
   const debouncedFilters = useDebouncedInvoicesFilters();
   const filters = useInvoicesFilters();
   const setFilters = useSetInvoicesFiltersDebounce();
-  const isDeboucing = useIsInvoicesFiltersDebouncing();
+  const isDebouncing = useIsInvoicesFiltersDebouncing();
 
   const query = useQuery<Array<UnpaidInvoice | PaidInvoice | SentInvoice>>(
     {
@@ -42,6 +43,14 @@ const InvoicesContainer: React.FC<{ accountId: number }> = ({ accountId }) => {
                 amount: 3000,
                 dueDate: '2024/08/28 13:00',
               },
+              {
+                id: 1,
+                type: 'unpaid',
+                label: 'SomeOtherAccount LLC',
+                message: 'Bill',
+                amount: 3000,
+                dueDate: '2024/08/28 13:00',
+              },
             ] satisfies UnpaidInvoice[],
             delay: 3000,
           }
@@ -51,13 +60,17 @@ const InvoicesContainer: React.FC<{ accountId: number }> = ({ accountId }) => {
     queryClient
   );
 
-  if (query.isLoading || isDeboucing) return <>Loading...</>;
-
   return (
     <div className="flex h-full flex-col justify-between">
-      {filters.type === 'unpaid' && <UnpaidInvoicesTable invoices={query.data as UnpaidInvoice[]} />}
-      {filters.type === 'paid' && <PaidInvoicesTable invoices={query.data as PaidInvoice[]} />}
-      {filters.type === 'sent' && <SentInvoicesTable invoices={query.data as SentInvoice[]} />}
+      {query.isLoading || isDebouncing ? (
+        <SkeletonInvoices />
+      ) : (
+        <>
+          {filters.type === 'unpaid' && <UnpaidInvoicesTable invoices={query.data as UnpaidInvoice[]} />}
+          {filters.type === 'paid' && <PaidInvoicesTable invoices={query.data as PaidInvoice[]} />}
+          {filters.type === 'sent' && <SentInvoicesTable invoices={query.data as SentInvoice[]} />}
+        </>
+      )}
       <Pagination maxPages={3} page={filters.page} setPage={(page) => setFilters((prev) => ({ ...prev, page }))} />
     </div>
   );
