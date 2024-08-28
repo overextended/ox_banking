@@ -7,6 +7,7 @@ import SpinningLoader from '@/components/SpinningLoader';
 import { delay } from '@/utils/misc';
 import { queryClient } from '@/main';
 import { useModal } from '@/components/ModalsProvider';
+import locales from '@/locales';
 
 const PayInvoiceModal: React.FC<{ invoice: UnpaidInvoice }> = ({ invoice }) => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -33,18 +34,18 @@ const PayInvoiceModal: React.FC<{ invoice: UnpaidInvoice }> = ({ invoice }) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4 rounded-lg border p-4">
-        <h2 className="border-b text-xl">Details</h2>
+        <h2 className="border-b text-xl">{locales.details}</h2>
         <div>
-          <p className="text-muted-foreground text-sm">Payment to</p>
+          <p className="text-muted-foreground text-sm">{locales.invoice_payment_to}</p>
           <p>{invoice.label}</p>
         </div>
         <div>
-          <p className="text-muted-foreground text-sm">Total</p>
+          <p className="text-muted-foreground text-sm">{locales.invoice_total}</p>
           <p>{formatNumber(invoice.amount)}</p>
         </div>
       </div>
       <Button className="self-end" onClick={handlePayInvoice} disabled={isLoading}>
-        {isLoading ? <SpinningLoader /> : 'Confirm payment'}
+        {isLoading ? <SpinningLoader /> : locales.confirm_payment}
       </Button>
     </div>
   );

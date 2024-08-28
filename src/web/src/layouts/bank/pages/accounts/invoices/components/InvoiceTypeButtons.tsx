@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import React from 'react';
 import { useInvoicesFilters, useSetInvoicesFiltersDebounce } from '@/state/accounts/invoices';
+import locales from '@/locales';
 
 const InvoiceTypeButtons: React.FC = () => {
   const filters = useInvoicesFilters();
@@ -13,21 +14,21 @@ const InvoiceTypeButtons: React.FC = () => {
         className="h-[34px] rounded-br-none rounded-tr-none"
         variant={filters.type === 'unpaid' ? 'default' : 'ghost'}
       >
-        Unpaid invoices
+        {locales.unpaid_invoices}
       </Button>
       <Button
         onClick={() => setFilters((prev) => ({ ...prev, type: 'paid', page: 0 }))}
         className="h-[34px] rounded-none"
         variant={filters.type === 'paid' ? 'default' : 'ghost'}
       >
-        Paid invoices
+        {locales.paid_invoices}
       </Button>
       <Button
         onClick={() => setFilters((prev) => ({ ...prev, type: 'sent', page: 0 }))}
         className="h-[34px] rounded-bl-none rounded-tl-none"
         variant={filters.type === 'sent' ? 'default' : 'ghost'}
       >
-        Sent invoices
+        {locales.sent_invoices}
       </Button>
     </div>
   );

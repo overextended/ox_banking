@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useModal } from '@/components/ModalsProvider';
 import PaidInvoiceDetailsModal from '../modals/PaidInvoiceDetailsModal';
 import { PaidInvoice } from '~/src/common/typings';
+import locales from '@/locales';
 
 const PaidInvoiceItem: React.FC<{ invoice: PaidInvoice }> = ({ invoice }) => {
   const modal = useModal();
@@ -16,7 +17,7 @@ const PaidInvoiceItem: React.FC<{ invoice: PaidInvoice }> = ({ invoice }) => {
         </div>
         <div className="flex flex-col gap-1">
           <p>{invoice.label}</p>
-          <p className="text-muted-foreground text-xs">Paid at: {invoice.paidAt}</p>
+          <p className="text-muted-foreground text-xs">{locales.invoice_paid_at.format(invoice.paidAt)}</p>
         </div>
       </div>
 
@@ -24,10 +25,10 @@ const PaidInvoiceItem: React.FC<{ invoice: PaidInvoice }> = ({ invoice }) => {
         <Button
           variant="outline"
           onClick={() =>
-            modal.open({ title: 'Invoice details', children: <PaidInvoiceDetailsModal invoice={invoice} /> })
+            modal.open({ title: locales.invoice_details, children: <PaidInvoiceDetailsModal invoice={invoice} /> })
           }
         >
-          Details
+          {locales.details}
         </Button>
       </div>
     </div>

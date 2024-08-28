@@ -5,6 +5,7 @@ import { useModal } from '@/components/ModalsProvider';
 import UnpaidInvoiceDetailsModal from '../modals/UnpaidInvoiceDetailsModal';
 import PayInvoiceModal from '../modals/PayInvoiceModal';
 import { UnpaidInvoice } from '~/src/common/typings';
+import locales from '@/locales';
 
 const UnpaidInvoiceItem: React.FC<{ invoice: UnpaidInvoice }> = ({ invoice }) => {
   const modal = useModal();
@@ -17,7 +18,7 @@ const UnpaidInvoiceItem: React.FC<{ invoice: UnpaidInvoice }> = ({ invoice }) =>
         </div>
         <div className="flex flex-col gap-1">
           <p>{invoice.label}</p>
-          <p className="text-muted-foreground text-xs">Due by: {invoice.dueDate}</p>
+          <p className="text-muted-foreground text-xs">{locales.invoice_due_by.format(invoice.dueDate)}</p>
         </div>
       </div>
 
@@ -25,22 +26,22 @@ const UnpaidInvoiceItem: React.FC<{ invoice: UnpaidInvoice }> = ({ invoice }) =>
         <Button
           variant="outline"
           onClick={() =>
-            modal.open({ title: 'Invoice details', children: <UnpaidInvoiceDetailsModal invoice={invoice} /> })
+            modal.open({ title: locales.invoice_details, children: <UnpaidInvoiceDetailsModal invoice={invoice} /> })
           }
         >
-          Details
+          {locales.details}
         </Button>
         <Button
           onClick={() =>
             modal.open({
-              title: 'Pay invoice',
-              description: 'Confirm your payment',
+              title: locales.pay_invoice,
+              description: locales.invoice_confirm_payment,
               children: <PayInvoiceModal invoice={invoice} />,
               size: 'lg',
             })
           }
         >
-          Pay invoice
+          {locales.pay_invoice}
         </Button>
       </div>
     </div>

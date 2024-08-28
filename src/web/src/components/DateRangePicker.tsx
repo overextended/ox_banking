@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import locales from '@/locales';
 
 export function DateRangePicker({
   className,
@@ -32,7 +33,7 @@ export function DateRangePicker({
                 format(date.from, 'LLL dd, y')
               )
             ) : (
-              <span>Pick a date</span>
+              <span>{locales.pick_date}</span>
             )}
           </Button>
         </PopoverTrigger>

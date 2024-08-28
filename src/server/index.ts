@@ -446,9 +446,9 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
       break;
     case 'paid':
       typeSearchString = '(ai.toAccount = ? AND ai.paidAt IS NOT NULL)';
-      columnSearchString = `(CONCAT(c.firstName, ' ', c.lastName) LIKE ? OR ai.message LIKE ?)`;
+      columnSearchString = `(CONCAT(c.firstName, ' ', c.lastName) LIKE ? OR ai.message LIKE ? OR a.label LIKE ?)`;
 
-      queryParams.push(accountId, search, search);
+      queryParams.push(accountId, search, search, search);
 
       queryJoins = `
         LEFT JOIN accounts a ON ai.fromAccount = a.id

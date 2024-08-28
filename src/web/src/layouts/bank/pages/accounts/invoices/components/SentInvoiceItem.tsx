@@ -5,6 +5,7 @@ import { useModal } from '@/components/ModalsProvider';
 import SentInvoiceDetailsModal from '../modals/SentInvoiceDetailsModal';
 import { cn } from '@/lib/utils';
 import { SentInvoice } from '~/src/common/typings';
+import locales from '@/locales';
 
 const SentInvoiceItem: React.FC<{ invoice: SentInvoice }> = ({ invoice }) => {
   const modal = useModal();
@@ -31,7 +32,13 @@ const SentInvoiceItem: React.FC<{ invoice: SentInvoice }> = ({ invoice }) => {
         <div className="flex flex-col gap-1">
           <p>{invoice.label}</p>
           <p className="text-muted-foreground text-xs">
-            Status: {invoice.status === 'sent' ? 'SENT' : invoice.status === 'paid' ? 'PAID' : 'OVERDUE'}
+            {locales.invoice_status.format(
+              invoice.status === 'sent'
+                ? locales.invoice_status_sent
+                : invoice.status === 'paid'
+                  ? locales.invoice_status_paid
+                  : locales.invoice_status_overdue
+            )}
           </p>
         </div>
       </div>
@@ -40,10 +47,10 @@ const SentInvoiceItem: React.FC<{ invoice: SentInvoice }> = ({ invoice }) => {
         <Button
           variant="outline"
           onClick={() =>
-            modal.open({ title: 'Invoice details', children: <SentInvoiceDetailsModal invoice={invoice} /> })
+            modal.open({ title: locales.invoice_details, children: <SentInvoiceDetailsModal invoice={invoice} /> })
           }
         >
-          Details
+          {locales.details}
         </Button>
       </div>
     </div>
