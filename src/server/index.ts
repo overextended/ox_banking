@@ -462,6 +462,7 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
           a.label,
           ai.amount,
           ai.message,
+          DATE_FORMAT(ai.dueDate, '%Y-%m-%d %H:%i') as dueDate,
           DATE_FORMAT(ai.paidAt, '%Y-%m-%d %H:%i') as paidAt,
           'paid' AS type
         FROM accounts_invoices ai

@@ -39,7 +39,9 @@ const SentInvoiceItem: React.FC<{ invoice: SentInvoice }> = ({ invoice }) => {
       <div className="flex items-center gap-2">
         <Button
           variant="outline"
-          onClick={() => modal.open({ title: 'Invoice details', children: <SentInvoiceDetailsModal /> })}
+          onClick={() =>
+            modal.open({ title: 'Invoice details', children: <SentInvoiceDetailsModal invoice={invoice} /> })
+          }
         >
           Details
         </Button>

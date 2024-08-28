@@ -24,7 +24,9 @@ const UnpaidInvoiceItem: React.FC<{ invoice: UnpaidInvoice }> = ({ invoice }) =>
       <div className="flex items-center gap-2">
         <Button
           variant="outline"
-          onClick={() => modal.open({ title: 'Invoice details', children: <UnpaidInvoiceDetailsModal /> })}
+          onClick={() =>
+            modal.open({ title: 'Invoice details', children: <UnpaidInvoiceDetailsModal invoice={invoice} /> })
+          }
         >
           Details
         </Button>
@@ -33,7 +35,7 @@ const UnpaidInvoiceItem: React.FC<{ invoice: UnpaidInvoice }> = ({ invoice }) =>
             modal.open({
               title: 'Pay invoice',
               description: 'Confirm your payment',
-              children: <PayInvoiceModal />,
+              children: <PayInvoiceModal invoice={invoice} />,
               size: 'lg',
             })
           }
