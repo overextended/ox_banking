@@ -20,9 +20,9 @@ const SentInvoiceItem: React.FC<{ invoice: SentInvoice }> = ({ invoice }) => {
             invoice.status === 'overdue' && 'bg-red-400/20 text-red-700 dark:bg-red-500/20 dark:text-red-500'
           )}
         >
-          {status === 'sent' ? (
+          {invoice.status === 'sent' ? (
             <FileUp size={20} />
-          ) : status === 'paid' ? (
+          ) : invoice.status === 'paid' ? (
             <FileCheck size={20} />
           ) : (
             <FileClock size={20} />
