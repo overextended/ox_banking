@@ -351,7 +351,7 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
 
   if (filters.type && filters.type !== 'combined') {
     typeQueryString += 'AND (';
-    filters.type === 'outbound' ? (typeQueryString += 'fromId = ?)') : (typeQueryString += 'toId = ?)');
+    filters.type === 'outbound' ? (typeQueryString += 'fromAccount = ?)') : (typeQueryString += 'toAccount = ?)');
 
     queryParams.push(accountId);
   }
@@ -363,7 +363,7 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
     queryParams.push(date.from, date.to);
   }
 
-  const queryWhere = `WHERE (fromId = ? OR toId = ?) AND (ac.message LIKE ? OR CONCAT(c.firstName, ' ', c.lastName) LIKE ?) ${typeQueryString} ${dateSearchString}`;
+  const queryWhere = `WHERE (fromAccount = ? OR toAccount = ?) AND (ac.message LIKE ? OR CONCAT(c.firstName, ' ', c.lastName) LIKE ?) ${typeQueryString} ${dateSearchString}`;
   const countQueryParams = [...queryParams];
 
   queryParams.push(filters.page * 9);
@@ -421,14 +421,14 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
 
   switch (filters.type) {
     case 'unpaid':
-      typeSearchString = '(ai.toId = ? AND ai.paidAt IS NULL)';
+      typeSearchString = '(ai.toAccount = ? AND ai.paidAt IS NULL)';
       columnSearchString = '(a.label LIKE ? OR ai.message LIKE ?)';
 
       queryParams.push(accountId, search, search);
 
       queryJoins = `
-        LEFT JOIN accounts a ON ai.fromId = a.id
-        LEFT JOIN characters c ON ai.creatorId = c.charId
+        LEFT JOIN accounts a ON ai.fromAccount = a.id
+        LEFT JOIN characters c ON ai.actorId = c.charId
       `;
 
       query = `
@@ -445,13 +445,13 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
 
       break;
     case 'paid':
-      typeSearchString = '(ai.toId = ? AND ai.paidAt IS NOT NULL)';
+      typeSearchString = '(ai.toAccount = ? AND ai.paidAt IS NOT NULL)';
       columnSearchString = `(CONCAT(c.firstName, ' ', c.lastName) LIKE ? OR ai.message LIKE ?)`;
 
       queryParams.push(accountId, search, search);
 
       queryJoins = `
-        LEFT JOIN accounts a ON ai.fromId = a.id
+        LEFT JOIN accounts a ON ai.fromAccount = a.id
         LEFT JOIN characters c ON ai.payerId = c.charId
       `;
 
@@ -470,14 +470,14 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
 
       break;
     case 'sent':
-      typeSearchString = '(ai.fromId = ?)';
+      typeSearchString = '(ai.fromAccount = ?)';
       columnSearchString = `(CONCAT(c.firstName, ' ', c.lastName) LIKE ? OR ai.message LIKE ? OR a.label LIKE ?)`;
 
       queryParams.push(accountId, search, search, search);
 
       queryJoins = `
-        LEFT JOIN accounts a ON ai.toId = a.id
-        LEFT JOIN characters c ON ai.creatorId = c.charId
+        LEFT JOIN accounts a ON ai.toAccount = a.id
+        LEFT JOIN characters c ON ai.actorId = c.charId
       `;
 
       query = `
