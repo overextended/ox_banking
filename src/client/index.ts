@@ -140,3 +140,4 @@ serverNuiCallback('renameAccount');
 serverNuiCallback('convertAccountToShared');
 serverNuiCallback('getLogs');
 serverNuiCallback('getInvoices');
+serverNuiCallback('payInvoice');

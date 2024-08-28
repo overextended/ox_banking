@@ -547,6 +547,16 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
   };
 });
 
+onClientCallback('ox_banking:payInvoice', async (playerId, data: { invoiceId: number }) => {
+  const player = GetPlayer(playerId);
+
+  if (!player.charId) return;
+
+  // todo?: maybe a notification for successful payment?
+
+  return await player.payInvoice(data.invoiceId);
+});
+
 function getFormattedDates(date: DateRange) {
   const rawDates = {
     from: new Date(date.from),
