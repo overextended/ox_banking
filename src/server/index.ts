@@ -189,14 +189,14 @@ onClientCallback(
     if (!player) return;
     if (!(await player.hasAccountPermission(accountId, 'manageUser'))) return;
 
-    const wildcard = `%${search}%`;
+    const wildcard = sanitizeSearch(search);
 
     const users = await oxmysql.rawExecute<AccessTableData['users']>(
       `
       SELECT c.stateId, a.role, CONCAT(c.firstName, " ", c.lastName) AS \`name\` FROM \`accounts_access\` a
       LEFT JOIN \`characters\` c ON c.charId = a.charId
       WHERE a.accountId = ?
-      AND CONCAT(c.firstName, " ", c.lastName) LIKE ?
+      AND MATCH(c.firstName, c.lastName) AGAINST (? IN BOOLEAN MODE)
       ORDER BY a.role DESC
       LIMIT 7
       OFFSET ?
@@ -205,7 +205,7 @@ onClientCallback(
     );
 
     const usersCount = await oxmysql.prepare<number>(
-      'SELECT COUNT(*) FROM `accounts_access` ac LEFT JOIN characters c ON c.charId = ac.charId WHERE accountId = ? AND CONCAT(c.firstName, " ", c.lastName) LIKE ?',
+      'SELECT COUNT(*) FROM `accounts_access` ac LEFT JOIN characters c ON c.charId = ac.charId WHERE accountId = ? AND MATCH(c.firstName, c.lastName) AGAINST (? IN BOOLEAN MODE)',
       [accountId, wildcard]
     );
 
@@ -342,7 +342,7 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
 
   const { accountId, filters } = data;
 
-  const search = `%${filters.search}%`;
+  const search = sanitizeSearch(filters.search);
 
   let dateSearchString = '';
   let queryParams: any[] = [accountId, accountId, search, search];
@@ -363,7 +363,7 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
     queryParams.push(date.from, date.to);
   }
 
-  const queryWhere = `WHERE (fromAccount = ? OR toAccount = ?) AND (ac.message LIKE ? OR CONCAT(c.firstName, ' ', c.lastName) LIKE ?) ${typeQueryString} ${dateSearchString}`;
+  const queryWhere = `WHERE (fromAccount = ? OR toAccount = ?) AND (MATCH(ac.message, c.firstName, c.lastName) AGAINST (? IN BOOLEAN MODE) OR MATCH(ac.message) AGAINST (? IN BOOLEAN MODE)) ${typeQueryString} ${dateSearchString}`;
   const countQueryParams = [...queryParams];
 
   queryParams.push(filters.page * 9);
@@ -408,7 +408,7 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
 
   if (!hasPermission) return;
 
-  const search = `%${filters.search}%`;
+  const search = sanitizeSearch(filters.search);
 
   let queryParams: any[] = [];
 
@@ -422,9 +422,14 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
   switch (filters.type) {
     case 'unpaid':
       typeSearchString = '(ai.toAccount = ? AND ai.paidAt IS NULL)';
-      columnSearchString = '(a.label LIKE ? OR ai.message LIKE ?)';
 
-      queryParams.push(accountId, search, search);
+      queryParams.push(accountId);
+
+      if (search) {
+        columnSearchString =
+          'AND (MATCH(a.label) AGAINST (? IN BOOLEAN MODE) OR MATCH(ai.message) AGAINST (? IN BOOLEAN MODE))';
+        queryParams.push(search, search);
+      }
 
       queryJoins = `
         LEFT JOIN accounts a ON ai.fromAccount = a.id
@@ -446,9 +451,13 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
       break;
     case 'paid':
       typeSearchString = '(ai.toAccount = ? AND ai.paidAt IS NOT NULL)';
-      columnSearchString = `(CONCAT(c.firstName, ' ', c.lastName) LIKE ? OR ai.message LIKE ? OR a.label LIKE ?)`;
 
-      queryParams.push(accountId, search, search, search);
+      queryParams.push(accountId);
+
+      if (search) {
+        columnSearchString = `AND (MATCH(c.firstName, c.lastName) AGAINST (? IN BOOLEAN MODE) OR MATCH(ai.message) AGAINST (? IN BOOLEAN MODE) OR MATCH(a.label) AGAINST (? IN BOOLEAN MODE))`;
+        queryParams.push(search, search, search);
+      }
 
       queryJoins = `
         LEFT JOIN accounts a ON ai.fromAccount = a.id
@@ -472,9 +481,13 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
       break;
     case 'sent':
       typeSearchString = '(ai.fromAccount = ?)';
-      columnSearchString = `(CONCAT(c.firstName, ' ', c.lastName) LIKE ? OR ai.message LIKE ? OR a.label LIKE ?)`;
 
-      queryParams.push(accountId, search, search, search);
+      queryParams.push(accountId);
+
+      if (search) {
+        columnSearchString = `AND (MATCH(c.firstName, c.lastName) AGAINST (? IN BOOLEAN MODE) OR MATCH (ai.message) AGAINST (? IN BOOLEAN MODE) OR MATCH (a.label) AGAINST (? IN BOOLEAN MODE))`;
+        queryParams.push(search, search, search);
+      }
 
       queryJoins = `
         LEFT JOIN accounts a ON ai.toAccount = a.id
@@ -511,7 +524,7 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
     queryParams.push(date.from, date.to);
   }
 
-  const whereStatement = `WHERE ${typeSearchString} AND ${columnSearchString} ${dateSearchString}`;
+  const whereStatement = `WHERE ${typeSearchString} ${columnSearchString} ${dateSearchString}`;
 
   queryParams.push(filters.page * 6);
 
@@ -573,4 +586,22 @@ function getFormattedDates(date: DateRange) {
   };
 
   return formattedDates;
+}
+
+function sanitizeSearch(search: string) {
+  const str: string[] = [];
+
+  search.split(/\s+/).forEach((word) => {
+    str.push('+');
+    str.push(word.replace(/[\p{P}\p{C}]/gu, ''));
+    str.push('*');
+  });
+
+  if (str.length > 3) {
+    str.splice(2, 1);
+  }
+
+  search = str.join('');
+
+  return search === '+*' ? null : search;
 }
