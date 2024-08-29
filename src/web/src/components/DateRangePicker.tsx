@@ -10,10 +10,14 @@ import locales from '@/locales';
 
 export function DateRangePicker({
   className,
+  date,
   setValue,
-}: React.HTMLAttributes<HTMLDivElement> & { setValue: (date?: DateRange) => void }) {
-  const [date, setDate] = React.useState<DateRange | undefined>(undefined);
-
+  placeholder,
+}: React.HTMLAttributes<HTMLDivElement> & {
+  setValue: (date?: DateRange) => void;
+  date: DateRange | undefined;
+  placeholder?: string;
+}): React.ReactElement {
   return (
     <div className={cn('grid gap-2', className)}>
       <Popover>
@@ -33,7 +37,7 @@ export function DateRangePicker({
                 format(date.from, 'LLL dd, y')
               )
             ) : (
-              <span>{locales.pick_date}</span>
+              <span>{placeholder || locales.pick_date}</span>
             )}
           </Button>
         </PopoverTrigger>
@@ -43,7 +47,6 @@ export function DateRangePicker({
             defaultMonth={date?.from}
             selected={date}
             onSelect={(date) => {
-              setDate(date);
               setValue(date);
             }}
             disabled={{ after: new Date() }}
