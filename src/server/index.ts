@@ -193,10 +193,10 @@ onClientCallback(
 
     const users = await oxmysql.rawExecute<AccessTableData['users']>(
       `
-      SELECT c.stateId, a.role, CONCAT(c.firstName, " ", c.lastName) AS \`name\` FROM \`accounts_access\` a
+      SELECT c.stateId, a.role, c.fullName AS \`name\` FROM \`accounts_access\` a
       LEFT JOIN \`characters\` c ON c.charId = a.charId
       WHERE a.accountId = ?
-      AND MATCH(c.firstName, c.lastName) AGAINST (? IN BOOLEAN MODE)
+      AND MATCH(c.fullName) AGAINST (? IN BOOLEAN MODE)
       ORDER BY a.role DESC
       LIMIT 7
       OFFSET ?
@@ -205,7 +205,7 @@ onClientCallback(
     );
 
     const usersCount = await oxmysql.prepare<number>(
-      'SELECT COUNT(*) FROM `accounts_access` aa LEFT JOIN characters c ON c.charId = aa.charId WHERE accountId = ? AND MATCH(c.firstName, c.lastName) AGAINST (? IN BOOLEAN MODE)',
+      'SELECT COUNT(*) FROM `accounts_access` aa LEFT JOIN characters c ON c.charId = aa.charId WHERE accountId = ? AND MATCH(c.fullName) AGAINST (? IN BOOLEAN MODE)',
       [accountId, wildcard]
     );
 
@@ -353,7 +353,7 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
 
   if (search) {
     queryWhere +=
-      ' AND (MATCH(c.firstName, c.lastName) AGAINST (? IN BOOLEAN MODE) OR MATCH(at.message) AGAINST (? IN BOOLEAN MODE)) ';
+      ' AND (MATCH(c.fullName) AGAINST (? IN BOOLEAN MODE) OR MATCH(at.message) AGAINST (? IN BOOLEAN MODE)) ';
     queryParams.push(search, search);
   }
 
@@ -380,7 +380,7 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
   const queryData = await oxmysql
     .rawExecute<RawLogItem[]>(
       `
-          SELECT at.id, at.toId, at.fromBalance, at.toBalance, at.message, at.amount, DATE_FORMAT(at.date, '%Y-%m-%d %H:%i') AS date, CONCAT(c.firstName, ' ', c.lastName) AS name
+          SELECT at.id, at.toId, at.fromBalance, at.toBalance, at.message, at.amount, DATE_FORMAT(at.date, '%Y-%m-%d %H:%i') AS date, c.fullName AS name
           FROM accounts_transactions at
           LEFT JOIN characters c ON c.charId = at.actorId
           ${queryWhere}
@@ -471,7 +471,7 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
       queryParams.push(accountId);
 
       if (search) {
-        columnSearchString = `AND (MATCH(c.firstName, c.lastName) AGAINST (? IN BOOLEAN MODE) OR MATCH(ai.message) AGAINST (? IN BOOLEAN MODE) OR MATCH(a.label) AGAINST (? IN BOOLEAN MODE))`;
+        columnSearchString = `AND (MATCH(c.fullName) AGAINST (? IN BOOLEAN MODE) OR MATCH(ai.message) AGAINST (? IN BOOLEAN MODE) OR MATCH(a.label) AGAINST (? IN BOOLEAN MODE))`;
         queryParams.push(search, search, search);
       }
 
@@ -483,7 +483,7 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
       query = `
         SELECT
           ai.id,
-          CONCAT(c.firstName, ' ', c.lastName) as paidBy,
+          c.fullName as paidBy,
           a.label,
           ai.amount,
           ai.message,
@@ -501,7 +501,7 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
       queryParams.push(accountId);
 
       if (search) {
-        columnSearchString = `AND (MATCH(c.firstName, c.lastName) AGAINST (? IN BOOLEAN MODE) OR MATCH (ai.message) AGAINST (? IN BOOLEAN MODE) OR MATCH (a.label) AGAINST (? IN BOOLEAN MODE))`;
+        columnSearchString = `AND (MATCH(c.fullName) AGAINST (? IN BOOLEAN MODE) OR MATCH (ai.message) AGAINST (? IN BOOLEAN MODE) OR MATCH (a.label) AGAINST (? IN BOOLEAN MODE))`;
         queryParams.push(search, search, search);
       }
 
@@ -513,7 +513,7 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
       query = `
         SELECT
           ai.id,
-          CONCAT(c.firstName, ' ', c.lastName) as sentBy,
+          c.fullName as sentBy,
           a.label,
           ai.amount,
           ai.message,
