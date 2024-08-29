@@ -205,7 +205,7 @@ onClientCallback(
     );
 
     const usersCount = await oxmysql.prepare<number>(
-      'SELECT COUNT(*) FROM `accounts_access` ac LEFT JOIN characters c ON c.charId = ac.charId WHERE accountId = ? AND MATCH(c.firstName, c.lastName) AGAINST (? IN BOOLEAN MODE)',
+      'SELECT COUNT(*) FROM `accounts_access` aa LEFT JOIN characters c ON c.charId = aa.charId WHERE accountId = ? AND MATCH(c.firstName, c.lastName) AGAINST (? IN BOOLEAN MODE)',
       [accountId, wildcard]
     );
 
@@ -345,13 +345,21 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
   const search = sanitizeSearch(filters.search);
 
   let dateSearchString = '';
-  let queryParams: any[] = [accountId, accountId, search, search];
+  let queryParams: any[] = [accountId, accountId];
 
   let typeQueryString = ``;
 
+  let queryWhere = `WHERE (at.fromId = ? OR at.toId = ?)`;
+
+  if (search) {
+    queryWhere +=
+      ' AND (MATCH(c.firstName, c.lastName) AGAINST (? IN BOOLEAN MODE) OR MATCH(at.message) AGAINST (? IN BOOLEAN MODE)) ';
+    queryParams.push(search, search);
+  }
+
   if (filters.type && filters.type !== 'combined') {
     typeQueryString += 'AND (';
-    filters.type === 'outbound' ? (typeQueryString += 'fromAccount = ?)') : (typeQueryString += 'toAccount = ?)');
+    filters.type === 'outbound' ? (typeQueryString += 'at.fromId = ?)') : (typeQueryString += 'at.toId = ?)');
 
     queryParams.push(accountId);
   }
@@ -359,37 +367,45 @@ onClientCallback('ox_banking:getLogs', async (playerId, data: { accountId: numbe
   if (filters.date) {
     const date = getFormattedDates(filters.date);
 
-    dateSearchString = `AND (DATE(ac.date) BETWEEN ? AND ?)`;
+    dateSearchString = `AND (DATE(at.date) BETWEEN ? AND ?)`;
     queryParams.push(date.from, date.to);
   }
 
-  const queryWhere = `WHERE (fromAccount = ? OR toAccount = ?) AND (MATCH(ac.message, c.firstName, c.lastName) AGAINST (? IN BOOLEAN MODE) OR MATCH(ac.message) AGAINST (? IN BOOLEAN MODE)) ${typeQueryString} ${dateSearchString}`;
+  queryWhere += `${typeQueryString} ${dateSearchString}`;
+
   const countQueryParams = [...queryParams];
 
   queryParams.push(filters.page * 9);
 
-  const queryData = await oxmysql.rawExecute<RawLogItem[]>(
-    `
-          SELECT ac.id, ac.toId, ac.fromBalance, ac.toBalance, ac.message, ac.amount, DATE_FORMAT(ac.date, '%Y-%m-%d %H:%i') AS date, CONCAT(c.firstName, ' ', c.lastName) AS name
-          FROM accounts_transactions ac
-          LEFT JOIN characters c ON c.charId = ac.actorId
+  const queryData = await oxmysql
+    .rawExecute<RawLogItem[]>(
+      `
+          SELECT at.id, at.toId, at.fromBalance, at.toBalance, at.message, at.amount, DATE_FORMAT(at.date, '%Y-%m-%d %H:%i') AS date, CONCAT(c.firstName, ' ', c.lastName) AS name
+          FROM accounts_transactions at
+          LEFT JOIN characters c ON c.charId = at.actorId
           ${queryWhere}
-          ORDER BY ac.id DESC
+          ORDER BY at.id DESC
           LIMIT 9
           OFFSET ?
         `,
-    queryParams
-  );
+      queryParams
+    )
+    .catch((e) => console.log(e));
 
-  const totalLogsCount = await oxmysql.prepare(
-    `
+  console.log(queryWhere);
+  console.log(JSON.stringify(queryParams));
+
+  const totalLogsCount = await oxmysql
+    .prepare(
+      `
           SELECT COUNT(*)
-          FROM accounts_transactions ac
-          LEFT JOIN characters c ON c.charId = ac.actorId
+          FROM accounts_transactions at
+          LEFT JOIN characters c ON c.charId = at.actorId
           ${queryWhere}
         `,
-    countQueryParams
-  );
+      countQueryParams
+    )
+    .catch((e) => console.log(e));
 
   return {
     numberOfPages: Math.ceil(totalLogsCount / 9),
