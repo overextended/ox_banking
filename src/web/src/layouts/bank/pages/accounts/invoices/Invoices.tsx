@@ -30,6 +30,13 @@ const Invoices: React.FC = () => {
           <DateRangePicker
             date={filters.date}
             setValue={(date) => setFilters((prev) => ({ ...prev, date, page: 0 }))}
+            placeholder={
+              filters.type === 'unpaid'
+                ? locales.invoice_pick_due_date
+                : filters.type === 'paid'
+                  ? locales.invoice_pick_paid_date
+                  : locales.invoice_pick_sent_date
+            }
           />
           <InvoiceTypeButtons />
         </div>

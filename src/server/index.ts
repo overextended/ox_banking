@@ -534,9 +534,9 @@ onClientCallback('ox_banking:getInvoices', async (playerId, data: { accountId: n
 
   if (filters.date) {
     const date = getFormattedDates(filters.date);
+    const dateCol = filters.type === 'unpaid' ? 'ai.dueDate' : filters.type === 'paid' ? 'ai.paidAt' : 'ai.sentAt';
 
-    // todo: fix date filtering
-    dateSearchString = `AND (DATE(ai.sentAt) BETWEEN ? AND ?)`;
+    dateSearchString = `AND (DATE(${dateCol}) BETWEEN ? AND ?)`;
     queryParams.push(date.from, date.to);
   }
 

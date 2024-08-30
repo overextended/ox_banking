@@ -112,5 +112,8 @@
   "invoice_status": "Status: %s",
   "invoice_status_sent": "Sent",
   "invoice_status_paid": "Paid",
-  "invoice_status_overdue": "Overdue"
+  "invoice_status_overdue": "Overdue",
+  "invoice_pick_due_date": "Pick a due date",
+  "invoice_pick_paid_date": "Pick a paid date",
+  "invoice_pick_sent_date": "Pick a sent date"
 }
