@@ -6,8 +6,10 @@ import UnpaidInvoiceDetailsModal from '../modals/UnpaidInvoiceDetailsModal';
 import PayInvoiceModal from '../modals/PayInvoiceModal';
 import { UnpaidInvoice } from '~/src/common/typings';
 import locales from '@/locales';
+import { useActiveAccount } from '@/state/accounts';
 
 const UnpaidInvoiceItem: React.FC<{ invoice: UnpaidInvoice }> = ({ invoice }) => {
+  const account = useActiveAccount()!;
   const modal = useModal();
 
   return (
@@ -32,6 +34,7 @@ const UnpaidInvoiceItem: React.FC<{ invoice: UnpaidInvoice }> = ({ invoice }) =>
           {locales.details}
         </Button>
         <Button
+          disabled={invoice.amount > account.balance}
           onClick={() =>
             modal.open({
               title: locales.pay_invoice,
