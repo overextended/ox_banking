@@ -2,7 +2,7 @@ import React from 'react';
 import SentInvoiceItem from './SentInvoiceItem';
 import { SentInvoice } from '~/src/common/typings';
 
-const SentInvoicesTable: React.FC<{ invoices: SentInvoice[] }> = ({ invoices }) => {
+const SentInvoicesContainer: React.FC<{ invoices: SentInvoice[] }> = ({ invoices }) => {
   return (
     <div className="flex flex-col gap-2">
       {invoices.map((invoice) => (
@@ -12,4 +12,4 @@ const SentInvoicesTable: React.FC<{ invoices: SentInvoice[] }> = ({ invoices }) 
   );
 };
 
-export default SentInvoicesTable;
+export default SentInvoicesContainer;

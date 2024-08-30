@@ -2,7 +2,7 @@ import React from 'react';
 import UnpaidInvoiceItem from './UnpaidInvoiceItem';
 import { UnpaidInvoice } from '~/src/common/typings';
 
-const UnpaidInvoicesTable: React.FC<{ invoices: UnpaidInvoice[] }> = ({ invoices }) => {
+const UnpaidInvoicesContainer: React.FC<{ invoices: UnpaidInvoice[] }> = ({ invoices }) => {
   return (
     <div className="flex flex-col gap-2">
       {invoices.map((invoice) => (
@@ -12,4 +12,4 @@ const UnpaidInvoicesTable: React.FC<{ invoices: UnpaidInvoice[] }> = ({ invoices
   );
 };
 
-export default UnpaidInvoicesTable;
+export default UnpaidInvoicesContainer;

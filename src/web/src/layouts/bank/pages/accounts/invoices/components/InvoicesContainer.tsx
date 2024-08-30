@@ -1,7 +1,7 @@
 import React from 'react';
-import UnpaidInvoicesTable from './UnpaidInvoicesTable';
-import PaidInvoicesTable from './PaidInvoicesTable';
-import SentInvoicesTable from './SentInvoicesTable';
+import UnpaidInvoicesContainer from './UnpaidInvoicesContainer';
+import PaidInvoicesContainer from './PaidInvoicesContainer';
+import SentInvoicesContainer from './SentInvoicesContainer';
 import {
   useInvoicesFilters,
   useSetInvoicesFiltersDebounce,
@@ -75,9 +75,9 @@ const InvoicesContainer: React.FC<{ accountId: number }> = ({ accountId }) => {
         <SkeletonInvoices />
       ) : (
         <>
-          {filters.type === 'unpaid' && <UnpaidInvoicesTable invoices={query.data!.invoices as UnpaidInvoice[]} />}
-          {filters.type === 'paid' && <PaidInvoicesTable invoices={query.data!.invoices as PaidInvoice[]} />}
-          {filters.type === 'sent' && <SentInvoicesTable invoices={query.data!.invoices as SentInvoice[]} />}
+          {filters.type === 'unpaid' && <UnpaidInvoicesContainer invoices={query.data!.invoices as UnpaidInvoice[]} />}
+          {filters.type === 'paid' && <PaidInvoicesContainer invoices={query.data!.invoices as PaidInvoice[]} />}
+          {filters.type === 'sent' && <SentInvoicesContainer invoices={query.data!.invoices as SentInvoice[]} />}
         </>
       )}
       <Pagination
