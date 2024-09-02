@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useModal } from '@/components/ModalsProvider';
 import { fetchNui } from '@/utils/fetchNui';
 import { queryClient } from '@/main';
+import permissions from '@/permissions';
 
 const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => {
   const modal = useModal();
@@ -57,6 +58,10 @@ const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => 
     modal.close();
   }
 
+  const roles = React.useMemo(() => Object.keys(permissions).filter((role) => role !== 'owner'), [permissions]);
+
+  console.log(JSON.stringify(permissions, null, 2));
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -82,14 +87,31 @@ const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => 
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="manager">{locales.manager}</SelectItem>
-                    <SelectItem value="contributor">{locales.contributor}</SelectItem>
+                    {roles.map((role) => (
+                      <SelectItem key={role} value={role}>
+                        {/*@ts-expect-error*/}
+                        {locales[role]}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </FormControl>
-              <FormDescription>
-                <p>{locales.contributor_description}</p>
-                <p>{locales.manager_description}</p>
+              <FormDescription className="flex flex-col gap-2">
+                {roles.map((role) => (
+                  <p>
+                    {Object.values(permissions[role]).filter((value) => value === 1).length > 0 ? (
+                      // @ts-expect-error
+                      <>{locales[role]} - </>
+                    ) : (
+                      <></>
+                    )}
+                    {Object.entries(permissions[role])
+                      .filter(([permission, value]) => value === 1)
+                      // @ts-expect-error
+                      .map(([permission, value]) => (value ? locales[`permission_${permission}`] : undefined))
+                      .join(', ')}
+                  </p>
+                ))}
               </FormDescription>
             </FormItem>
           )}

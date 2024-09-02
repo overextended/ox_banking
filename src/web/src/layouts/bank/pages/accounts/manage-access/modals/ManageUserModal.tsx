@@ -11,6 +11,7 @@ import SpinningLoader from '@/components/SpinningLoader';
 import locales from '@/locales';
 import { queryClient } from '@/main';
 import { AccessTableData, AccountRole } from '~/src/common/typings';
+import permissions from '@/permissions';
 
 interface Props {
   targetStateId: string;
@@ -63,6 +64,8 @@ const ManageUserModal: React.FC<Props> = ({ targetStateId, defaultRole, accountI
     modal.close();
   }
 
+  const roles = React.useMemo(() => Object.keys(permissions).filter((role) => role !== 'owner'), [permissions]);
+
   return (
     <div className="flex flex-col gap-4">
       <Form {...form}>
@@ -77,14 +80,33 @@ const ManageUserModal: React.FC<Props> = ({ targetStateId, defaultRole, accountI
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="manager">{locales.manager}</SelectItem>
-                      <SelectItem value="contributor">{locales.contributor}</SelectItem>
+                      {Object.keys(permissions)
+                        .filter((role) => role !== 'owner')
+                        .map((role) => (
+                          <SelectItem key={role} value={role}>
+                            {/*@ts-expect-error*/}
+                            {locales[role]}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                 </FormControl>
                 <FormDescription>
-                  <p>{locales.contributor_description}</p>
-                  <p>{locales.manager_description}</p>
+                  {roles.map((role) => (
+                    <p>
+                      {Object.values(permissions[role]).filter((value) => value === 1).length > 0 ? (
+                        // @ts-expect-error
+                        <>{locales[role]} - </>
+                      ) : (
+                        <></>
+                      )}
+                      {Object.entries(permissions[role])
+                        .filter(([permission, value]) => value === 1)
+                        // @ts-expect-error
+                        .map(([permission, value]) => (value ? locales[`permission_${permission}`] : undefined))
+                        .join(', ')}
+                    </p>
+                  ))}
                 </FormDescription>
               </FormItem>
             )}
