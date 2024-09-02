@@ -4,7 +4,7 @@ import locations from '../../data/locations.json';
 import atms from '../../data/atms.json';
 import { SendTypedNUIMessage, serverNuiCallback } from 'utils';
 import { getLocales } from '@overextended/ox_lib/shared';
-import { OxAccountPermissions, OxAccountRoles } from '@overextended/ox_core';
+import { OxAccountPermissions, OxAccountRole } from '@overextended/ox_core';
 
 const usingTarget = GetConvarInt('ox_banking:target', 0) === 1;
 let hasLoadedUi = false;
@@ -14,7 +14,7 @@ let isATMopen = false;
 function initUI() {
   if (hasLoadedUi) return;
 
-  const accountRoles: OxAccountRoles[] = GlobalState.accountRoles;
+  const accountRoles: OxAccountRole[] = GlobalState.accountRoles;
 
   // @ts-expect-error
   const permissions: Record<OxAccountRoles, OxAccountPermissions> = {};

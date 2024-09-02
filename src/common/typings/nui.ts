@@ -1,7 +1,7 @@
-import { OxAccountPermissions, OxAccountRoles } from '@overextended/ox_core';
+import { OxAccountPermissions, OxAccountRole } from '@overextended/ox_core';
 import { DateRange } from 'react-day-picker';
 
-export type AccountRole = OxAccountRoles;
+export type AccountRole = OxAccountRole;
 export type AccountPermissions = OxAccountPermissions;
 export type AccessTableUser = {
   name: string;
