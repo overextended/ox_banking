@@ -1,9 +1,8 @@
 import React from 'react';
 import Navbar from '@/layouts/bank/components/Navbar';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import Dashboard from '@/layouts/bank/pages/dashboard/Dashboard';
 import Accounts from '@/layouts/bank/pages/accounts/Accounts';
-import ModalsProvider from '@/components/ModalsProvider';
 import { useSetModalContainer } from '@/state/modals';
 import { useBankVisibility, useSetBankVisibility } from '@/state/visibility';
 import { useNuiEvent } from '@/hooks/useNuiEvent';
@@ -20,8 +19,10 @@ const Bank: React.FC = () => {
   const setContainer = useSetModalContainer();
   const visible = useBankVisibility();
   const setVisible = useSetBankVisibility();
+  const navigate = useNavigate();
 
   useNuiEvent('openBank', (data: Character) => {
+    navigate('/');
     setVisible(true);
     setCharacter(data);
   });
