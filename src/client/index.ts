@@ -124,7 +124,7 @@ RegisterNuiCallback('exit', () => {
 on('ox_inventory:itemCount', (itemName: string, count: number) => {
   if (!isUiOpen || isATMopen || itemName !== 'money') return;
 
-  SendTypedNUIMessage<Character>('openBank', { cash: count });
+  SendTypedNUIMessage<Character>('refreshCharacter', { cash: count });
 });
 
 serverNuiCallback('getDashboardData');

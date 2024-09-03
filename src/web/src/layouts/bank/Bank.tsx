@@ -27,6 +27,8 @@ const Bank: React.FC = () => {
     setCharacter(data);
   });
 
+  useNuiEvent('refreshCharacter', (data: Character) => setCharacter(data));
+
   useExitListener(setVisible);
 
   return (
