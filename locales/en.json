@@ -1,4 +1,6 @@
 {
+  "locale_code": "en-US",
+  "currency": "USD",
   "confirm": "Confirm",
   "cancel": "Cancel",
   "dashboard": "Dashboard",
