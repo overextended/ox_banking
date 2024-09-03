@@ -53,7 +53,7 @@ const AccountDetails: React.FC = () => {
         <div className="flex flex-col gap-4">
           <div className="flex flex-col">
             <p className="text-muted-foreground text-xs">{locales.account_owner}</p>
-            <p>{account.owner}</p>
+            <p>{account.owner || '-'}</p>
           </div>
           <div className="flex flex-col">
             <p className="text-muted-foreground text-xs">{locales.account_role}</p>
