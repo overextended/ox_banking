@@ -2,6 +2,7 @@ import type { Character } from '../common/typings';
 import targets from '../../data/targets.json';
 import locations from '../../data/locations.json';
 import atms from '../../data/atms.json';
+import { hideTextUI } from '@overextended/ox_lib/client';
 import { SendTypedNUIMessage, serverNuiCallback } from 'utils';
 import { getLocales, locale } from '@overextended/ox_lib/shared';
 import { OxAccountPermissions, OxAccountRole } from '@overextended/ox_core';
@@ -51,6 +52,8 @@ const openBank = () => {
 
   const playerCash: number = exports.ox_inventory.GetItemCount('money');
   isUiOpen = true;
+
+  hideTextUI();
 
   SendTypedNUIMessage<Character>('openBank', { cash: playerCash });
   SetNuiFocus(true, true);
