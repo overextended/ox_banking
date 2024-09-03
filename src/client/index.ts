@@ -3,7 +3,7 @@ import targets from '../../data/targets.json';
 import locations from '../../data/locations.json';
 import atms from '../../data/atms.json';
 import { SendTypedNUIMessage, serverNuiCallback } from 'utils';
-import { getLocales } from '@overextended/ox_lib/shared';
+import { getLocales, locale } from '@overextended/ox_lib/shared';
 import { OxAccountPermissions, OxAccountRole } from '@overextended/ox_core';
 
 const usingTarget = GetConvarInt('ox_banking:target', 0) === 1;
@@ -64,7 +64,7 @@ const createBankBlip = (coords: number[]) => {
   SetBlipColour(blip, 2);
   SetBlipAsShortRange(blip, true);
   BeginTextCommandSetBlipName('STRING');
-  AddTextComponentString('Bank');
+  AddTextComponentString(locale('bank'));
   EndTextCommandSetBlipName(blip);
 };
 
@@ -78,7 +78,7 @@ if (usingTarget) {
     {
       name: 'access_atm',
       icon: 'fa-solid fa-money-check',
-      label: 'Access ATM',
+      label: locale('target_access_atm'),
       onSelect: () => {
         openATM();
       },
@@ -99,7 +99,7 @@ if (usingTarget) {
         {
           name: 'access_bank',
           icon: 'fa-solid fa-dollar-sign',
-          label: 'Access bank',
+          label: locale('target_access_bank'),
           onSelect: () => {
             openBank();
           },

@@ -60,8 +60,6 @@ const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => 
 
   const roles = React.useMemo(() => Object.keys(permissions).filter((role) => role !== 'owner'), [permissions]);
 
-  console.log(JSON.stringify(permissions, null, 2));
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">

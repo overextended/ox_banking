@@ -1,7 +1,9 @@
 if GetConvarInt('ox_banking:target', 0) == 1 then return end
 
+lib.locale()
+
 local function onEnterBank()
-    lib.showTextUI('[E] - Access bank')
+    lib.showTextUI(locale('text_ui_access_bank'))
 end
 
 local function onExitBank()
@@ -41,7 +43,7 @@ local function findClosestAtm()
         if atm > 0 then
             local atmCoords = GetEntityCoords(atm)
 
-            lib.showTextUI('[E] - Access ATM')
+            lib.showTextUI(locale('text_ui_access_atm'))
 
             while #(GetEntityCoords(cache.ped) - atmCoords) <= 1.5 and not IsNuiFocused() and not IsPauseMenuActive() do
                 if IsControlJustPressed(0, 38) then

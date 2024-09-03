@@ -142,7 +142,7 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
               checked={internalTransfer}
               onCheckedChange={() => setInternalTransfer((prev) => !prev)}
             />
-            <label htmlFor="internal-transfer">Internal transfer</label>
+            <label htmlFor="internal-transfer">{locales.internal_transfer}</label>
           </div>
         )}
         <FormField
@@ -150,10 +150,10 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
             <FormItem>
               <FormLabel>
                 {form.getValues('transferType') === 'person'
-                  ? 'State ID'
+                  ? locales.state_id
                   : internalTransfer
-                    ? 'Account'
-                    : 'Account number'}
+                    ? locales.account
+                    : locales.account_number}
               </FormLabel>
               <FormControl>
                 {form.getValues('transferType') === 'account' && internalTransfer ? (
