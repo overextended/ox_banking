@@ -11,6 +11,7 @@ import locales from '@/locales';
 import TransferModal from '@/layouts/bank/pages/accounts/modals/TransferModal';
 import { hasPermission } from '@/permissions';
 import { useNavigate } from 'react-router-dom';
+import CopyAccountNumber from './CopyAccountNumber';
 
 const AccountDetails: React.FC = () => {
   const modal = useModal();
@@ -41,14 +42,7 @@ const AccountDetails: React.FC = () => {
             <p className="text-muted-foreground text-xs">{locales.account_number}</p>
             <div className="flex items-center gap-2">
               <p>{account.id}</p>
-              <Tooltip delayDuration={200}>
-                <TooltipTrigger asChild>
-                  <button className="flex items-center">
-                    <Copy size={14} />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent>{locales.copy}</TooltipContent>
-              </Tooltip>
+              <CopyAccountNumber accountNumber={account.id} />
             </div>
           </div>
           <div className="flex flex-col">
