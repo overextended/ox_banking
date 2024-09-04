@@ -54,33 +54,26 @@ const MOCK_DASHBOARD: DashboardData = {
   invoices: [
     {
       amount: 1500,
-      date: '28/10/2023',
-      issuer: 'John Doe',
-      paid: false,
+      label: 'SomeCompany LLC',
+      id: 0,
+      dueDate: '2024/08/28 13:00',
+      status: 'overdue',
     },
     {
-      amount: 8200,
-      date: '28/10/2023',
-      issuer: 'Bobby Smith',
-      paid: false,
+      amount: 5000,
+      label: 'SomeCompany LLC',
+      id: 1,
+      dueDate: '2024/08/28 13:00',
+      paidAt: '2024/08/25 09:07',
+      status: 'paid',
     },
     {
-      amount: 13999,
-      date: '28/10/2023',
-      issuer: 'Michael Jackson',
-      paid: true,
-    },
-    {
-      amount: 300,
-      date: '28/10/2023',
-      issuer: 'Some Body',
-      paid: true,
-    },
-    {
-      amount: 300,
-      date: '28/10/2023',
-      issuer: 'Some Body',
-      paid: true,
+      amount: 5000,
+      label: 'SomeCompany LLC',
+      id: 2,
+      dueDate: '2024/08/28 13:00',
+      paidAt: '2024/08/25 09:07',
+      status: 'unpaid',
     },
   ],
   transactions: [
@@ -132,16 +125,7 @@ const Dashboard: React.FC = () => {
           ))}
         </BaseCard>
         <BaseCard title={locales.recent_invoices} icon={FileStack} className="flex-1">
-          {data.invoices?.map((invoice) => (
-            <InvoiceItem
-              // Potentially duplicate key, need to convert date to timestamp
-              key={`${invoice.issuer}-${invoice.date}`}
-              amount={invoice.amount}
-              date={invoice.date}
-              issuer={invoice.issuer}
-              paid={invoice.paid}
-            />
-          ))}
+          {data.invoices?.map((invoice) => <InvoiceItem key={invoice.id} invoice={invoice} />)}
         </BaseCard>
       </div>
     </div>

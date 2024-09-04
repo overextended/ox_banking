@@ -3,6 +3,7 @@ import type {
   AccessTableData,
   Account,
   DashboardData,
+  Invoice,
   InvoicesFilters,
   LogsFilters,
   RawLogItem,
@@ -179,11 +180,28 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
     };
   });
 
+  const invoices = await oxmysql.rawExecute<Invoice[]>(
+    `
+     SELECT ai.id, ai.amount, DATE_FORMAT(ai.dueDate, '%Y-%m-%d %H:%i') as dueDate, DATE_FORMAT(ai.paidAt, '%Y-%m-%d %H:%i') as paidAt, a.label,
+     CASE
+        WHEN ai.payerId IS NOT NULL THEN 'paid'
+        WHEN NOW() > ai.dueDate THEN 'overdue'
+        ELSE 'unpaid'
+     END AS status
+     FROM accounts_invoices ai
+     LEFT JOIN accounts a ON a.id = ai.fromAccount
+     WHERE ai.toAccount = ?
+     ORDER BY ai.id DESC
+     LIMIT 5
+     `,
+    [account.id]
+  );
+
   return {
     balance: await account.get('balance'),
     overview,
     transactions,
-    invoices: [],
+    invoices,
   };
 });
 

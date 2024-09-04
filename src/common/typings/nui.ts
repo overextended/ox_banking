@@ -16,6 +16,15 @@ export interface Transaction {
   message?: string;
 }
 
+export interface Invoice {
+  id: number;
+  amount: number;
+  dueDate: string;
+  paidAt?: string;
+  label: string;
+  status: 'paid' | 'unpaid' | 'overdue';
+}
+
 export interface DashboardData {
   balance: number;
   overview?: {
@@ -24,12 +33,7 @@ export interface DashboardData {
     expenses: number;
   }[];
   transactions?: Transaction[];
-  invoices?: {
-    paid: boolean;
-    amount: number;
-    issuer: string;
-    date: string;
-  }[];
+  invoices: Invoice[];
 }
 
 export interface AccessTableData {
