@@ -152,33 +152,20 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
     [account.accountId, account.accountId, account.accountId, account.accountId]
   );
 
-  const lastTransactions = await oxmysql.rawExecute<
-    {
-      amount: number;
-      date: string;
-      toId?: number;
-      fromId?: number;
-      message?: string;
-    }[]
-  >(
+  const transactions = await oxmysql.rawExecute<Transaction[]>(
     `
-    SELECT amount, DATE_FORMAT(date, '%Y-%m-%d %H:%i') as date, toId, fromId, message
+    SELECT id, amount, DATE_FORMAT(date, '%Y-%m-%d %H:%i') as date, toId, fromId, message,
+    CASE
+      WHEN toId = ? THEN 'inbound'
+      ELSE 'outbound'
+    END AS 'type'
     FROM accounts_transactions
     WHERE toId = ? OR fromId = ?
     ORDER BY id DESC
     LIMIT 5
     `,
-    [account.accountId, account.accountId]
+    [account.id, account.id, account.id]
   );
-
-  const transactions: Transaction[] = lastTransactions.map((transaction) => {
-    return {
-      amount: transaction.amount,
-      date: transaction.date,
-      message: transaction.message,
-      type: transaction.toId === account.accountId ? 'inbound' : 'outbound',
-    };
-  });
 
   const invoices = await oxmysql.rawExecute<Invoice[]>(
     `

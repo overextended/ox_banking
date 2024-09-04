@@ -77,11 +77,11 @@ const MOCK_DASHBOARD: DashboardData = {
     },
   ],
   transactions: [
-    { amount: 1500, message: 'Salary', date: '28/10/2023', type: 'inbound' },
-    { amount: 2900, message: 'Salary', date: '28/10/2023', type: 'inbound' },
-    { amount: 12700, message: 'Withdraw', date: '28/10/2023', type: 'outbound' },
-    { amount: 3500, message: 'Deposit', date: '28/10/2023', type: 'inbound' },
-    { amount: 3500, message: 'Deposit', date: '28/10/2023', type: 'inbound' },
+    { id: 0, amount: 1500, message: 'Salary', date: '28/10/2023', type: 'inbound' },
+    { id: 1, amount: 2900, message: 'Salary', date: '28/10/2023', type: 'inbound' },
+    { id: 2, amount: 12700, message: 'Withdraw', date: '28/10/2023', type: 'outbound' },
+    { id: 3, amount: 3500, message: 'Deposit', date: '28/10/2023', type: 'inbound' },
+    { id: 4, amount: 3500, message: 'Deposit', date: '28/10/2023', type: 'inbound' },
   ],
 };
 
@@ -116,7 +116,7 @@ const Dashboard: React.FC = () => {
         <BaseCard title={locales.recent_transactions} icon={Repeat} className="flex-1">
           {data.transactions?.map((transaction) => (
             <TransactionItem
-              key={`${transaction.amount}-${transaction.date}`}
+              key={transaction.id}
               amount={transaction.amount}
               message={transaction.message}
               date={transaction.date}
