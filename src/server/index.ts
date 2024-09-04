@@ -133,7 +133,7 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
   >(
     `
     SELECT
-      DAYNAME(d.date) as day,
+      LOWER(DAYNAME(d.date)) as day,
       CAST(COALESCE(SUM(CASE WHEN at.toId = ? THEN at.amount ELSE 0 END), 0) AS UNSIGNED) as income,
       CAST(COALESCE(SUM(CASE WHEN at.fromId = ? THEN at.amount ELSE 0 END), 0) AS UNSIGNED) as expenses
     FROM (
