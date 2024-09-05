@@ -164,7 +164,7 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
     ORDER BY id DESC
     LIMIT 5
     `,
-    [account.id, account.id, account.id]
+    [account.accountId, account.accountId, account.accountId]
   );
 
   const invoices = await oxmysql.rawExecute<Invoice[]>(
@@ -181,7 +181,7 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
      ORDER BY ai.id DESC
      LIMIT 5
      `,
-    [account.id]
+    [account.accountId]
   );
 
   return {
