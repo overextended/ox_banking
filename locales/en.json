@@ -143,5 +143,6 @@
   "permission_manageAccount": "Manage account",
   "permission_closeAccount": "Close account",
   "permission_sendInvoice": "Send invoice",
-  "permission_payInvoice": "Pay invoice"
+  "permission_payInvoice": "Pay invoice",
+  "transfer_from": "Transfer from"
 }

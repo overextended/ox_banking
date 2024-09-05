@@ -23,10 +23,7 @@ const LogsTable: React.FC<{ accountId: number }> = ({ accountId }) => {
       {isLoading || isDebouncing ? (
         <LogsTableSkeleton />
       ) : (
-        <div>
-          <LogsTableHead />
-          <LogsTableBody logs={data?.logs ?? []} />
-        </div>
+        <LogsTableBody accountId={accountId} logs={data?.logs ?? []} />
       )}
       <Pagination
         maxPages={maxPages}

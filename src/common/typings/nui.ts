@@ -44,13 +44,14 @@ export interface AccessTableData {
 
 export interface RawLogItem {
   id: number;
+  fromId: number;
   toId: number;
   name: string;
   message: string;
   amount: number;
   date: string;
-  fromBalance?: number;
-  toBalance?: number;
+  fromAccountLabel?: string;
+  toAccountLabel?: string;
 }
 
 export type LogItem = RawLogItem & {

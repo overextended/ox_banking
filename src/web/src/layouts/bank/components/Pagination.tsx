@@ -15,7 +15,7 @@ const Pagination: React.FC<Props> = ({ maxPages, page, setPage }) => {
         <ChevronLeft size={20} />
       </Button>
       <p>
-        {page + 1} / {maxPages ? maxPages : '?'}
+        {page + 1} / {maxPages !== undefined ? maxPages : '?'}
       </p>
       <Button size="icon" onClick={() => setPage(++page)} disabled={page + 1 >= maxPages}>
         <ChevronRight size={20} />

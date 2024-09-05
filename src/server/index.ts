@@ -381,7 +381,7 @@ onClientCallback(
     const search = sanitizeSearch(filters.search);
 
     let dateSearchString = '';
-    let queryParams: any[] = [accountId, accountId];
+    let queryParams: any[] = [accountId, accountId, accountId, accountId];
 
     let typeQueryString = ``;
 
@@ -409,27 +409,45 @@ onClientCallback(
 
     queryWhere += `${typeQueryString} ${dateSearchString}`;
 
-    const countQueryParams = [...queryParams];
+    const countQueryParams = [...queryParams].slice(2, queryParams.length);
 
-    queryParams.push(filters.page * 9);
+    queryParams.push(filters.page * 6);
 
     const queryData = await oxmysql
       .rawExecute<RawLogItem[]>(
         `
-          SELECT at.id, at.toId, at.fromBalance, at.toBalance, at.message, at.amount, DATE_FORMAT(at.date, '%Y-%m-%d %H:%i') AS date, c.fullName AS name
+          SELECT
+            at.id,
+            at.fromId,
+            at.toId,
+            at.message,
+            at.amount,
+            CONCAT(fa.id, ' - ', fa.label) AS fromAccountLabel,
+            CONCAT(ta.id, ' - ', ta.label) AS toAccountLabel,
+            DATE_FORMAT(at.date, '%Y-%m-%d %H:%i') AS date,
+            c.fullName AS name,
+            CASE
+              WHEN at.toId = ? THEN 'inbound'
+              ELSE 'outbound'
+            END AS 'type',
+            CASE
+                WHEN at.toId = ? THEN at.toBalance
+                ELSE at.fromBalance
+            END AS newBalance
           FROM accounts_transactions at
           LEFT JOIN characters c ON c.charId = at.actorId
+          LEFT JOIN accounts ta ON ta.id = at.toId
+          LEFT JOIN accounts fa ON fa.id = at.fromId
           ${queryWhere}
           ORDER BY at.id DESC
-          LIMIT 9
+          LIMIT 6
           OFFSET ?
         `,
         queryParams
       )
       .catch((e) => console.log(e));
 
-    console.log(queryWhere);
-    console.log(JSON.stringify(queryParams));
+    console.log(JSON.stringify(queryData, null, 2));
 
     const totalLogsCount = await oxmysql
       .prepare(
@@ -437,14 +455,20 @@ onClientCallback(
           SELECT COUNT(*)
           FROM accounts_transactions at
           LEFT JOIN characters c ON c.charId = at.actorId
+          LEFT JOIN accounts ta ON ta.id = at.toId
+          LEFT JOIN accounts fa ON fa.id = at.fromId
           ${queryWhere}
         `,
         countQueryParams
       )
       .catch((e) => console.log(e));
 
+    console.log(totalLogsCount);
+
+    console.log(Math.ceil(totalLogsCount / 6));
+
     return {
-      numberOfPages: Math.ceil(totalLogsCount / 9),
+      numberOfPages: Math.ceil(totalLogsCount / 6),
       logs: queryData,
     };
   }
