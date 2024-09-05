@@ -15,8 +15,8 @@ importers:
         specifier: latest
         version: 0.0.20
       '@overextended/ox_core':
-        specifier: ^0.30.0
-        version: 0.30.0
+        specifier: ^0.31.0
+        version: 0.31.0
       '@overextended/ox_lib':
         specifier: latest
         version: 3.24.0
@@ -644,8 +644,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@overextended/ox_core@0.30.0':
-    resolution: {integrity: sha512-VFhqXdxPUcTrNx4eajaERhjmdpIHSTe0TrLPxzkjU4GCsMfq1FFZ3wu/b4sfjQen5kMtCtWopZ5OqN/EcwDFvw==}
+  '@overextended/ox_core@0.31.0':
+    resolution: {integrity: sha512-hp2U2bv6XKCKF91U1WZi2hB1UeKftQPYGBwfqElBZhJXGyIQnC18yKU38ZGY9HWJHUO6Ye3G2z+W5ZA9YBh1KQ==}
     engines: {node: '>=16.9.1'}
 
   '@overextended/ox_lib@3.24.0':
@@ -2457,7 +2457,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  '@overextended/ox_core@0.30.0':
+  '@overextended/ox_core@0.31.0':
     dependencies:
       '@nativewrappers/fivem': 0.0.41
       '@overextended/ox_lib': 3.25.0

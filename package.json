@@ -60,7 +60,7 @@
   "dependencies": {
     "@nativewrappers/client": "latest",
     "@nativewrappers/fivem-server": "latest",
-    "@overextended/ox_core": "^0.30.0",
+    "@overextended/ox_core": "^0.31.0",
     "@overextended/ox_lib": "latest",
     "@overextended/oxmysql": "latest",
     "@radix-ui/react-dialog": "^1.1.1",
