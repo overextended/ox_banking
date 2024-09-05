@@ -207,7 +207,7 @@ onClientCallback(
     }
   ): Promise<AccessTableData> => {
     const account = await GetAccount(accountId);
-    const hasPermission = !(await account?.playerHasPermission(playerId, 'manageUser'));
+    const hasPermission = await account?.playerHasPermission(playerId, 'manageUser');
 
     if (!hasPermission) return;
 
@@ -313,7 +313,7 @@ onClientCallback(
     }
   ): Promise<true | 'state_id_not_exists'> => {
     const account = await GetAccount(accountId);
-    const hasPermission = !(await account?.playerHasPermission(playerId, 'transferOwnership'));
+    const hasPermission = await account?.playerHasPermission(playerId, 'transferOwnership');
 
     if (!hasPermission) return;
 
@@ -344,7 +344,7 @@ onClientCallback(
   'ox_banking:renameAccount',
   async (playerId, { accountId, name }: { accountId: number; name: string }) => {
     const account = await GetAccount(accountId);
-    const hasPermission = !(await account?.playerHasPermission(playerId, 'manageAccount'));
+    const hasPermission = await account?.playerHasPermission(playerId, 'manageAccount');
 
     if (!hasPermission) return;
 
@@ -374,7 +374,7 @@ onClientCallback(
   'ox_banking:getLogs',
   async (playerId, { accountId, filters }: { accountId: number; filters: LogsFilters }) => {
     const account = await GetAccount(accountId);
-    const hasPermission = !(await account?.playerHasPermission(playerId, 'viewHistory'));
+    const hasPermission = await account?.playerHasPermission(playerId, 'viewHistory');
 
     if (!hasPermission) return;
 
@@ -454,7 +454,7 @@ onClientCallback(
   'ox_banking:getInvoices',
   async (playerId, { accountId, filters }: { accountId: number; filters: InvoicesFilters }) => {
     const account = await GetAccount(accountId);
-    const hasPermission = !(await account?.playerHasPermission(playerId, 'payInvoice'));
+    const hasPermission = await account?.playerHasPermission(playerId, 'payInvoice');
 
     if (!hasPermission) return;
 
