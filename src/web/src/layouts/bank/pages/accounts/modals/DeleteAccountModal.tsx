@@ -6,7 +6,7 @@ import { useModal } from '@/components/ModalsProvider';
 import { fetchNui } from '@/utils/fetchNui';
 import SpinningLoader from '@/components/SpinningLoader';
 import { queryClient } from '@/main';
-import { useSetActiveAccount } from '@/state/accounts';
+import { useSetActiveAccountId } from '@/state/accounts';
 
 interface Props {
   account: Account;
@@ -15,7 +15,7 @@ interface Props {
 const DeleteAccountModal: React.FC<Props> = ({ account }) => {
   const modal = useModal();
   const [isLoading, setIsLoading] = React.useState(false);
-  const setActiveAccount = useSetActiveAccount();
+  const setActiveAccountId = useSetActiveAccountId();
 
   return (
     <div className="flex flex-col gap-4">
@@ -30,7 +30,7 @@ const DeleteAccountModal: React.FC<Props> = ({ account }) => {
           setIsLoading(true);
           await fetchNui('deleteAccount', account.id, { data: true, delay: 1500 });
           await queryClient.invalidateQueries({ queryKey: ['accounts'] });
-          setActiveAccount(null);
+          setActiveAccountId(null);
           setIsLoading(false);
           modal.close();
         }}

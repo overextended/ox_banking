@@ -10,14 +10,14 @@ import { Button } from '@/components/ui/button';
 import SpinningLoader from '@/components/SpinningLoader';
 import { fetchNui } from '@/utils/fetchNui';
 import { useModal } from '@/components/ModalsProvider';
-import { useSetActiveAccount } from '@/state/accounts';
+import { useSetActiveAccountId } from '@/state/accounts';
 import { queryClient } from '@/main';
 import { Account } from '~/src/common/typings';
 import { updateAccountProperty } from '@/state/accounts';
 
 const TransferAccountModal: React.FC<{ accountId: number }> = ({ accountId }) => {
   const [isLoading, setIsLoading] = React.useState(false);
-  const setActiveAccount = useSetActiveAccount();
+  const setActiveAccountId = useSetActiveAccountId();
   const modal = useModal();
 
   const formSchema = React.useMemo(
@@ -58,7 +58,7 @@ const TransferAccountModal: React.FC<{ accountId: number }> = ({ accountId }) =>
 
     // todo: probably fetch the updated account instead of updating it as the name would need to be updated as well
     updateAccountProperty(accountId, 'role', 'manager');
-    setActiveAccount(null);
+    setActiveAccountId(null);
 
     setIsLoading(false);
     modal.close();

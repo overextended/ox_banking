@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button';
 import React from 'react';
-import { fetchNui } from '../../../../../utils/fetchNui';
-import { useModal } from '../../../../../components/ModalsProvider';
-import SpinningLoader from '../../../../../components/SpinningLoader';
-import { updateAccountProperty, useSetActiveAccount } from '../../../../../state/accounts';
+import { fetchNui } from '@/utils/fetchNui';
+import { useModal } from '@/components/ModalsProvider';
+import SpinningLoader from '@/components/SpinningLoader';
+import { updateAccountProperty } from '@/state/accounts';
 import locales from '@/locales';
 
 interface Props {
@@ -12,7 +12,6 @@ interface Props {
 
 const ConvertAccountModal: React.FC<Props> = ({ accountId }) => {
   const [isLoading, setIsLoading] = React.useState(false);
-  const setActiveAccount = useSetActiveAccount();
   const modal = useModal();
 
   async function handleConvertClick() {
@@ -27,7 +26,6 @@ const ConvertAccountModal: React.FC<Props> = ({ accountId }) => {
     }
 
     updateAccountProperty(accountId, 'type', 'shared');
-    setActiveAccount((prev) => (prev ? { ...prev, type: 'shared' } : null));
     modal.close();
   }
 

@@ -8,11 +8,12 @@ import { delay } from '@/utils/misc';
 import { queryClient } from '@/main';
 import { useModal } from '@/components/ModalsProvider';
 import locales from '@/locales';
-import { useSetActiveAccount } from '@/state/accounts';
+import { updateAccountProperty } from '@/state/accounts';
+import { useActiveAccount } from '@/state/accounts';
 
 const PayInvoiceModal: React.FC<{ invoice: UnpaidInvoice }> = ({ invoice }) => {
   const [isLoading, setIsLoading] = React.useState(false);
-  const setActiveAccount = useSetActiveAccount();
+  const account = useActiveAccount()!;
   const modal = useModal();
 
   async function handlePayInvoice() {
@@ -28,15 +29,7 @@ const PayInvoiceModal: React.FC<{ invoice: UnpaidInvoice }> = ({ invoice }) => {
     }
 
     await queryClient.invalidateQueries({ queryKey: ['invoices'] });
-
-    setActiveAccount((prev) => {
-      if (!prev) return prev;
-
-      return {
-        ...prev,
-        balance: prev.balance - invoice.amount,
-      };
-    });
+    updateAccountProperty(account.id, 'balance', account.balance - invoice.amount);
 
     setIsLoading(false);
     modal.close();

@@ -4,70 +4,42 @@ import { Account } from '@/typings';
 import { queryClient } from '@/main';
 import { fetchNui } from '@/utils/fetchNui';
 
+const DEBUG_ACCOUNTS: Account[] = [
+  {
+    id: 932122,
+    balance: 132032,
+    label: 'Some name',
+    owner: 'Some owner',
+    type: 'personal',
+    role: 'owner',
+  },
+  {
+    id: 932123,
+    balance: 0,
+    label: 'Some name',
+    owner: 'Some owner',
+    type: 'shared',
+    role: 'viewer',
+  },
+  {
+    id: 932124,
+    balance: 132032,
+    label: 'My Account',
+    isDefault: true,
+    owner: 'Some owner',
+    type: 'personal',
+    role: 'owner',
+  },
+];
+
 const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Account[] }>(
   () => ({
     queryKey: ['accounts'],
+    refetchOnMount: false,
     queryFn: async () => {
       const accounts = await fetchNui<Account[]>('getAccounts', null, {
-        data: [
-          {
-            id: 932122,
-            balance: 132032,
-            label: 'Some name',
-            owner: 'Some owner',
-            type: 'personal',
-            role: 'owner',
-          },
-          {
-            id: 932123,
-            balance: 0,
-            label: 'Some name',
-            owner: 'Some owner',
-            type: 'shared',
-            role: 'viewer',
-          },
-          {
-            id: 932124,
-            balance: 132032,
-            label: 'My Account',
-            isDefault: true,
-            owner: 'Some owner',
-            type: 'personal',
-            role: 'owner',
-          },
-          {
-            id: 932125,
-            balance: 132032,
-            label: 'Some name',
-            owner: 'Some owner',
-            type: 'shared',
-            role: 'manager',
-          },
-          {
-            id: 932126,
-            balance: 132032,
-            label: 'Some name',
-            owner: 'Some owner',
-            type: 'personal',
-            role: 'owner',
-          },
-          {
-            id: 932127,
-            balance: 132032,
-            label: 'Some name',
-            owner: 'Some owner',
-            type: 'personal',
-            role: 'owner',
-          },
-          {
-            id: 932128,
-            balance: 132032,
-            label: 'Some name',
-            owner: 'Some owner',
-            type: 'personal',
-            role: 'owner',
-          },
-        ],
+        data: DEBUG_ACCOUNTS,
+        delay: 3000,
       });
 
       const defaultAccount = accounts.find((account) => account.isDefault)!;
@@ -81,11 +53,20 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
   () => queryClient
 );
 
-const activeAccountAtom = atom<Account | null>(null);
+const activeAccountIdAtom = atom<number | null>(null);
+
+const activeAccountAtom = atom<Promise<Account | null>>(async (get) => {
+  const accountId = get(activeAccountIdAtom);
+  const { accounts } = await get(accountsDataAtom);
+
+  if (!accounts || accounts.length === 0) return null;
+
+  return accounts.find((account) => account.id === accountId) || null;
+});
 
 export const useAccounts = () => useAtomValue(accountsDataAtom);
 export const useActiveAccount = () => useAtomValue(activeAccountAtom);
-export const useSetActiveAccount = () => useSetAtom(activeAccountAtom);
+export const useSetActiveAccountId = () => useSetAtom(activeAccountIdAtom);
 
 export function updateAccountProperty<K extends keyof Account>(
   accountId: number,
