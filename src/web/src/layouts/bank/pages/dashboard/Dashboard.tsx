@@ -114,15 +114,7 @@ const Dashboard: React.FC = () => {
       </BaseCard>
       <div className="flex flex-1 gap-2">
         <BaseCard title={locales.recent_transactions} icon={Repeat} className="flex-1">
-          {data.transactions?.map((transaction) => (
-            <TransactionItem
-              key={transaction.id}
-              amount={transaction.amount}
-              message={transaction.message}
-              date={transaction.date}
-              type={transaction.type}
-            />
-          ))}
+          {data.transactions?.map((transaction) => <TransactionItem key={transaction.id} transaction={transaction} />)}
         </BaseCard>
         <BaseCard title={locales.recent_invoices} icon={FileStack} className="flex-1">
           {data.invoices?.map((invoice) => <InvoiceItem key={invoice.id} invoice={invoice} />)}
