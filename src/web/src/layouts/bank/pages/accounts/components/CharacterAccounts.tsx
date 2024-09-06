@@ -5,14 +5,14 @@ import CreateAccountModal from '@/layouts/bank/pages/accounts/modals/CreateAccou
 import AccountCard from '@/layouts/bank/pages/accounts/components/AccountCard';
 import BaseCard from '@/layouts/bank/components/BaseCard';
 import { useModal } from '@/components/ModalsProvider';
-import { useAccounts, useActiveAccount } from '@/state/accounts';
+import { useAccounts, useActiveAccount, useActiveAccountId } from '@/state/accounts';
 import { cn } from '@/lib/utils';
 import locales from '@/locales';
 
 const CharacterAccounts: React.FC = () => {
   const modal = useModal();
-  const activeAccount = useActiveAccount();
   const accountsData = useAccounts();
+  const activeAccountId = useActiveAccountId();
   const [page, setPage] = React.useState(0);
 
   const MAX_ITEMS = React.useMemo(() => (page === 0 ? 3 : 4), [page]);
@@ -43,7 +43,7 @@ const CharacterAccounts: React.FC = () => {
               <AccountCard
                 key={`${account.id}-${account.balance}`}
                 account={account}
-                active={account.id === activeAccount?.id}
+                active={account.id === activeAccountId}
               />
             ))}
         </div>

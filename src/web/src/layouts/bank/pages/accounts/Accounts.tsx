@@ -9,12 +9,14 @@ const Accounts: React.FC = () => {
   }, []);
 
   return (
-    <React.Suspense fallback={<p>Loading...</p>}>
-      <div className="flex h-full w-full flex-col gap-2 overflow-hidden p-2">
+    <div className="flex h-full w-full flex-col gap-2 overflow-hidden p-2">
+      <React.Suspense fallback={<p>Loading...</p>}>
         <CharacterAccounts />
+      </React.Suspense>
+      <React.Suspense fallback={<p>Account loading...</p>}>
         <ActiveAccountContainer />
-      </div>
-    </React.Suspense>
+      </React.Suspense>
+    </div>
   );
 };
 

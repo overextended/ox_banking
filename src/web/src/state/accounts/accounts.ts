@@ -67,6 +67,7 @@ const activeAccountAtom = atom<Promise<Account | null>>(async (get) => {
 export const useAccounts = () => useAtomValue(accountsDataAtom);
 export const useActiveAccount = () => useAtomValue(activeAccountAtom);
 export const useSetActiveAccountId = () => useSetAtom(activeAccountIdAtom);
+export const useActiveAccountId = () => useAtomValue(activeAccountIdAtom);
 
 export function updateAccountProperty<K extends keyof Account>(
   accountId: number,
