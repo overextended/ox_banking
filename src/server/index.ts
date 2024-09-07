@@ -31,15 +31,15 @@ onClientCallback('ox_banking:getAccounts', async (playerId): Promise<Account[]> 
     LEFT JOIN character_groups cg ON cg.charId = ?
     LEFT JOIN ox_groups g ON cg.name = g.name
     LEFT JOIN ox_group_grades gg ON cg.name = gg.group AND cg.grade = gg.grade
-    LEFT JOIN accounts_access access ON account.id = access.accountId AND access.charId = c.charId
+    LEFT JOIN accounts_access access ON account.id = access.accountId AND access.charId = ?
     WHERE
       account.type != 'inactive'
       AND (
-        account.owner IS NOT NULL
+        access.charId = ?
         OR account.group = g.name
       );
     `,
-    [player.charId]
+    [player.charId, player.charId, player.charId]
   );
 
   const accounts: Account[] = accessAccounts.map((account) => ({
