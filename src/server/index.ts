@@ -28,9 +28,11 @@ onClientCallback('ox_banking:getAccounts', async (playerId): Promise<Account[]> 
     FROM
       accounts account
     LEFT JOIN characters c ON account.owner = c.charId
-    LEFT JOIN character_groups cg ON cg.charId = ?
     LEFT JOIN ox_groups g
       ON account.group = g.name
+    LEFT JOIN character_groups cg
+      ON cg.charId = ?
+      AND cg.name = account.group
     LEFT JOIN ox_group_grades gg
       ON account.group = gg.group
       AND cg.grade = gg.grade
@@ -42,7 +44,8 @@ onClientCallback('ox_banking:getAccounts', async (playerId): Promise<Account[]> 
       AND (
         access.charId = ?
         OR (
-          account.group IS NOT NULL AND gg.accountRole IS NOT NULL
+          account.group IS NOT NULL
+          AND gg.accountRole IS NOT NULL
         )
       )
     GROUP BY
