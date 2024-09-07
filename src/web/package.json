@@ -4,11 +4,7 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "start": "vite",
-    "start:game": "vite build --watch",
-    "watch": "vite build --watch",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    
   },
   "dependencies": {
 
