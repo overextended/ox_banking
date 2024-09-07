@@ -22,12 +22,22 @@ onClientCallback('ox_banking:getAccounts', async (playerId): Promise<Account[]> 
   const accessAccounts = await oxmysql.rawExecute<OxAccountUserMetadata[]>(
     `
     SELECT
-      access.role, account.*, c.fullName as ownerName
-    FROM \`accounts_access\` access
-    LEFT JOIN accounts account ON account.id = access.accountId
+      COALESCE(access.role, gg.accountRole) AS role,
+      account.*,
+      COALESCE(c.fullName, g.label) AS ownerName
+    FROM
+      accounts account
     LEFT JOIN characters c ON account.owner = c.charId
+    LEFT JOIN character_groups cg ON cg.charId = ?
+    LEFT JOIN ox_groups g ON cg.name = g.name
+    LEFT JOIN ox_group_grades gg ON cg.name = gg.group AND cg.grade = gg.grade
+    LEFT JOIN accounts_access access ON account.id = access.accountId AND access.charId = c.charId
     WHERE
-      access.charId = ? AND account.type != 'inactive'
+      account.type != 'inactive'
+      AND (
+        account.owner IS NOT NULL
+        OR account.group = g.name
+      );
     `,
     [player.charId]
   );
