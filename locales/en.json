@@ -1,5 +1,6 @@
 {
   "locale_code": "en-US",
+  "date_format": "yyyy/MM/dd HH:mm",
   "currency": "USD",
   "bank": "Bank",
   "target_access_bank": "Access bank",

@@ -176,7 +176,7 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
 
   const transactions = await oxmysql.rawExecute<Transaction[]>(
     `
-    SELECT id, amount, DATE_FORMAT(date, '%Y-%m-%d %H:%i') as date, toId, fromId, message,
+    SELECT id, amount, UNIX_TIMESTAMP(date) as date, toId, fromId, message,
     CASE
       WHEN toId = ? THEN 'inbound'
       ELSE 'outbound'
@@ -191,7 +191,7 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
 
   const invoices = await oxmysql.rawExecute<Invoice[]>(
     `
-     SELECT ai.id, ai.amount, DATE_FORMAT(ai.dueDate, '%Y-%m-%d %H:%i') as dueDate, DATE_FORMAT(ai.paidAt, '%Y-%m-%d %H:%i') as paidAt, a.label,
+     SELECT ai.id, ai.amount, UNIX_TIMESTAMP(ai.dueDate) as dueDate, UNIX_TIMESTAMP(ai.paidAt) as paidAt, a.label,
      CASE
         WHEN ai.payerId IS NOT NULL THEN 'paid'
         WHEN NOW() > ai.dueDate THEN 'overdue'
@@ -446,7 +446,7 @@ onClientCallback(
             at.amount,
             CONCAT(fa.id, ' - ', fa.label) AS fromAccountLabel,
             CONCAT(ta.id, ' - ', ta.label) AS toAccountLabel,
-            DATE_FORMAT(at.date, '%Y-%m-%d %H:%i') AS date,
+            UNIX_TIMESTAMP(at.date) AS date,
             c.fullName AS name,
             CASE
               WHEN at.toId = ? THEN 'inbound'
@@ -538,7 +538,7 @@ onClientCallback(
             a.label,
             ai.amount,
             ai.message,
-            DATE_FORMAT(ai.dueDate, '%Y-%m-%d %H:%i') as dueDate,
+            UNIX_TIMESTAMP(ai.dueDate) as dueDate,
             'unpaid' AS type
           FROM accounts_invoices ai
           ${queryJoins}
@@ -567,8 +567,8 @@ onClientCallback(
           a.label,
           ai.amount,
           ai.message,
-          DATE_FORMAT(ai.dueDate, '%Y-%m-%d %H:%i') as dueDate,
-          DATE_FORMAT(ai.paidAt, '%Y-%m-%d %H:%i') as paidAt,
+          UNIX_TIMESTAMP(ai.dueDate) AS dueDate,
+          UNIX_TIMESTAMP(ai.paidAt) AS paidAt,
           'paid' AS type
         FROM accounts_invoices ai
         ${queryJoins}
@@ -597,8 +597,8 @@ onClientCallback(
           a.label,
           ai.amount,
           ai.message,
-          DATE_FORMAT(ai.sentAt, '%Y-%m-%d %H:%i') as sentAt,
-          DATE_FORMAT(ai.dueDate, '%Y-%m-%d %H:%i') as dueDate,
+          UNIX_TIMESTAMP(ai.sentAt) AS sentAt,
+          UNIX_TIMESTAMP(ai.dueDate) AS dueDate,
           CASE
             WHEN ai.payerId IS NOT NULL THEN 'paid'
             WHEN NOW() > ai.dueDate THEN 'overdue'

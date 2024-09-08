@@ -1,10 +1,9 @@
 import React from 'react';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { ArrowUpRight, ArrowDownRight, FileCheck, FileClock, FileText } from 'lucide-react';
 import { formatNumber } from '@/utils/formatNumber';
 import { cn } from '@/lib/utils';
-import locales from '@/locales';
 import { Transaction } from '~/src/common/typings';
+import { formatDate } from '@/utils/formatDate';
 
 const TransactionItem: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
   return (
@@ -20,7 +19,7 @@ const TransactionItem: React.FC<{ transaction: Transaction }> = ({ transaction }
       </div>
       <div className="ml-4 space-y-1">
         <p className="line-clamp-1 text-sm font-medium leading-none">{transaction.message}</p>
-        <p className="text-muted-foreground text-xs">{transaction.date}</p>
+        <p className="text-muted-foreground text-xs">{formatDate(transaction.date)}</p>
       </div>
       <div className={cn('ml-auto font-medium', transaction.type === 'outbound' && 'text-destructive')}>
         {transaction.type === 'inbound' ? '+' : '-'}

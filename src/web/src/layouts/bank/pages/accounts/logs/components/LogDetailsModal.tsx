@@ -2,6 +2,7 @@ import locales from '@/locales';
 import React from 'react';
 import { LogItem } from '~/src/common/typings';
 import { formatNumber } from '@/utils/formatNumber';
+import { formatDate } from '@/utils/formatDate';
 
 const LogDetailsModal: React.FC<{ log: LogItem; accountId: number }> = ({ log, accountId }) => {
   return (
@@ -45,7 +46,7 @@ const LogDetailsModal: React.FC<{ log: LogItem; accountId: number }> = ({ log, a
       </div>
       <div>
         <p className="text-muted-foreground text-xs">{locales.date}</p>
-        <p className="text-sm">{log.date}</p>
+        <p className="text-sm">{formatDate(log.date)}</p>
       </div>
       <div>
         <p className="text-muted-foreground text-xs">{locales.message}</p>

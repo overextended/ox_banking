@@ -2,6 +2,7 @@ import React from 'react';
 import { formatNumber } from '@/utils/formatNumber';
 import { SentInvoice } from '~/src/common/typings';
 import locales from '@/locales';
+import { formatDate } from '@/utils/formatDate';
 
 const SentInvoiceDetailsModal: React.FC<{ invoice: SentInvoice }> = ({ invoice }) => {
   return (
@@ -16,11 +17,11 @@ const SentInvoiceDetailsModal: React.FC<{ invoice: SentInvoice }> = ({ invoice }
       </div>
       <div>
         <p className="text-muted-foreground text-xs">{locales.invoice_details_sent_at}</p>
-        <p className="text-sm">{invoice.sentAt}</p>
+        <p className="text-sm">{formatDate(invoice.sentAt)}</p>
       </div>
       <div>
         <p className="text-muted-foreground text-xs">{locales.invoice_details_due_by}</p>
-        <p className="text-sm">{invoice.dueDate}</p>
+        <p className="text-sm">{formatDate(invoice.dueDate)}</p>
       </div>
       <div>
         <p className="text-muted-foreground text-xs">{locales.message}</p>

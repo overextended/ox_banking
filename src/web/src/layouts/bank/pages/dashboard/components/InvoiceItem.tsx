@@ -4,6 +4,7 @@ import { ArrowDownRight, ArrowUpRight, FileCheck, FileClock, FileText, FileX } f
 import { Invoice } from '~/src/common/typings';
 import locales from '@/locales';
 import { cn } from '@/lib/utils';
+import { formatDate } from '@/utils/formatDate';
 
 const InvoiceItem: React.FC<{ invoice: Invoice }> = ({ invoice }) => {
   return (
@@ -27,8 +28,8 @@ const InvoiceItem: React.FC<{ invoice: Invoice }> = ({ invoice }) => {
         <p className="text-sm font-medium leading-none">{invoice.label}</p>
         <p className="text-muted-foreground text-xs">
           {invoice.status === 'paid'
-            ? locales.invoice_paid_at.format(invoice.paidAt)
-            : locales.invoice_due_by.format(invoice.dueDate)}
+            ? locales.invoice_paid_at.format(formatDate(invoice.paidAt))
+            : locales.invoice_due_by.format(formatDate(invoice.dueDate))}
         </p>
       </div>
       <div className="ml-auto font-medium">{formatNumber(invoice.amount)}</div>

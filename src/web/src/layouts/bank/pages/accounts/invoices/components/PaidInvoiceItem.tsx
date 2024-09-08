@@ -5,6 +5,7 @@ import { useModal } from '@/components/ModalsProvider';
 import PaidInvoiceDetailsModal from '../modals/PaidInvoiceDetailsModal';
 import { PaidInvoice } from '~/src/common/typings';
 import locales from '@/locales';
+import { formatDate } from '@/utils/formatDate';
 
 const PaidInvoiceItem: React.FC<{ invoice: PaidInvoice }> = ({ invoice }) => {
   const modal = useModal();
@@ -17,7 +18,7 @@ const PaidInvoiceItem: React.FC<{ invoice: PaidInvoice }> = ({ invoice }) => {
         </div>
         <div className="flex flex-col gap-1">
           <p>{invoice.label}</p>
-          <p className="text-muted-foreground text-xs">{locales.invoice_paid_at.format(invoice.paidAt)}</p>
+          <p className="text-muted-foreground text-xs">{locales.invoice_paid_at.format(formatDate(invoice.paidAt))}</p>
         </div>
       </div>
 

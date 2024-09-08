@@ -7,6 +7,7 @@ import PayInvoiceModal from '../modals/PayInvoiceModal';
 import { UnpaidInvoice } from '~/src/common/typings';
 import locales from '@/locales';
 import { useActiveAccount } from '@/state/accounts';
+import { formatDate } from '@/utils/formatDate';
 
 const UnpaidInvoiceItem: React.FC<{ invoice: UnpaidInvoice }> = ({ invoice }) => {
   const account = useActiveAccount()!;
@@ -20,7 +21,7 @@ const UnpaidInvoiceItem: React.FC<{ invoice: UnpaidInvoice }> = ({ invoice }) =>
         </div>
         <div className="flex flex-col gap-1">
           <p>{invoice.label}</p>
-          <p className="text-muted-foreground text-xs">{locales.invoice_due_by.format(invoice.dueDate)}</p>
+          <p className="text-muted-foreground text-xs">{locales.invoice_due_by.format(formatDate(invoice.dueDate))}</p>
         </div>
       </div>
 

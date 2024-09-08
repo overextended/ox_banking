@@ -2,12 +2,12 @@ import React from 'react';
 import { formatNumber } from '@/utils/formatNumber';
 import { ArrowDownRight, ArrowUpRight } from 'lucide-react';
 import { useModal } from '@/components/ModalsProvider';
-import { LogItemProps } from '@/typings';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import locales from '@/locales';
 import LogDetailsModal from './LogDetailsModal';
 import { LogItem } from '~/src/common/typings';
+import { formatDate } from '@/utils/formatDate';
 
 const LogsTableItem: React.FC<{ log: LogItem; accountId: number }> = ({ log, accountId }) => {
   const modal = useModal();
@@ -28,7 +28,7 @@ const LogsTableItem: React.FC<{ log: LogItem; accountId: number }> = ({ log, acc
         <div className="flex flex-col gap-1">
           <p className="line-clamp-1">{log.message}</p>
           <p className="text-muted-foreground text-xs">
-            {formatNumber(log.amount)} - {log.date}
+            {formatNumber(log.amount)} - {formatDate(log.date)}
           </p>
         </div>
       </div>
