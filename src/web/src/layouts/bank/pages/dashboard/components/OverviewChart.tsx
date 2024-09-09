@@ -1,7 +1,7 @@
-import React from 'react';
-import { Bar, LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
-import { formatNumber } from '@/utils/formatNumber';
 import locales from '@/locales';
+import { formatNumber } from '@/utils/formatNumber';
+import React from 'react';
+import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 interface Props {
   data?: {
@@ -17,8 +17,7 @@ const OverviewChart: React.FC<Props> = ({ data }) => {
       {data && data.length > 0 ? (
         <LineChart data={data}>
           <XAxis
-            // @ts-expect-error
-            tickFormatter={(value) => locales[`day_${value.toLowerCase()}`]}
+            tickFormatter={(value) => locales[`day_${value}` as keyof typeof locales]}
             dataKey="day"
             stroke="#888888"
             fontSize={12}
@@ -34,8 +33,8 @@ const OverviewChart: React.FC<Props> = ({ data }) => {
           />
           <Tooltip
             animationDuration={100}
-            // @ts-expect-error
-            formatter={(value, name) => [formatNumber(value as number), locales[name as string]]}
+            labelFormatter={(value: keyof typeof locales) => locales[value]}
+            formatter={(value, name: keyof typeof locales) => [formatNumber(value as number), locales[name]]}
             wrapperClassName="rounded-lg"
             contentStyle={{
               backgroundColor: 'hsl(var(--background)/0.8)',
