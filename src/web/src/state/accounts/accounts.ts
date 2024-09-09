@@ -45,7 +45,7 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
       const defaultAccount = accounts.find((account) => account.isDefault)!;
 
       return {
-        accounts: [defaultAccount, ...accounts.filter((account) => !account.isDefault)],
+        accounts: defaultAccount ? [defaultAccount, ...accounts.filter((account) => !account.isDefault)] : accounts,
         numberOfPages: Math.ceil((accounts.length + 1) / 4),
       };
     },
