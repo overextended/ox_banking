@@ -49,7 +49,7 @@ const CustomWithdrawAmount: React.FC<Props> = ({ isWithdrawing, handleWithdraw, 
             name="amount"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Amount</FormLabel>
+                <FormLabel>{locales.amount}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
