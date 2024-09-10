@@ -1,3 +1,4 @@
+import { formatDate } from '@/utils/formatDate';
 import { formatNumber } from '@/utils/formatNumber';
 import React from 'react';
 import { UnpaidInvoice } from '~/src/common/typings';
@@ -11,7 +12,7 @@ const UnpaidInvoiceDetailsModal: React.FC<{ invoice: UnpaidInvoice }> = ({ invoi
       </div>
       <div>
         <p className="text-muted-foreground text-xs">Due date</p>
-        <p>{invoice.dueDate}</p>
+        <p>{formatDate(invoice.dueDate)}</p>
       </div>
       <div>
         <p className="text-muted-foreground text-xs">Message</p>
