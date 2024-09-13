@@ -45,7 +45,7 @@ const InvoicesContainer: React.FC<{ accountId: number }> = ({ accountId }) => {
                   label: 'SomeOtherAccount LLC',
                   message: 'Bill',
                   amount: 3000,
-                  dueDate: '2024/08/28 13:00',
+                  dueDate: Date.now(),
                 },
                 {
                   id: 1,
@@ -53,7 +53,7 @@ const InvoicesContainer: React.FC<{ accountId: number }> = ({ accountId }) => {
                   label: 'SomeOtherAccount LLC',
                   message: 'Bill',
                   amount: 3000,
-                  dueDate: '2024/08/28 13:00',
+                  dueDate: Date.now(),
                 },
               ] satisfies UnpaidInvoice[],
             },
