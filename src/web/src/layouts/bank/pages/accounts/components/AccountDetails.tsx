@@ -1,6 +1,5 @@
 import React from 'react';
 import { Copy, History, Landmark, ReceiptText, Repeat, ScanText, Wallet } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { formatNumber } from '@/utils/formatNumber';
 import AccountButton from '@/layouts/bank/pages/accounts/components/AccountButton';
 import DepositWithdrawModal from '@/layouts/bank/pages/accounts/modals/DepositWithdrawModal';
@@ -20,21 +19,15 @@ const AccountDetails: React.FC = () => {
 
   return (
     <BaseCard title="Details" icon={ScanText} className="flex-1">
-      <div className="flex justify-between">
+      <div className="grid grid-cols-[1.5fr_repeat(2,1fr)] gap-2">
         <div className="flex flex-col gap-4">
           <div className="flex flex-col">
             <p className="text-muted-foreground text-xs">{locales.account_name}</p>
-            <p>{account.label}</p>
+            <p className="line-clamp-1">{account.label}</p>
           </div>
           <div className="flex flex-col">
-            <p className="text-muted-foreground text-xs">{locales.account_type}</p>
-            <p>
-              {account.type === 'personal'
-                ? locales.personal_account
-                : account.type === 'shared'
-                  ? locales.shared_account
-                  : locales.group_account}
-            </p>
+            <p className="text-muted-foreground text-xs">{locales.account_owner}</p>
+            <p className="line-clamp-1">{account.owner || '-'}</p>
           </div>
         </div>
         <div className="flex flex-col gap-4">
@@ -52,8 +45,14 @@ const AccountDetails: React.FC = () => {
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col">
-            <p className="text-muted-foreground text-xs">{locales.account_owner}</p>
-            <p>{account.owner || '-'}</p>
+            <p className="text-muted-foreground text-xs">{locales.account_type}</p>
+            <p>
+              {account.type === 'personal'
+                ? locales.personal_account
+                : account.type === 'shared'
+                  ? locales.shared_account
+                  : locales.group_account}
+            </p>
           </div>
           <div className="flex flex-col">
             <p className="text-muted-foreground text-xs">{locales.account_role}</p>

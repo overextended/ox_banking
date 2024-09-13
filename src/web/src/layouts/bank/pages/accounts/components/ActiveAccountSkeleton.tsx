@@ -8,7 +8,7 @@ const ActiveAccountSkeleton: React.FC = () => {
   return (
     <div className="flex h-full w-full gap-2">
       <BaseCard title="Details" icon={ScanText} className="h-fit flex-1">
-        <div className="flex justify-between">
+        <div className="grid grid-cols-[1.5fr_repeat(2,1fr)] gap-2">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col">
               <p className="text-muted-foreground text-xs">{locales.account_name}</p>

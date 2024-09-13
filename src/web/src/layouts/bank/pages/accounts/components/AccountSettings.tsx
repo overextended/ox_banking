@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import TransferAccountModal from '@/layouts/bank/pages/accounts/modals/TransferAccountModal';
 import RenameAccountModal from '../modals/RenameAccountModal';
 import ConvertAccountModal from '../modals/ConvertAccountModal';
-import { hasPermission } from '../../../../../permissions';
+import { hasPermission } from '@/permissions';
 
 const AccountSettings: React.FC = () => {
   const modal = useModal();
