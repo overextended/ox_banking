@@ -11,6 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchNui } from '@/utils/fetchNui';
 import type { DashboardData } from '~/src/common/typings';
 import LoadingDashboard from '@/layouts/bank/pages/dashboard/components/LoadingDashboard';
+import { delay } from '@/utils/misc';
 
 const MOCK_DASHBOARD: DashboardData = {
   balance: 56320,
@@ -94,6 +95,8 @@ const Dashboard: React.FC = () => {
         data: MOCK_DASHBOARD,
         delay: 1500,
       });
+
+      await delay(500);
 
       return resp;
     },
