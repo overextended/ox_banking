@@ -2,7 +2,21 @@ import React from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import BaseCard from '../../../components/BaseCard';
 import locales from '@/locales';
-import { ScanText, Settings } from 'lucide-react';
+import {
+  ArrowRight,
+  History,
+  Landmark,
+  Pencil,
+  ReceiptText,
+  Repeat,
+  ScanText,
+  Settings,
+  Shield,
+  Trash,
+  Users,
+  Wallet,
+} from 'lucide-react';
+import AccountButton from './AccountButton';
 
 const ActiveAccountSkeleton: React.FC = () => {
   return (
@@ -41,20 +55,20 @@ const ActiveAccountSkeleton: React.FC = () => {
           </div>
         </div>
         <div className="flex h-full flex-col gap-2">
-          <Skeleton className="h-14 w-full" />
-          <Skeleton className="h-14 w-full" />
-          <Skeleton className="h-14 w-full" />
-          <Skeleton className="h-14 w-full" />
-          <Skeleton className="h-14 w-full" />
+          <AccountButton label={locales.withdraw} icon={Wallet} disabled />
+          <AccountButton label={locales.deposit} icon={Landmark} disabled />
+          <AccountButton label={locales.transfer} icon={Repeat} disabled />
+          <AccountButton disabled label={locales.invoices} icon={ReceiptText} />
+          <AccountButton disabled label={locales.logs} icon={History} />
         </div>
       </BaseCard>
       <BaseCard title={locales.settings} icon={Settings} className="h-fit flex-[0.75]">
         <div className="flex flex-col gap-2">
-          <Skeleton className="h-14 w-full" />
-          <Skeleton className="h-14 w-full" />
-          <Skeleton className="h-14 w-full" />
-          <Skeleton className="h-14 w-full" />
-          <Skeleton className="h-14 w-full" />
+          <AccountButton label={locales.transfer_ownership} icon={ArrowRight} disabled />
+          <AccountButton label={locales.convert_to_shared} icon={Users} disabled />
+          <AccountButton disabled label={locales.rename} icon={Pencil} />
+          <AccountButton label={locales.manage_access} icon={Shield} disabled />
+          <AccountButton label={locales.delete_account} icon={Trash} variant="destructive" disabled />
         </div>
       </BaseCard>
     </div>
