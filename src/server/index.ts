@@ -537,13 +537,14 @@ onClientCallback(
 
         queryJoins = `
         LEFT JOIN accounts a ON ai.fromAccount = a.id
-        LEFT JOIN characters c ON ai.actorId = c.charId
+        LEFT JOIN characters co ON (a.owner IS NOT NULL AND co.charId = a.owner)
+        LEFT JOIN ox_groups g ON (a.owner IS NULL AND g.name = a.group)
       `;
 
         query = `
           SELECT
             ai.id,
-            a.label,
+            CONCAT(a.id, ' - ', IFNULL(co.fullName, g.label)) AS label,
             ai.amount,
             ai.message,
             UNIX_TIMESTAMP(ai.dueDate) as dueDate,
@@ -566,13 +567,15 @@ onClientCallback(
         queryJoins = `
         LEFT JOIN accounts a ON ai.fromAccount = a.id
         LEFT JOIN characters c ON ai.payerId = c.charId
+        LEFT JOIN characters co ON (a.owner IS NOT NULL AND co.charId = a.owner)
+        LEFT JOIN ox_groups g ON (a.owner IS NULL AND g.name = a.group)
       `;
 
         query = `
         SELECT
           ai.id,
           c.fullName as paidBy,
-          a.label,
+          CONCAT(a.id, ' - ', IFNULL(co.fullName, g.label)) AS label,
           ai.amount,
           ai.message,
           UNIX_TIMESTAMP(ai.dueDate) AS dueDate,
@@ -596,13 +599,15 @@ onClientCallback(
         queryJoins = `
         LEFT JOIN accounts a ON ai.toAccount = a.id
         LEFT JOIN characters c ON ai.actorId = c.charId
+        LEFT JOIN characters co ON (a.owner IS NOT NULL AND co.charId = a.owner)
+        LEFT JOIN ox_groups g ON (a.owner IS NULL AND g.name = a.group)
       `;
 
         query = `
         SELECT
           ai.id,
           c.fullName as sentBy,
-          a.label,
+          CONCAT(a.id, ' - ', IFNULL(co.fullName, g.label)) AS label,
           ai.amount,
           ai.message,
           UNIX_TIMESTAMP(ai.sentAt) AS sentAt,
