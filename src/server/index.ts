@@ -483,8 +483,8 @@ onClientCallback(
           LEFT JOIN characters c ON c.charId = at.actorId
           LEFT JOIN accounts ta ON ta.id = at.toId
           LEFT JOIN accounts fa ON fa.id = at.fromId
-          LEFT JOIN characters ct ON (at.fromId = ? AND ct.charId = ta.owner)
-          LEFT JOIN characters cf ON (at.toId = ? AND cf.charId = fa.owner)
+          LEFT JOIN characters ct ON (ta.owner IS NOT NULL AND at.fromId = ? AND ct.charId = ta.owner)
+          LEFT JOIN characters cf ON (fa.owner IS NOT NULL AND at.toId = ? AND cf.charId = fa.owner)
           LEFT JOIN ox_groups ogt ON (ta.owner IS NULL AND at.fromId = ? AND ogt.name = ta.group)
           LEFT JOIN ox_groups ogf ON (fa.owner IS NULL AND at.toId = ? AND ogf.name = fa.group)
           ${queryWhere}
