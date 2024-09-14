@@ -403,7 +403,7 @@ onClientCallback(
     const search = sanitizeSearch(filters.search);
 
     let dateSearchString = '';
-    let queryParams: any[] = [accountId, accountId, accountId, accountId];
+    let queryParams: any[] = [accountId, accountId, accountId, accountId, accountId, accountId, accountId, accountId];
 
     let typeQueryString = ``;
 
@@ -444,8 +444,8 @@ onClientCallback(
             at.toId,
             at.message,
             at.amount,
-            CONCAT(fa.id, ' - ', fa.label) AS fromAccountLabel,
-            CONCAT(ta.id, ' - ', ta.label) AS toAccountLabel,
+            CONCAT(fa.id, ' - ', IFNULL(cf.fullName, ogf.label)) AS fromAccountLabel,
+            CONCAT(ta.id, ' - ', IFNULL(ct.fullName, ogt.label)) AS toAccountLabel,
             UNIX_TIMESTAMP(at.date) AS date,
             c.fullName AS name,
             CASE
@@ -460,6 +460,10 @@ onClientCallback(
           LEFT JOIN characters c ON c.charId = at.actorId
           LEFT JOIN accounts ta ON ta.id = at.toId
           LEFT JOIN accounts fa ON fa.id = at.fromId
+          LEFT JOIN characters ct ON (ta.owner IS NOT NULL AND at.fromId = ? AND ct.charId = ta.owner)
+          LEFT JOIN characters cf ON (fa.owner IS NOT NULL AND at.toId = ? AND cf.charId = fa.owner)
+          LEFT JOIN ox_groups ogt ON (ta.owner IS NULL AND at.fromId = ? AND ogt.name = ta.group)
+          LEFT JOIN ox_groups ogf ON (fa.owner IS NULL AND at.toId = ? AND ogf.name = fa.group)
           ${queryWhere}
           ORDER BY at.id DESC
           LIMIT 6
@@ -479,6 +483,10 @@ onClientCallback(
           LEFT JOIN characters c ON c.charId = at.actorId
           LEFT JOIN accounts ta ON ta.id = at.toId
           LEFT JOIN accounts fa ON fa.id = at.fromId
+          LEFT JOIN characters ct ON (at.fromId = ? AND ct.charId = ta.owner)
+          LEFT JOIN characters cf ON (at.toId = ? AND cf.charId = fa.owner)
+          LEFT JOIN ox_groups ogt ON (ta.owner IS NULL AND at.fromId = ? AND ogt.name = ta.group)
+          LEFT JOIN ox_groups ogf ON (fa.owner IS NULL AND at.toId = ? AND ogf.name = fa.group)
           ${queryWhere}
         `,
         countQueryParams
