@@ -6,7 +6,6 @@ import Accounts from '@/layouts/bank/pages/accounts/Accounts';
 import { useSetModalContainer } from '@/state/modals';
 import { useBankVisibility, useSetBankVisibility } from '@/state/visibility';
 import { useNuiEvent } from '@/hooks/useNuiEvent';
-import { fetchNui } from '@/utils/fetchNui';
 import { Character } from '~/src/common/typings';
 import { useSetCharacter } from '@/state/character';
 import ManageAccess from '@/layouts/bank/pages/accounts/manage-access/ManageAccess';
@@ -21,6 +20,8 @@ const Bank: React.FC = () => {
   const setVisible = useSetBankVisibility();
   const navigate = useNavigate();
 
+  const [shouldRender, setShouldRender] = React.useState(false);
+
   useNuiEvent('openBank', (data: Character) => {
     navigate('/');
     setVisible(true);
@@ -31,11 +32,19 @@ const Bank: React.FC = () => {
 
   useExitListener(setVisible);
 
+  React.useEffect(() => {
+    if (visible) {
+      setShouldRender(true);
+    }
+  }, [visible]);
+
   return (
     <>
-      {visible && (
+      {shouldRender && (
         <div
-          className="bg-background relative flex h-[768px] w-[1280px] rounded-lg"
+          data-state={visible ? 'open' : 'closed'}
+          onAnimationEnd={() => !visible && setShouldRender(false)}
+          className="bg-background fill-mode-forwards data-[state=open]:animate-in data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-bottom data-[state=open]:fade-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=closed]:slide-out-to-bottom relative flex h-[768px] w-[1280px] rounded-lg"
           id="bank-container"
           ref={setContainer}
         >

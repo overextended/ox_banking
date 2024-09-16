@@ -1,17 +1,15 @@
 import React, { Suspense } from 'react';
-import { useAtmVisibilityState } from '../../state/visibility';
-import BaseCard from '../bank/components/BaseCard';
-import { LogOut, Settings2 } from 'lucide-react';
-import { Button } from '../../components/ui/button';
-import { Input } from '../../components/ui/input';
-import { useExitListener } from '../../hooks/useExitListener';
-import { useNuiEvent } from '../../hooks/useNuiEvent';
+import { useAtmVisibilityState } from '@/state/visibility';
+import { LogOut } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useExitListener } from '@/hooks/useExitListener';
+import { useNuiEvent } from '@/hooks/useNuiEvent';
 import AccountSelector from './components/AccountSelector';
 import QuickWithdraw from './components/QuickWithdraw';
-import { fetchNui } from '../../utils/fetchNui';
-import SpinningLoader from '../../components/SpinningLoader';
+import { fetchNui } from '@/utils/fetchNui';
+import SpinningLoader from '@/components/SpinningLoader';
 import locales from '@/locales';
-import { Account } from '../../../../common/typings';
+import { Account } from '~/src/common/typings';
 import CustomWithdrawAmount from './components/CustomWithdrawAmount';
 import { delay } from '@/utils/misc';
 
@@ -25,6 +23,12 @@ const Atm: React.FC = () => {
     label: '',
     role: 'viewer',
   });
+
+  const [shouldRender, setShouldRender] = React.useState(false);
+
+  React.useEffect(() => {
+    if (visible) setShouldRender(true);
+  }, [visible]);
 
   useExitListener(setVisible);
 
@@ -45,8 +49,12 @@ const Atm: React.FC = () => {
 
   return (
     <>
-      {visible && (
-        <div className="bg-background relative flex min-w-[400px] max-w-lg flex-col gap-2 rounded-lg p-2">
+      {shouldRender && (
+        <div
+          onAnimationEnd={() => !visible && setShouldRender(false)}
+          data-state={visible ? 'open' : 'closed'}
+          className="bg-background fill-mode-forwards data-[state=open]:animate-in data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-bottom data-[state=open]:fade-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=closed]:slide-out-to-bottom relative flex min-w-[400px] max-w-lg flex-col gap-2 rounded-lg p-2"
+        >
           <Suspense
             fallback={
               <div className="flex h-[150px] items-center justify-center self-center">
