@@ -29,7 +29,7 @@ const ActiveAccountSkeleton: React.FC = () => {
               <Skeleton className="h-6 w-full" />
             </div>
             <div className="flex flex-col">
-              <p className="text-muted-foreground text-xs">{locales.account_type}</p>
+              <p className="text-muted-foreground text-xs">{locales.account_owner}</p>
               <Skeleton className="h-6 w-full" />
             </div>
           </div>
@@ -45,7 +45,7 @@ const ActiveAccountSkeleton: React.FC = () => {
           </div>
           <div className="flex flex-col gap-4">
             <div className="flex flex-col">
-              <p className="text-muted-foreground text-xs">{locales.account_owner}</p>
+              <p className="text-muted-foreground text-xs">{locales.account_type}</p>
               <Skeleton className="h-6 w-full" />
             </div>
             <div className="flex flex-col">
