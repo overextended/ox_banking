@@ -49,9 +49,12 @@ onClientCallback('ox_banking:getAccounts', async (playerId): Promise<Account[]> 
         )
       )
     GROUP BY
-      account.id;
+      account.id
+    ORDER BY
+      account.owner = ? DESC,
+      account.isDefault DESC
     `,
-    [player.charId, player.charId, player.charId]
+    [player.charId, player.charId, player.charId, player.charId]
   );
 
   const accounts: Account[] = accessAccounts.map((account) => ({
