@@ -239,19 +239,31 @@ onClientCallback(
     if (!hasPermission) return;
 
     const wildcard = sanitizeSearch(search);
+    let searchStr = '';
+
+    const queryParams: any[] = [accountId];
+
+    if (wildcard) {
+      searchStr += 'AND MATCH(c.fullName) AGAINST (? IN BOOLEAN MODE)';
+      queryParams.push(wildcard);
+    }
+
+    queryParams.push(page * 7);
 
     const users = await oxmysql.rawExecute<AccessTableData['users']>(
       `
       SELECT c.stateId, a.role, c.fullName AS \`name\` FROM \`accounts_access\` a
       LEFT JOIN \`characters\` c ON c.charId = a.charId
       WHERE a.accountId = ?
-      AND MATCH(c.fullName) AGAINST (? IN BOOLEAN MODE)
+      ${searchStr}
       ORDER BY a.role DESC
       LIMIT 7
       OFFSET ?
       `,
-      [accountId, wildcard, page * 7]
+      queryParams
     );
+
+    console.log(JSON.stringify(users, null, 2));
 
     const usersCount = await oxmysql.prepare<number>(
       'SELECT COUNT(*) FROM `accounts_access` aa LEFT JOIN characters c ON c.charId = aa.charId WHERE accountId = ? AND MATCH(c.fullName) AGAINST (? IN BOOLEAN MODE)',
