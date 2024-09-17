@@ -3,7 +3,6 @@ import CharacterAccounts from '@/layouts/bank/pages/accounts/components/Characte
 import ActiveAccountContainer from './components/ActiveAccountContainer';
 import { queryClient } from '@/main';
 import ActiveAccountSkeleton from './components/ActiveAccountSkeleton';
-import { Skeleton } from '@/components/ui/skeleton';
 import AccountsSkeleton from './components/AccountsSkeleton';
 
 const Accounts: React.FC = () => {
