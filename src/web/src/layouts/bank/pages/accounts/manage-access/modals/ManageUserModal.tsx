@@ -12,6 +12,7 @@ import locales from '@/locales';
 import { queryClient } from '@/main';
 import { AccessTableData, AccountRole } from '~/src/common/typings';
 import permissions from '@/permissions';
+import RolePermissions from '../components/RolePermissions';
 
 interface Props {
   targetStateId: string;
@@ -33,6 +34,8 @@ const ManageUserModal: React.FC<Props> = ({ targetStateId, defaultRole, accountI
       role: defaultRole,
     },
   });
+
+  const role = form.watch('role');
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
@@ -80,33 +83,17 @@ const ManageUserModal: React.FC<Props> = ({ targetStateId, defaultRole, accountI
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {Object.keys(permissions)
-                        .filter((role) => role !== 'owner')
-                        .map((role) => (
-                          <SelectItem key={role} value={role}>
-                            {/*@ts-expect-error*/}
-                            {locales[role]}
-                          </SelectItem>
-                        ))}
+                      {roles.map((role) => (
+                        <SelectItem key={role} value={role}>
+                          {/*@ts-expect-error*/}
+                          {locales[role]}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </FormControl>
                 <FormDescription>
-                  {roles.map((role) => (
-                    <p>
-                      {Object.values(permissions[role]).filter((value) => value === 1).length > 0 ? (
-                        // @ts-expect-error
-                        <>{locales[role]} - </>
-                      ) : (
-                        <></>
-                      )}
-                      {Object.entries(permissions[role])
-                        .filter(([permission, value]) => value === 1)
-                        // @ts-expect-error
-                        .map(([permission, value]) => (value ? locales[`permission_${permission}`] : undefined))
-                        .join(', ')}
-                    </p>
-                  ))}
+                  <RolePermissions role={role} />
                 </FormDescription>
               </FormItem>
             )}

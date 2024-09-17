@@ -13,6 +13,7 @@ import { useModal } from '@/components/ModalsProvider';
 import { fetchNui } from '@/utils/fetchNui';
 import { queryClient } from '@/main';
 import permissions from '@/permissions';
+import RolePermissions from '../components/RolePermissions';
 
 const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => {
   const modal = useModal();
@@ -32,6 +33,8 @@ const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => 
       role: 'contributor',
     },
   });
+
+  const role = form.watch('role');
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
@@ -95,21 +98,7 @@ const NewAccountUserModal: React.FC<{ accountId: number }> = ({ accountId }) => 
                 </Select>
               </FormControl>
               <FormDescription className="flex flex-col gap-2">
-                {roles.map((role) => (
-                  <p>
-                    {Object.values(permissions[role]).filter((value) => value === 1).length > 0 ? (
-                      // @ts-expect-error
-                      <>{locales[role]} - </>
-                    ) : (
-                      <></>
-                    )}
-                    {Object.entries(permissions[role])
-                      .filter(([permission, value]) => value === 1)
-                      // @ts-expect-error
-                      .map(([permission, value]) => (value ? locales[`permission_${permission}`] : undefined))
-                      .join(', ')}
-                  </p>
-                ))}
+                <RolePermissions role={role} />
               </FormDescription>
             </FormItem>
           )}

@@ -20,7 +20,7 @@ const DEBUG_ACCOUNTS: Account[] = [
     label: 'Some name',
     owner: 'Some owner',
     type: 'shared',
-    role: 'viewer',
+    role: 'owner',
   },
   {
     id: 932124,
