@@ -75,6 +75,8 @@ onClientCallback('ox_banking:createAccount', async (playerId, { name, shared }: 
 
   const account = await CreateAccount(charId, name);
 
+  if (shared) await account.setShared();
+
   return account.accountId;
 });
 
