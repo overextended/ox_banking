@@ -38,7 +38,7 @@ const TransferAccountModal: React.FC<{ accountId: number }> = ({ accountId }) =>
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
 
-    const resp = await fetchNui<true | 'state_id_not_exists'>(
+    const resp = await fetchNui<true | string>(
       'transferOwnership',
       {
         accountId,

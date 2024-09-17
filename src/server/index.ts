@@ -335,11 +335,11 @@ onClientCallback(
       targetStateId: string;
       accountId: number;
     }
-  ): Promise<true | 'state_id_not_exists'> => {
+  ): Promise<true | string> => {
     const account = await GetAccount(accountId);
     const hasPermission = await account?.playerHasPermission(playerId, 'transferOwnership');
 
-    if (!hasPermission) return;
+    if (!hasPermission) return 'no_permission';
 
     const targetCharId = await oxmysql.prepare<number | null>('SELECT `charId` FROM `characters` WHERE `stateId` = ?', [
       targetStateId,
@@ -347,12 +347,16 @@ onClientCallback(
 
     if (!targetCharId) return 'state_id_not_exists';
 
+    const accountOwner = await account.get('owner');
+
+    if (accountOwner === targetCharId) return 'invalid_input';
+
+    const player = GetPlayer(playerId);
+
     await oxmysql.prepare(
       "INSERT INTO `accounts_access` (`accountId`, `charId`, `role`) VALUES (?, ?, 'owner') ON DUPLICATE KEY UPDATE `role` = 'owner'",
       [accountId, targetCharId]
     );
-
-    const player = GetPlayer(playerId);
 
     await oxmysql.prepare('UPDATE `accounts` SET `owner` = ? WHERE `id` = ?', [targetCharId, accountId]);
     await oxmysql.prepare("UPDATE `accounts_access` SET `role` = 'manager' WHERE `accountId` = ? AND `charId` = ?", [

@@ -153,5 +153,7 @@
   "permission_sendInvoice": "Send invoice",
   "permission_payInvoice": "Pay invoice",
   "transfer_from": "Transfer from",
-  "permissions": "Permissions"
+  "permissions": "Permissions",
+  "no_permission": "You are not authorised to perform this action.",
+  "invalid_input": "Invalid input."
 }
