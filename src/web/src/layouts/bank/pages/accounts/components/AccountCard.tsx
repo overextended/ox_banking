@@ -25,11 +25,13 @@ const AccountCard: React.FC<Props> = ({ account, active }) => {
       )}
     >
       <h2 className="line-clamp-1">{account.label}</h2>
-      <p className={cn('text-muted-foreground mb-4 text-sm', active && 'text-primary-foreground')}>
+      <p className={cn('text-muted-foreground mb-4 line-clamp-1 text-sm', active && 'text-primary-foreground')}>
         {account.type === 'personal'
           ? locales.personal_account
           : account.type === 'shared'
-            ? locales.shared_account
+            ? account.role === 'owner'
+              ? locales.shared_account
+              : account.owner
             : locales.group_account}
       </p>
       <div className="flex items-center justify-between">
