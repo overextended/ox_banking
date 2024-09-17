@@ -281,11 +281,11 @@ onClientCallback(
 
     if (!hasPermission) return false;
 
-    const validId = await oxmysql.prepare('SELECT 1 FROM `characters` WHERE `stateId` = ?', [stateId]);
+    const currentRole = account.getCharacterRole(stateId);
 
-    if (!validId) return 'state_id_not_exists';
+    if (currentRole) return 'invalid_input';
 
-    return await account.setCharacterRole(stateId, role);
+    return (await account.setCharacterRole(stateId, role)) || 'state_id_not_exists';
   }
 );
 
