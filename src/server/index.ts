@@ -17,7 +17,7 @@ import type { OxAccountRole, OxAccountUserMetadata } from '@overextended/ox_core
 onClientCallback('ox_banking:getAccounts', async (playerId): Promise<Account[]> => {
   const player = GetPlayer(playerId);
 
-  if (!player) return;
+  if (!player.charId) return;
 
   const accessAccounts = await oxmysql.rawExecute<OxAccountUserMetadata[]>(
     `
@@ -379,7 +379,7 @@ onClientCallback(
 onClientCallback('ox_banking:convertAccountToShared', async (playerId, { accountId }: { accountId: number }) => {
   const player = GetPlayer(playerId);
 
-  if (!player) return;
+  if (!player.charId) return;
 
   const account = await GetAccount(accountId);
 
@@ -473,8 +473,6 @@ onClientCallback(
       )
       .catch((e) => console.log(e));
 
-    console.log(JSON.stringify(queryData, null, 2));
-
     const totalLogsCount = await oxmysql
       .prepare(
         `
@@ -492,10 +490,6 @@ onClientCallback(
         countQueryParams
       )
       .catch((e) => console.log(e));
-
-    console.log(totalLogsCount);
-
-    console.log(Math.ceil(totalLogsCount / 6));
 
     return {
       numberOfPages: Math.ceil(totalLogsCount / 6),
