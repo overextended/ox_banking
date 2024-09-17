@@ -248,10 +248,16 @@ onClientCallback(
       queryParams.push(wildcard);
     }
 
+    const usersCount = await oxmysql.prepare<number>(
+      `SELECT COUNT(*) FROM \`accounts_access\` aa LEFT JOIN characters c ON c.charId = aa.charId WHERE accountId = ? ${searchStr}`,
+      queryParams
+    );
+
     queryParams.push(page * 7);
 
-    const users = await oxmysql.rawExecute<AccessTableData['users']>(
-      `
+    const users = usersCount
+      ? await oxmysql.rawExecute<AccessTableData['users']>(
+          `
       SELECT c.stateId, a.role, c.fullName AS \`name\` FROM \`accounts_access\` a
       LEFT JOIN \`characters\` c ON c.charId = a.charId
       WHERE a.accountId = ?
@@ -260,18 +266,12 @@ onClientCallback(
       LIMIT 7
       OFFSET ?
       `,
-      queryParams
-    );
-
-    console.log(JSON.stringify(users, null, 2));
-
-    const usersCount = await oxmysql.prepare<number>(
-      'SELECT COUNT(*) FROM `accounts_access` aa LEFT JOIN characters c ON c.charId = aa.charId WHERE accountId = ? AND MATCH(c.fullName) AGAINST (? IN BOOLEAN MODE)',
-      [accountId, wildcard]
-    );
+          queryParams
+        )
+      : [];
 
     return {
-      numberOfPages: Math.ceil(usersCount / 7),
+      numberOfPages: Math.ceil(usersCount / 7) || 1,
       users,
     };
   }
