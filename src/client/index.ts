@@ -1,13 +1,10 @@
 import type { Character } from '../common/typings';
-import targets from '../../data/targets.json';
-import locations from '../../data/locations.json';
-import atms from '../../data/atms.json';
 import { hideTextUI } from '@overextended/ox_lib/client';
-import { SendTypedNUIMessage, serverNuiCallback } from 'utils';
-import { getLocales, locale } from '@overextended/ox_lib/shared';
+import { SendTypedNUIMessage, serverNuiCallback } from './utils';
+import { getLocales } from '@overextended/ox_lib/shared';
 import { OxAccountPermissions, OxAccountRole } from '@overextended/ox_core';
+import { LoadJsonFile, Locale } from '@common/.';
 
-const usingTarget = GetConvarInt('ox_banking:target', 0) === 1;
 let hasLoadedUi = false;
 let isUiOpen = false;
 let isATMopen = false;
@@ -16,13 +13,13 @@ function initUI() {
   if (hasLoadedUi) return;
 
   const accountRoles: OxAccountRole[] = GlobalState.accountRoles;
-
-  // @ts-expect-error
-  const permissions: Record<OxAccountRoles, OxAccountPermissions> = {};
-
-  accountRoles.forEach((role) => {
-    permissions[role] = GlobalState[`accountRole.${role}`] as OxAccountPermissions;
-  });
+  const permissions = accountRoles.reduce(
+    (acc, role) => {
+      acc[role] = GlobalState[`accountRole.${role}`] as OxAccountPermissions;
+      return acc;
+    },
+    {} as Record<OxAccountRole, OxAccountPermissions>
+  );
 
   SendNUIMessage({
     action: 'setInitData',
@@ -61,58 +58,51 @@ const openBank = () => {
 
 exports('openBank', openBank);
 
-const createBankBlip = (coords: number[]) => {
-  const blip = AddBlipForCoord(coords[0], coords[1], coords[2]);
+const createBankBlip = ([x, y, z]: number[]) => {
+  const blip = AddBlipForCoord(x, y, z);
   SetBlipSprite(blip, 207);
   SetBlipColour(blip, 2);
   SetBlipAsShortRange(blip, true);
   BeginTextCommandSetBlipName('STRING');
-  AddTextComponentString(locale('bank'));
+  AddTextComponentString(Locale('bank'));
   EndTextCommandSetBlipName(blip);
 };
 
-if (!usingTarget) {
-  for (let i = 0; i < locations.length; i++) createBankBlip(locations[i]);
-}
+if (GetConvarInt('ox_banking:target', 0)) {
+  const atms = LoadJsonFile<typeof import('../../data/atms.json')>('data/atms.json').map((value) => GetHashKey(value));
+  const targets = LoadJsonFile<typeof import('../../data/targets.json')>('data/targets.json');
 
-if (usingTarget) {
-  exports.ox_target.addModel(
-    atms.map((value) => GetHashKey(value)),
-    {
-      name: 'access_atm',
-      icon: 'fa-solid fa-money-check',
-      label: locale('target_access_atm'),
-      onSelect: () => {
-        openATM();
-      },
-    }
-  );
+  const atmOptions = {
+    name: 'access_atm',
+    icon: 'fa-solid fa-money-check',
+    label: Locale('target_access_atm'),
+    onSelect: openATM,
+    distance: 1.3,
+  };
 
-  for (let i = 0; i < targets.length; i++) {
-    const target = targets[i];
+  const bankOptions = {
+    name: 'access_bank',
+    icon: 'fa-solid fa-dollar-sign',
+    label: Locale('target_access_bank'),
+    onSelect: openBank,
+    distance: 1.3,
+  };
 
+  exports.ox_target.addModel(atms, atmOptions);
+
+  targets.forEach((target) => {
     exports.ox_target.addBoxZone({
       coords: target.coords,
       size: target.size,
       rotation: target.rotation,
       debug: true,
-      interactionDistance: 1.3,
       drawSprite: true,
-      options: [
-        {
-          name: 'access_bank',
-          icon: 'fa-solid fa-dollar-sign',
-          label: locale('target_access_bank'),
-          onSelect: () => {
-            openBank();
-          },
-        },
-      ],
+      options: bankOptions,
     });
 
     createBankBlip(target.coords);
-  }
-}
+  });
+} else LoadJsonFile<typeof import('../../data/locations.json')>('data/locations.json').forEach(createBankBlip);
 
 RegisterNuiCallback('exit', (_: any, cb: Function) => {
   isUiOpen = false;
