@@ -1,7 +1,7 @@
-import { Skeleton } from '@/components/ui/skeleton';
 import React from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 
-const SkeletonInvoices: React.FC = () => {
+const ManageAccessSkeleton: React.FC = () => {
   return (
     <div className="flex flex-col gap-2">
       {Array.from({ length: 6 }).map((_, index) => (
@@ -11,4 +11,4 @@ const SkeletonInvoices: React.FC = () => {
   );
 };
 
-export default SkeletonInvoices;
+export default ManageAccessSkeleton;

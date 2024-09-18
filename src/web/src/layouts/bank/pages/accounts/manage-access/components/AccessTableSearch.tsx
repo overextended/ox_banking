@@ -14,6 +14,7 @@ const AccessTableSearch: React.FC = () => {
       value={value.search}
       onChange={(e) => setDebounce({ search: e.target.value, page: 0 })}
       startIcon={SearchIcon}
+      className="w-full flex-1"
     />
   );
 };

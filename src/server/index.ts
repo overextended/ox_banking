@@ -253,7 +253,7 @@ onClientCallback(
       queryParams
     );
 
-    queryParams.push(page * 7);
+    queryParams.push(page * 6);
 
     const users = usersCount
       ? await oxmysql.rawExecute<AccessTableData['users']>(
@@ -263,7 +263,7 @@ onClientCallback(
       WHERE a.accountId = ?
       ${searchStr}
       ORDER BY a.role DESC
-      LIMIT 7
+      LIMIT 6
       OFFSET ?
       `,
           queryParams

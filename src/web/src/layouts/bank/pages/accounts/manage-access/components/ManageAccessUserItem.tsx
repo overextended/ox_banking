@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Edit, Trash, UserCog, UserMinus } from 'lucide-react';
+import { User, UserCog, UserMinus } from 'lucide-react';
 import { AccessTableUser, AccountRole } from '~/src/common/typings';
 import { useModal } from '@/components/ModalsProvider';
 import ManageUserModal from '@/layouts/bank/pages/accounts/manage-access/modals/ManageUserModal';
 import RemoveUserModal from '@/layouts/bank/pages/accounts/manage-access/modals/RemoveUserModal';
 import locales from '@/locales';
 
-const AccessTableUserItem: React.FC<AccessTableUser & { accountId: number; characterRole: AccountRole }> = (props) => {
+const ManageAccessUserItem: React.FC<AccessTableUser & { accountId: number; characterRole: AccountRole }> = (props) => {
   const { role, name, stateId, characterRole, accountId } = props;
   const modal = useModal();
 
@@ -22,10 +22,18 @@ const AccessTableUserItem: React.FC<AccessTableUser & { accountId: number; chara
   );
 
   return (
-    <div className="border-border grid grid-cols-4 place-items-center border-t py-4">
-      <p>{name}</p>
-      <p>{ROLES[role]}</p>
-      <p>{stateId}</p>
+    <div className="flex items-center justify-between gap-4 rounded-lg border p-4 shadow">
+      <div className="flex items-center gap-4">
+        <div className="bg-secondary text-secondary-foreground flex h-9 w-9 items-center justify-center rounded-lg">
+          <User size={20} />
+        </div>
+        <div className="flex flex-col">
+          <p>
+            {name} / {stateId}
+          </p>
+          <p className="text-muted-foreground text-sm">{ROLES[role]}</p>
+        </div>
+      </div>
       <div className="flex items-center gap-2">
         <Button
           disabled={role === 'owner' || role === characterRole}
@@ -57,4 +65,4 @@ const AccessTableUserItem: React.FC<AccessTableUser & { accountId: number; chara
   );
 };
 
-export default AccessTableUserItem;
+export default ManageAccessUserItem;
