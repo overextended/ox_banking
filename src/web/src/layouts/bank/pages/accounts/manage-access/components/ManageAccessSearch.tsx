@@ -9,13 +9,14 @@ const AccessTableSearch: React.FC = () => {
   const setDebounce = useSetAccessTableFiltersDebounce();
 
   return (
-    <Input
-      placeholder={locales.search_names}
-      value={value.search}
-      onChange={(e) => setDebounce({ search: e.target.value, page: 0 })}
-      startIcon={SearchIcon}
-      className="w-full flex-1"
-    />
+    <div className="w-full">
+      <Input
+        placeholder={locales.search_names}
+        value={value.search}
+        onChange={(e) => setDebounce({ search: e.target.value, page: 0 })}
+        startIcon={SearchIcon}
+      />
+    </div>
   );
 };
 
