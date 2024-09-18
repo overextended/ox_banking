@@ -4,7 +4,7 @@ import { useAccessTableFilters, useSetAccessTableFiltersDebounce } from '@/state
 import locales from '@/locales';
 import { SearchIcon } from 'lucide-react';
 
-const AccessTableSearch: React.FC = () => {
+const ManageAccessSearch: React.FC = () => {
   const value = useAccessTableFilters();
   const setDebounce = useSetAccessTableFiltersDebounce();
 
@@ -20,4 +20,4 @@ const AccessTableSearch: React.FC = () => {
   );
 };
 
-export default AccessTableSearch;
+export default ManageAccessSearch;

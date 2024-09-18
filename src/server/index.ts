@@ -1,6 +1,7 @@
 import { onClientCallback } from '@overextended/ox_lib/server';
 import type {
   AccessTableData,
+  AccessTableUser,
   Account,
   DashboardData,
   Invoice,
@@ -241,11 +242,48 @@ onClientCallback(
     const wildcard = sanitizeSearch(search);
     let searchStr = '';
 
+    const accountGroup = await account.get('group');
+
     const queryParams: any[] = [accountId];
 
     if (wildcard) {
       searchStr += 'AND MATCH(c.fullName) AGAINST (? IN BOOLEAN MODE)';
       queryParams.push(wildcard);
+    }
+
+    if (accountGroup) {
+      const params: any[] = [accountGroup];
+
+      const usersQuery = `
+        SELECT c.stateId, c.fullName AS name, gg.accountRole AS role FROM character_groups cg
+        LEFT JOIN accounts a ON cg.name = a.group
+        LEFT JOIN characters c ON c.charId = cg.charId
+        LEFT JOIN ox_group_grades gg ON (cg.name = gg.group AND cg.grade = gg.grade)
+        WHERE cg.name = ? ${searchStr}
+        ORDER BY role DESC
+        LIMIT 6
+        OFFSET ?
+      `;
+
+      const countQuery = `
+        SELECT COUNT(*) FROM character_groups cg
+        LEFT JOIN accounts a ON cg.name = a.group
+        LEFT JOIN characters c ON c.charId = cg.charId
+        LEFT JOIN ox_group_grades gg ON (cg.name = gg.group AND cg.grade = gg.grade)
+        WHERE cg.name = ?
+      `;
+
+      const count = await oxmysql.prepare(countQuery, params);
+
+      if (wildcard) params.push(wildcard);
+      params.push(page * 6);
+
+      const users = await oxmysql.rawExecute<AccessTableUser[]>(usersQuery, params);
+
+      return {
+        numberOfPages: count,
+        users,
+      };
     }
 
     const usersCount = await oxmysql.prepare<number>(

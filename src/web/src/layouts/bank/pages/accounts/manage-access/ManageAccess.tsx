@@ -18,18 +18,20 @@ const ManageAccess: React.FC = () => {
       <BaseCard title={locales.manage_access} icon={Shield} className="h-full">
         <div className="flex justify-between gap-2">
           <ManageAccessSearch />
-          <Button
-            className="flex items-center gap-2"
-            onClick={() =>
-              modal.open({
-                title: locales.new_account_user,
-                children: <NewAccountUserModal accountId={activeAccount.id} />,
-              })
-            }
-          >
-            <Plus size={20} />
-            {locales.new_account_user}
-          </Button>
+          {activeAccount.type !== 'group' && (
+            <Button
+              className="flex items-center gap-2"
+              onClick={() =>
+                modal.open({
+                  title: locales.new_account_user,
+                  children: <NewAccountUserModal accountId={activeAccount.id} />,
+                })
+              }
+            >
+              <Plus size={20} />
+              {locales.new_account_user}
+            </Button>
+          )}
         </div>
         <ManageAccessContainer accountId={activeAccount.id} />
       </BaseCard>

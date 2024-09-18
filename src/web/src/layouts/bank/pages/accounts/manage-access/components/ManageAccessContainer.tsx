@@ -8,7 +8,6 @@ import {
   useIsAccessTableFiltersDebouncing,
   useSetAccessTableFiltersDebounce,
 } from '@/state/manage-access/tableFilters';
-import { useActiveAccount } from '@/state/accounts';
 import Pagination from '../../../../components/Pagination';
 import ManageAccessSkeleton from './ManageAccessSkeleton';
 import { delay } from '@/utils/misc';
@@ -18,7 +17,6 @@ const ManageAccessContainer: React.FC<{ accountId: number }> = ({ accountId }) =
   const tableFilter = useDebouncedAccessTableFilters();
   const setTableFilter = useSetAccessTableFiltersDebounce();
   const isSearchDebouncing = useIsAccessTableFiltersDebouncing();
-  const { role: characterRole } = useActiveAccount()!;
 
   const { data, isLoading } = useQuery<AccessTableData>({
     queryKey: ['account-access', tableFilter.page, tableFilter.search],
@@ -70,14 +68,7 @@ const ManageAccessContainer: React.FC<{ accountId: number }> = ({ accountId }) =
       {!spinnerVisible ? (
         <div className="flex flex-col gap-2">
           {data?.users.map((user) => (
-            <ManageAccessUserItem
-              key={user.stateId}
-              characterRole={characterRole}
-              accountId={accountId}
-              name={user.name}
-              stateId={user.stateId}
-              role={user.role}
-            />
+            <ManageAccessUserItem key={user.stateId} name={user.name} stateId={user.stateId} role={user.role} />
           ))}
         </div>
       ) : (

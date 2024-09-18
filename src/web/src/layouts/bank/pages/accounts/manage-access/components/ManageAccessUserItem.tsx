@@ -6,10 +6,11 @@ import { useModal } from '@/components/ModalsProvider';
 import ManageUserModal from '@/layouts/bank/pages/accounts/manage-access/modals/ManageUserModal';
 import RemoveUserModal from '@/layouts/bank/pages/accounts/manage-access/modals/RemoveUserModal';
 import locales from '@/locales';
+import { useActiveAccount } from '@/state/accounts';
 
-const ManageAccessUserItem: React.FC<AccessTableUser & { accountId: number; characterRole: AccountRole }> = (props) => {
-  const { role, name, stateId, characterRole, accountId } = props;
+const ManageAccessUserItem: React.FC<AccessTableUser> = ({ name, stateId, role }) => {
   const modal = useModal();
+  const activeAccount = useActiveAccount()!;
 
   const ROLES: Record<AccountRole, string> = React.useMemo(
     () => ({
@@ -34,33 +35,35 @@ const ManageAccessUserItem: React.FC<AccessTableUser & { accountId: number; char
           <p className="text-muted-foreground text-sm">{ROLES[role]}</p>
         </div>
       </div>
-      <div className="flex items-center gap-2">
-        <Button
-          disabled={role === 'owner' || role === characterRole}
-          size="icon"
-          onClick={() =>
-            modal.open({
-              title: locales.manage_access,
-              children: <ManageUserModal accountId={accountId} targetStateId={stateId} defaultRole={role} />,
-            })
-          }
-        >
-          <UserCog size={20} />
-        </Button>
-        <Button
-          disabled={role === 'owner' || role === characterRole}
-          size="icon"
-          variant="destructive"
-          onClick={() =>
-            modal.open({
-              title: locales.remove_user,
-              children: <RemoveUserModal targetStateId={stateId} accountId={accountId} />,
-            })
-          }
-        >
-          <UserMinus size={20} />
-        </Button>
-      </div>
+      {activeAccount.type !== 'group' && (
+        <div className="flex items-center gap-2">
+          <Button
+            disabled={role === 'owner' || role === activeAccount.role}
+            size="icon"
+            onClick={() =>
+              modal.open({
+                title: locales.manage_access,
+                children: <ManageUserModal accountId={activeAccount.id} targetStateId={stateId} defaultRole={role} />,
+              })
+            }
+          >
+            <UserCog size={20} />
+          </Button>
+          <Button
+            disabled={role === 'owner' || role === activeAccount.role}
+            size="icon"
+            variant="destructive"
+            onClick={() =>
+              modal.open({
+                title: locales.remove_user,
+                children: <RemoveUserModal targetStateId={stateId} accountId={activeAccount.id} />,
+              })
+            }
+          >
+            <UserMinus size={20} />
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
