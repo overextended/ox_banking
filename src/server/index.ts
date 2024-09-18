@@ -1,4 +1,8 @@
+import type { OxAccountRole, OxAccountUserMetadata } from '@overextended/ox_core';
+import { CreateAccount, GetAccount, GetCharacterAccount, GetPlayer } from '@overextended/ox_core/server';
 import { onClientCallback } from '@overextended/ox_lib/server';
+import { oxmysql } from '@overextended/oxmysql';
+import type { DateRange } from 'react-day-picker';
 import type {
   AccessTableData,
   AccessTableUser,
@@ -10,10 +14,6 @@ import type {
   RawLogItem,
   Transaction,
 } from '../common/typings';
-import { oxmysql } from '@overextended/oxmysql';
-import { GetPlayer, GetAccount, GetCharacterAccount, CreateAccount } from '@overextended/ox_core/server';
-import type { DateRange } from 'react-day-picker';
-import type { OxAccountRole, OxAccountUserMetadata } from '@overextended/ox_core';
 
 onClientCallback('ox_banking:getAccounts', async (playerId): Promise<Account[]> => {
   const player = GetPlayer(playerId);
@@ -590,6 +590,7 @@ onClientCallback(
 
         queryJoins = `
         LEFT JOIN accounts a ON ai.fromAccount = a.id
+        LEFT JOIN characters c ON ai.actorId = c.charId
         LEFT JOIN characters co ON (a.owner IS NOT NULL AND co.charId = a.owner)
         LEFT JOIN ox_groups g ON (a.owner IS NULL AND g.name = a.group)
       `;
@@ -597,9 +598,11 @@ onClientCallback(
         query = `
           SELECT
             ai.id,
+            c.fullName as sentBy,
             CONCAT(a.id, ' - ', IFNULL(co.fullName, g.label)) AS label,
             ai.amount,
             ai.message,
+            UNIX_TIMESTAMP(ai.sentAt) AS sentAt,
             UNIX_TIMESTAMP(ai.dueDate) as dueDate,
             'unpaid' AS type
           FROM accounts_invoices ai
@@ -620,6 +623,7 @@ onClientCallback(
         queryJoins = `
         LEFT JOIN accounts a ON ai.fromAccount = a.id
         LEFT JOIN characters c ON ai.payerId = c.charId
+        LEFT JOIN characters ca ON ai.actorId = ca.charId
         LEFT JOIN characters co ON (a.owner IS NOT NULL AND co.charId = a.owner)
         LEFT JOIN ox_groups g ON (a.owner IS NULL AND g.name = a.group)
       `;
@@ -628,9 +632,11 @@ onClientCallback(
         SELECT
           ai.id,
           c.fullName as paidBy,
+          ca.fullName as sentBy,
           CONCAT(a.id, ' - ', IFNULL(co.fullName, g.label)) AS label,
           ai.amount,
           ai.message,
+          UNIX_TIMESTAMP(ai.sentAt) AS sentAt,
           UNIX_TIMESTAMP(ai.dueDate) AS dueDate,
           UNIX_TIMESTAMP(ai.paidAt) AS paidAt,
           'paid' AS type

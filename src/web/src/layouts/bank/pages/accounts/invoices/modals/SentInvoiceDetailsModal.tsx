@@ -1,8 +1,8 @@
-import React from 'react';
-import { formatNumber } from '@/utils/formatNumber';
-import { SentInvoice } from '~/src/common/typings';
 import locales from '@/locales';
 import { formatDate } from '@/utils/formatDate';
+import { formatNumber } from '@/utils/formatNumber';
+import React from 'react';
+import { SentInvoice } from '~/src/common/typings';
 
 const SentInvoiceDetailsModal: React.FC<{ invoice: SentInvoice }> = ({ invoice }) => {
   return (
@@ -11,10 +11,12 @@ const SentInvoiceDetailsModal: React.FC<{ invoice: SentInvoice }> = ({ invoice }
         <p className="text-muted-foreground text-xs">{locales.invoice_details_sent_to}</p>
         <p className="text-sm">{invoice.label}</p>
       </div>
-      <div>
-        <p className="text-muted-foreground text-xs">{locales.invoice_details_sent_by}</p>
-        <p className="text-sm">{invoice.sentBy}</p>
-      </div>
+      {invoice.sentBy && (
+        <div>
+          <p className="text-muted-foreground text-xs">{locales.invoice_details_sent_by}</p>
+          <p className="text-sm">{invoice.sentBy}</p>
+        </div>
+      )}
       <div>
         <p className="text-muted-foreground text-xs">{locales.invoice_details_sent_at}</p>
         <p className="text-sm">{formatDate(invoice.sentAt)}</p>
@@ -28,7 +30,7 @@ const SentInvoiceDetailsModal: React.FC<{ invoice: SentInvoice }> = ({ invoice }
         <p className="text-sm">{invoice.message}</p>
       </div>
       <div>
-        <p className="text-muted-foreground text-xs">locales.total</p>
+        <p className="text-muted-foreground text-xs">{locales.invoice_total}</p>
         <p className="text-sm">{formatNumber(invoice.amount)}</p>
       </div>
     </div>

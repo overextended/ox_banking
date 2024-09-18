@@ -80,6 +80,8 @@ export type BaseInvoice = {
   message: string;
   amount: number;
   dueDate: number;
+  sentBy?: string;
+  sentAt: number;
 };
 
 export type UnpaidInvoice = BaseInvoice & {
@@ -94,7 +96,5 @@ export type PaidInvoice = BaseInvoice & {
 
 export type SentInvoice = BaseInvoice & {
   type: 'sent';
-  sentBy: string;
-  sentAt: number;
   status: 'paid' | 'sent' | 'overdue';
 };
