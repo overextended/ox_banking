@@ -43,7 +43,6 @@ const ManageUserModal: React.FC<Props> = ({ targetStateId, defaultRole, accountI
     await fetchNui('manageUser', { accountId, targetStateId, values }, { data: true, delay: 1500 });
 
     queryClient.setQueriesData({ queryKey: ['account-access'] }, (data: AccessTableData | undefined) => {
-      console.log(0);
       if (!data) return;
 
       const selectedUserIndex = data.users.findIndex((user) => user.stateId === targetStateId);

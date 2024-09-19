@@ -1,28 +1,20 @@
-import React from 'react';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { formatNumber } from '@/utils/formatNumber';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { useModal } from '@/components/ModalsProvider';
 import SpinningLoader from '@/components/SpinningLoader';
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import locales from '@/locales';
+import { queryClient } from '@/main';
+import { useAccounts } from '@/state/accounts';
+import { Account } from '@/typings';
+import { fetchNui } from '@/utils/fetchNui';
+import { formatNumber } from '@/utils/formatNumber';
+import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { fetchNui } from '@/utils/fetchNui';
-import { useModal } from '@/components/ModalsProvider';
-import locales from '@/locales';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Account } from '@/typings';
-import { Switch } from '@/components/ui/switch';
-import { useAccounts } from '@/state/accounts';
-import { queryClient } from '@/main';
 
 const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
   const { accounts } = useAccounts();
@@ -107,7 +99,6 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
     }
 
     setIsLoading(false);
-    console.log(values);
     modal.close();
   };
 
