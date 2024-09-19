@@ -1,3 +1,5 @@
+local config = lib.loadJson('data.config')
+
 if GetConvarInt('ox_banking:target', 0) == 1 then return end
 
 lib.locale()
@@ -16,15 +18,17 @@ local function insideBank()
     end
 end
 
-lib.array.forEach(lib.loadJson('data.banks'), function(bank)
-    lib.points.new({
-        coords = bank.coords,
-        distance = 1.5,
-        onEnter = onEnterBank,
-        onExit = onExitBank,
-        nearby = insideBank
-    })
-end)
+if not config.UseOxTarget then
+    lib.array.forEach(lib.loadJson('data.banks'), function(bank)
+        lib.points.new({
+            coords = bank.coords,
+            distance = 1.5,
+            onEnter = onEnterBank,
+            onExit = onExitBank,
+            nearby = insideBank
+        })
+    end)
+end
 
 local atms = lib.loadJson('data.atms')
 
@@ -61,6 +65,8 @@ local function findClosestAtm()
 end
 
 CreateThread(function()
+    if config.UseOxTarget then return end
+
     while true do
         Wait(findClosestAtm() and 500 or 1000)
     end
