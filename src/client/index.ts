@@ -1,8 +1,8 @@
-import type { Character } from '../common/typings';
-import { hideTextUI, getLocales, cache, requestAnimDict, waitFor, sleep } from '@overextended/ox_lib/client';
-import { SendTypedNUIMessage, serverNuiCallback } from './utils';
-import { OxAccountPermissions, OxAccountRole } from '@overextended/ox_core';
 import { Config, LoadJsonFile, Locale } from '@common/.';
+import { OxAccountPermissions, OxAccountRole } from '@overextended/ox_core';
+import { cache, getLocales, hideTextUI, requestAnimDict, sleep, waitFor } from '@overextended/ox_lib/client';
+import type { Character } from '../common/typings';
+import { SendTypedNUIMessage, serverNuiCallback } from './utils';
 
 let hasLoadedUi = false;
 let isUiOpen = false;
@@ -83,13 +83,14 @@ exports('openBank', openBank);
 AddTextEntry('ox_banking_bank', Locale('bank'));
 
 const createBankBlip = ([x, y, z]: number[]) => {
-  const { sprite, colour } = Config.BankBlip;
+  const { sprite, colour, scale } = Config.BankBlip;
 
   if (!sprite) return;
 
   const blip = AddBlipForCoord(x, y, z);
   SetBlipSprite(blip, sprite);
   SetBlipColour(blip, colour);
+  SetBlipScale(blip, scale);
   SetBlipAsShortRange(blip, true);
   BeginTextCommandSetBlipName('ox_banking_bank');
   EndTextCommandSetBlipName(blip);

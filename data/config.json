@@ -3,6 +3,7 @@
   "UseOxTarget": true,
   "BankBlip": {
     "sprite": 207,
-    "colour": 2
+    "colour": 2,
+    "scale": 0.6
   }
 }
