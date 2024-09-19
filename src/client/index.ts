@@ -1,15 +1,18 @@
 import type { Character } from '../common/typings';
-import { hideTextUI } from '@overextended/ox_lib/client';
+import { hideTextUI, getLocales, cache, requestAnimDict, waitFor, sleep } from '@overextended/ox_lib/client';
 import { SendTypedNUIMessage, serverNuiCallback } from './utils';
-import { getLocales } from '@overextended/ox_lib/shared';
 import { OxAccountPermissions, OxAccountRole } from '@overextended/ox_core';
-import { LoadJsonFile, Locale } from '@common/.';
+import { Config, LoadJsonFile, Locale } from '@common/.';
 
 let hasLoadedUi = false;
 let isUiOpen = false;
 let isATMopen = false;
 
-function initUI() {
+function canOpenUi() {
+  return IsPedOnFoot(cache.ped);
+}
+
+function setupUi() {
   if (hasLoadedUi) return;
 
   const accountRoles: OxAccountRole[] = GlobalState.accountRoles;
@@ -32,20 +35,40 @@ function initUI() {
   hasLoadedUi = true;
 }
 
-const openATM = () => {
-  initUI();
+const openAtm = async ({ entity }: { entity: number }) => {
+  if (!canOpenUi) return;
+
+  const atmEnter = await requestAnimDict('mini@atmenter');
+  const [x, y, z] = GetOffsetFromEntityInWorldCoords(entity, 0, -0.7, 1);
+  const heading = GetEntityHeading(entity);
+  const sequence = OpenSequenceTask(0) as unknown as number;
+
+  TaskGoStraightToCoord(0, x, y, z, 1.0, 5000, heading, 0.25);
+  TaskPlayAnim(0, atmEnter, 'enter', 4.0, -2.0, 1600, 0, 0.0, false, false, false);
+  CloseSequenceTask(sequence);
+  TaskPerformSequence(cache.ped, sequence);
+  ClearSequenceTask(sequence);
+  setupUi();
+
+  await sleep(0);
+  await waitFor(() => GetSequenceProgress(cache.ped) === -1 || undefined, '', false);
+
+  PlaySoundFrontend(-1, 'PIN_BUTTON', 'ATM_SOUNDS', true);
 
   isUiOpen = true;
   isATMopen = true;
 
   SendTypedNUIMessage('openATM', null);
   SetNuiFocus(true, true);
+  RemoveAnimDict(atmEnter);
 };
 
-exports('openATM', openATM);
+exports('openAtm', openAtm);
 
 const openBank = () => {
-  initUI();
+  if (!canOpenUi) return;
+
+  setupUi();
 
   const playerCash: number = exports.ox_inventory.GetItemCount('money');
   isUiOpen = true;
@@ -57,26 +80,31 @@ const openBank = () => {
 };
 
 exports('openBank', openBank);
+AddTextEntry('ox_banking_bank', Locale('bank'));
 
 const createBankBlip = ([x, y, z]: number[]) => {
+  const { sprite, colour } = Config.BankBlip;
+
+  if (!sprite) return;
+
   const blip = AddBlipForCoord(x, y, z);
-  SetBlipSprite(blip, 207);
-  SetBlipColour(blip, 2);
+  SetBlipSprite(blip, sprite);
+  SetBlipColour(blip, colour);
   SetBlipAsShortRange(blip, true);
-  BeginTextCommandSetBlipName('STRING');
-  AddTextComponentString(Locale('bank'));
+  BeginTextCommandSetBlipName('ox_banking_bank');
   EndTextCommandSetBlipName(blip);
 };
 
-if (GetConvarInt('ox_banking:target', 0)) {
-  const atms = LoadJsonFile<typeof import('../../data/atms.json')>('data/atms.json').map((value) => GetHashKey(value));
-  const targets = LoadJsonFile<typeof import('../../data/targets.json')>('data/targets.json');
+const banks = LoadJsonFile<typeof import('~/data/banks.json')>('data/banks.json');
+
+if (Config.UseOxTarget) {
+  const atms = LoadJsonFile<typeof import('~/data/atms.json')>('data/atms.json').map((value) => GetHashKey(value));
 
   const atmOptions = {
     name: 'access_atm',
     icon: 'fa-solid fa-money-check',
     label: Locale('target_access_atm'),
-    onSelect: openATM,
+    onSelect: openAtm,
     distance: 1.3,
   };
 
@@ -90,27 +118,26 @@ if (GetConvarInt('ox_banking:target', 0)) {
 
   exports.ox_target.addModel(atms, atmOptions);
 
-  targets.forEach((target) => {
+  banks.forEach((bank) => {
     exports.ox_target.addBoxZone({
-      coords: target.coords,
-      size: target.size,
-      rotation: target.rotation,
+      coords: bank.coords,
+      size: bank.size,
+      rotation: bank.rotation,
       debug: true,
       drawSprite: true,
       options: bankOptions,
     });
 
-    createBankBlip(target.coords);
+    createBankBlip(bank.coords);
   });
-} else LoadJsonFile<typeof import('../../data/locations.json')>('data/locations.json').forEach(createBankBlip);
+} else banks.forEach(({ coords }) => createBankBlip(coords));
 
-RegisterNuiCallback('exit', (_: any, cb: Function) => {
-  isUiOpen = false;
-  isATMopen = false;
-
+RegisterNuiCallback('exit', async (_: any, cb: Function) => {
+  cb(1);
   SetNuiFocus(false, false);
 
-  cb(1);
+  isUiOpen = false;
+  isATMopen = false;
 });
 
 on('ox_inventory:itemCount', (itemName: string, count: number) => {

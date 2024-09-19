@@ -112,14 +112,14 @@ interface TransferBalance {
 onClientCallback('ox_banking:depositMoney', async (playerId, { accountId, amount }: UpdateBalance) => {
   const account = await GetAccount(accountId);
   const response = await account.depositMoney(playerId, amount);
-  //@todo notify
+
   return response === true;
 });
 
 onClientCallback('ox_banking:withdrawMoney', async (playerId, { accountId, amount }: UpdateBalance) => {
   const account = await GetAccount(accountId);
   const response = await account.withdrawMoney(playerId, amount);
-  //@todo notify
+
   return response === true;
 });
 
@@ -141,7 +141,7 @@ onClientCallback(
         amount: amount,
         actorId: player.charId,
       });
-      //@todo notify
+
       return response === true;
     }
   }
@@ -727,8 +727,6 @@ onClientCallback('ox_banking:payInvoice', async (playerId, data: { invoiceId: nu
   const player = GetPlayer(playerId);
 
   if (!player.charId) return;
-
-  // todo?: maybe a notification for successful payment?
 
   return await player.payInvoice(data.invoiceId);
 });

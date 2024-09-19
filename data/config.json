@@ -1,0 +1,7 @@
+{
+  "UseOxTarget": true,
+  "BankBlip": {
+    "sprite": 207,
+    "colour": 2
+  }
+}

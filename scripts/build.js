@@ -17,7 +17,6 @@ const client = {
 };
 
 const packageJson = JSON.parse(await readFile('package.json', 'utf8'));
-let luaClientFile = false;
 let fxmanifest = `name '${packageJson.name}'
 author '${packageJson.author}'
 version '${packageJson.version}'
@@ -38,11 +37,9 @@ if (await exists('./src/client')) {
   environments.push('client');
   fxmanifest += `client_scripts {
     '@ox_lib/init.lua',
-    'dist/client.lua',
+    'src/client/client.lua',
     'dist/client.js',
 }\n`;
-
-  luaClientFile = await readFile('./src/client/client.lua', 'utf8');
 }
 
 if (await exists('./src/server')) {
@@ -84,10 +81,6 @@ for (const context of environments) {
       build.watch();
     })
     .catch(() => process.exit(1));
-}
-
-if (luaClientFile) {
-  writeFile('dist/client.lua', luaClientFile);
 }
 
 if (web) await exec(`cd ./src/web && vite ${production ? 'build' : 'build --watch'}`);
