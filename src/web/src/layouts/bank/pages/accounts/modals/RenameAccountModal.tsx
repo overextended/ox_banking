@@ -1,17 +1,15 @@
-import React from 'react';
-import { z } from 'zod';
-import locales from '@/locales';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormControl, FormLabel, FormMessage, FormItem, FormField } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
-import SpinningLoader from '@/components/SpinningLoader';
-import { Input } from '@/components/ui/input';
-import { fetchNui } from '@/utils/fetchNui';
 import { useModal } from '@/components/ModalsProvider';
-import { queryClient } from '@/main';
-import { Account } from '~/src/common/typings';
+import SpinningLoader from '@/components/SpinningLoader';
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import locales from '@/locales';
 import { updateAccountProperty } from '@/state/accounts';
+import { fetchNui } from '@/utils/fetchNui';
+import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 interface Props {
   initialName: string;
@@ -56,7 +54,7 @@ const RenameAccountModal: React.FC<Props> = ({ initialName, accountId }) => {
         <FormField
           render={({ field }) => (
             <FormItem>
-              <FormLabel>New account name</FormLabel>
+              <FormLabel>{locales.new_account_name}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
