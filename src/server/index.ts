@@ -261,7 +261,7 @@ onClientCallback(
         LEFT JOIN ox_group_grades gg ON (cg.name = gg.group AND cg.grade = gg.grade)
         WHERE cg.name = ? ${searchStr}
         ORDER BY role DESC
-        LIMIT 6
+        LIMIT 12
         OFFSET ?
       `;
 
@@ -276,7 +276,7 @@ onClientCallback(
       const count = await oxmysql.prepare(countQuery, params);
 
       if (wildcard) params.push(wildcard);
-      params.push(page * 6);
+      params.push(page * 12);
 
       const users = await oxmysql.rawExecute<AccessTableUser[]>(usersQuery, params);
 
@@ -291,7 +291,7 @@ onClientCallback(
       queryParams
     );
 
-    queryParams.push(page * 6);
+    queryParams.push(page * 12);
 
     const users = usersCount
       ? await oxmysql.rawExecute<AccessTableData['users']>(
@@ -301,7 +301,7 @@ onClientCallback(
       WHERE a.accountId = ?
       ${searchStr}
       ORDER BY a.role DESC
-      LIMIT 6
+      LIMIT 12
       OFFSET ?
       `,
           queryParams
@@ -309,7 +309,7 @@ onClientCallback(
       : [];
 
     return {
-      numberOfPages: Math.ceil(usersCount / 7) || 1,
+      numberOfPages: Math.ceil(usersCount / 12) || 1,
       users,
     };
   }
