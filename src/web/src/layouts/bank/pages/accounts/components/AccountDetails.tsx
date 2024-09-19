@@ -1,14 +1,14 @@
-import React from 'react';
-import { Copy, History, Landmark, ReceiptText, Repeat, ScanText, Wallet } from 'lucide-react';
-import { formatNumber } from '@/utils/formatNumber';
+import { useModal } from '@/components/ModalsProvider';
+import BaseCard from '@/layouts/bank/components/BaseCard';
 import AccountButton from '@/layouts/bank/pages/accounts/components/AccountButton';
 import DepositWithdrawModal from '@/layouts/bank/pages/accounts/modals/DepositWithdrawModal';
-import BaseCard from '@/layouts/bank/components/BaseCard';
-import { useModal } from '@/components/ModalsProvider';
-import { useActiveAccount } from '@/state/accounts/accounts';
-import locales from '@/locales';
 import TransferModal from '@/layouts/bank/pages/accounts/modals/TransferModal';
+import locales from '@/locales';
 import { hasPermission } from '@/permissions';
+import { useActiveAccount } from '@/state/accounts/accounts';
+import { formatNumber } from '@/utils/formatNumber';
+import { History, Landmark, ReceiptText, Repeat, ScanText, Wallet } from 'lucide-react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import CopyAccountNumber from './CopyAccountNumber';
 
@@ -56,7 +56,6 @@ const AccountDetails: React.FC = () => {
           </div>
           <div className="flex flex-col">
             <p className="text-muted-foreground text-xs">{locales.account_role}</p>
-            {/* @ts-expect-error */}
             <p>{locales[account.role]}</p>
           </div>
         </div>
