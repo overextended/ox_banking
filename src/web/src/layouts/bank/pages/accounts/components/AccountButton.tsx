@@ -1,7 +1,6 @@
-import React from 'react';
-import { LucideIcon, Wallet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useModal } from '@/components/ModalsProvider';
+import { LucideIcon } from 'lucide-react';
+import React from 'react';
 
 interface Props {
   icon: LucideIcon;

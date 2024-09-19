@@ -1,18 +1,17 @@
-import React from 'react';
-import { Input } from '@/components/ui/input';
+import { useModal } from '@/components/ModalsProvider';
+import SpinningLoader from '@/components/SpinningLoader';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import locales from '@/locales';
+import { useCharacterState } from '@/state/character';
+import { Account } from '@/typings';
+import { fetchNui } from '@/utils/fetchNui';
+import { formatNumber } from '@/utils/formatNumber';
+import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useModal } from '@/components/ModalsProvider';
-import { fetchNui } from '@/utils/fetchNui';
-import SpinningLoader from '@/components/SpinningLoader';
-import { formatNumber } from '@/utils/formatNumber';
-import { Account } from '@/typings';
-import locales from '@/locales';
-import { queryClient } from '@/main';
-import { useCharacterState } from '@/state/character';
 import { updateAccountProperty } from '../../../../../state/accounts';
 
 const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> = ({ account, isDeposit }) => {

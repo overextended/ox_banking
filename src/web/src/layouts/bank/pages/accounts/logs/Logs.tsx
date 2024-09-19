@@ -1,14 +1,12 @@
-import React from 'react';
-import { History } from 'lucide-react';
 import BaseCard from '@/layouts/bank/components/BaseCard';
 import locales from '@/locales';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { useActiveAccount } from '@/state/accounts';
-import LogsTable from './components/LogsTable';
+import { History } from 'lucide-react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import LogsSearch from './components/LogsSearch';
 import LogsFilters from './components/LogsFilters';
+import LogsSearch from './components/LogsSearch';
+import LogsTable from './components/LogsTable';
 
 const Logs: React.FC = () => {
   const account = useActiveAccount();
