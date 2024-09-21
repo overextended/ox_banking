@@ -25,8 +25,6 @@ const CharacterAccounts: React.FC = () => {
     if (defaultAccount) setActiveAccountId(defaultAccount.id);
   }, [accountsData, activeAccountId]);
 
-  const MAX_ITEMS = React.useMemo(() => (page === 0 ? 3 : 4), [page]);
-
   return (
     <BaseCard title={locales.accounts} icon={CreditCard} className="overflow-visible">
       <div className="flex w-full items-center justify-center gap-4">
@@ -48,7 +46,7 @@ const CharacterAccounts: React.FC = () => {
             </div>
           )}
           {accountsData.accounts
-            .slice(page * (MAX_ITEMS === 3 ? MAX_ITEMS : MAX_ITEMS - 1), page * MAX_ITEMS + MAX_ITEMS)
+            .slice(page === 0 ? 0 : page * 4 - 1, page === 0 ? 3 : page * 4 + 4 - 1)
             .map((account) => (
               <AccountCard
                 key={`${account.id}-${account.balance}`}
