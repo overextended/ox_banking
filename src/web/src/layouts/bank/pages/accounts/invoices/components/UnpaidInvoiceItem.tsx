@@ -1,5 +1,5 @@
 import React from 'react';
-import { File, FileText, Receipt } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useModal } from '@/components/ModalsProvider';
 import UnpaidInvoiceDetailsModal from '../modals/UnpaidInvoiceDetailsModal';

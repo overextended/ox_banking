@@ -1,10 +1,10 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
 import { useModal } from '@/components/ModalsProvider';
-import { fetchNui } from '@/utils/fetchNui';
 import SpinningLoader from '@/components/SpinningLoader';
+import { Button } from '@/components/ui/button';
 import locales from '@/locales';
 import { queryClient } from '@/main';
+import { fetchNui } from '@/utils/fetchNui';
+import React from 'react';
 
 interface Props {
   targetStateId: string;
@@ -18,7 +18,7 @@ const RemoveUserModal: React.FC<Props> = ({ targetStateId, accountId }) => {
   async function handleRemove() {
     setIsLoading(true);
 
-    const resp = await fetchNui('removeUser', { accountId, targetStateId }, { data: true, delay: 1500 });
+    await fetchNui('removeUser', { accountId, targetStateId }, { data: true, delay: 1500 });
 
     await queryClient.invalidateQueries({ queryKey: ['account-access'] });
 

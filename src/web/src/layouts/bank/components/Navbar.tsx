@@ -1,11 +1,11 @@
-import React from 'react';
-import { CreditCard, HistoryIcon, LayoutDashboard, LogOut } from 'lucide-react';
-import ThemeSwitcher from '@/layouts/bank/components/ThemeSwitcher';
-import NavLink from '@/layouts/bank/components/NavLink';
 import NavItem from '@/layouts/bank/components/NavItem';
+import NavLink from '@/layouts/bank/components/NavLink';
+import ThemeSwitcher from '@/layouts/bank/components/ThemeSwitcher';
 import locales from '@/locales';
 import { useSetBankVisibility } from '@/state/visibility';
 import { fetchNui } from '@/utils/fetchNui';
+import { CreditCard, LayoutDashboard, LogOut } from 'lucide-react';
+import React from 'react';
 
 const Navbar: React.FC = () => {
   const setBankVisibility = useSetBankVisibility();

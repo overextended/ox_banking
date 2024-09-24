@@ -1,11 +1,11 @@
 import locales from '@/locales';
 import permissions from '@/permissions';
+import { AccountRole } from '@/typings';
 import React from 'react';
 
-const RolePermissions: React.FC<{ role: string }> = ({ role }) => {
-  const roles = React.useMemo(() => Object.keys(permissions).filter((role) => role !== 'owner'), [permissions]);
+const RolePermissions: React.FC<{ role: AccountRole }> = ({ role }) => {
   const rolePermissions = React.useMemo(
-    () => Object.entries(permissions[role]).filter(([permission, value]) => value === 1),
+    () => Object.entries(permissions[role]).filter(([, value]) => value === 1),
     [role]
   );
 
@@ -15,8 +15,10 @@ const RolePermissions: React.FC<{ role: string }> = ({ role }) => {
         <p>
           {locales.permissions}:{' '}
           {rolePermissions
-            // @ts-expect-error
-            .map(([permission, value]) => (value ? locales[`permission_${permission}`] : undefined))
+            .map(([permission, value]) => {
+              const key = `permission_${permission}` as keyof typeof locales;
+              return value ? locales[key] : undefined;
+            })
             .join(', ')}
         </p>
       )}

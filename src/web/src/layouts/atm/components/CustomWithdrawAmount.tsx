@@ -1,15 +1,15 @@
-import React from 'react';
-import BaseCard from '../../bank/components/BaseCard';
-import { Settings2 } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import SpinningLoader from '@/components/SpinningLoader';
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import locales from '@/locales';
-import { z } from 'zod';
 import { Account } from '@/typings';
-import { FormField, FormLabel, FormControl, FormDescription, FormMessage, FormItem, Form } from '@/components/ui/form';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Settings2 } from 'lucide-react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import BaseCard from '../../bank/components/BaseCard';
 
 interface Props {
   isWithdrawing: boolean;
@@ -25,7 +25,7 @@ const CustomWithdrawAmount: React.FC<Props> = ({ isWithdrawing, handleWithdraw, 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      amount: '',
+      amount: 0,
     },
   });
 
