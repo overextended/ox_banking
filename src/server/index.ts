@@ -111,16 +111,12 @@ interface TransferBalance {
 
 onClientCallback('ox_banking:depositMoney', async (playerId, { accountId, amount }: UpdateBalance) => {
   const account = await GetAccount(accountId);
-  const response = await account.depositMoney(playerId, amount);
-
-  return response === true;
+  return await account.depositMoney(playerId, amount);
 });
 
 onClientCallback('ox_banking:withdrawMoney', async (playerId, { accountId, amount }: UpdateBalance) => {
   const account = await GetAccount(accountId);
-  const response = await account.withdrawMoney(playerId, amount);
-
-  return response === true;
+  return await account.withdrawMoney(playerId, amount);
 });
 
 onClientCallback(
@@ -134,16 +130,24 @@ onClientCallback(
     const targetAccountId =
       transferType === 'account' ? (target as number) : (await GetCharacterAccount(target))?.accountId;
 
-    if (targetAccountId) {
-      const player = GetPlayer(playerId);
-      const response = await account.transferBalance({
-        toId: targetAccountId,
-        amount: amount,
-        actorId: player.charId,
-      });
+    if (transferType === 'person' && !targetAccountId)
+      return {
+        success: false,
+        message: 'state_id_not_exists',
+      };
 
-      return response === true;
-    }
+    if (!targetAccountId)
+      return {
+        success: false,
+        message: 'account_id_not_exists',
+      };
+
+    const player = GetPlayer(playerId);
+    return await account.transferBalance({
+      toId: targetAccountId,
+      amount: amount,
+      actorId: player.charId,
+    });
   }
 );
 
@@ -336,9 +340,9 @@ onClientCallback(
 
     const currentRole = account.getCharacterRole(stateId);
 
-    if (currentRole) return 'invalid_input';
+    if (currentRole) return { success: false, message: 'invalid_input' };
 
-    return (await account.setCharacterRole(stateId, role)) || 'state_id_not_exists';
+    return (await account.setCharacterRole(stateId, role)) || { success: false, message: 'state_id_not_exists' };
   }
 );
 
@@ -388,21 +392,33 @@ onClientCallback(
       targetStateId: string;
       accountId: number;
     }
-  ): Promise<true | string> => {
+  ): Promise<{ success: boolean; message?: string }> => {
     const account = await GetAccount(accountId);
     const hasPermission = await account?.playerHasPermission(playerId, 'transferOwnership');
 
-    if (!hasPermission) return 'no_permission';
+    if (!hasPermission)
+      return {
+        success: false,
+        message: 'no_permission',
+      };
 
     const targetCharId = await oxmysql.prepare<number | null>('SELECT `charId` FROM `characters` WHERE `stateId` = ?', [
       targetStateId,
     ]);
 
-    if (!targetCharId) return 'state_id_not_exists';
+    if (!targetCharId)
+      return {
+        success: false,
+        message: 'state_id_not_exists',
+      };
 
     const accountOwner = await account.get('owner');
 
-    if (accountOwner === targetCharId) return 'invalid_input';
+    if (accountOwner === targetCharId)
+      return {
+        success: false,
+        message: 'invalid_input',
+      };
 
     const player = GetPlayer(playerId);
 
@@ -417,7 +433,9 @@ onClientCallback(
       player.charId,
     ]);
 
-    return true;
+    return {
+      success: true,
+    };
   }
 );
 

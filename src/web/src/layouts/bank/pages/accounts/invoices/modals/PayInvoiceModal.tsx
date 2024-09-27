@@ -19,11 +19,16 @@ const PayInvoiceModal: React.FC<{ invoice: UnpaidInvoice }> = ({ invoice }) => {
   async function handlePayInvoice() {
     setIsLoading(true);
 
-    const resp = await fetchNui('payInvoice', { invoiceId: invoice.id }, { data: true });
+    const resp = await fetchNui<{ success: boolean; message?: string }>(
+      'payInvoice',
+      { invoiceId: invoice.id },
+      { data: { success: true } }
+    );
 
     await delay(500);
 
-    if (!resp) {
+    if (!resp.success) {
+      // todo: notification?
       setIsLoading(false);
       return;
     }

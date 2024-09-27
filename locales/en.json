@@ -156,5 +156,10 @@
   "transfer_from": "Transfer from",
   "permissions": "Permissions",
   "no_permission": "You are not authorised to perform this action.",
-  "invalid_input": "Invalid input."
+  "invalid_input": "Invalid input.",
+  "insufficient_funds": "Insufficient funds",
+  "no_balance": "No balance",
+  "no_access": "No access",
+  "something_went_wrong": "Unknown error, something went wrong",
+  "account_id_not_exists": "No account with such id found"
 }

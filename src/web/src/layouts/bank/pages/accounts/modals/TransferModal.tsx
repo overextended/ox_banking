@@ -65,13 +65,7 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
       });
 
     setIsLoading(true);
-    const resp = await fetchNui<
-      | true
-      | {
-          field: 'transferType' | 'target' | 'amount';
-          error: string;
-        }
-    >(
+    const resp = await fetchNui<{ success: boolean; message?: string }>(
       'transferMoney',
       {
         fromAccountId: account.id,
@@ -80,17 +74,25 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
         amount: values.amount,
       },
       {
-        data: true,
+        data: { success: false, message: 'account_id_not_exists' },
         delay: 1500,
       }
     );
 
-    if (typeof resp === 'object' && resp.error) {
+    if (!resp.success) {
       setIsLoading(false);
-      return form.setError(resp.field, {
-        type: 'value',
-        message: resp.error,
-      });
+
+      switch (resp.message) {
+        case 'account_id_not_exists':
+        case 'state_id_not_exists':
+          form.setError('target', { type: 'value', message: locales[resp.message as keyof typeof locales] });
+          break;
+        default:
+          // todo: notification?
+          break;
+      }
+
+      return;
     }
 
     // if the user has access to the account, refresh them

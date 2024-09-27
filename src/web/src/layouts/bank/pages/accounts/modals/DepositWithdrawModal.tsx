@@ -12,7 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { updateAccountProperty } from '../../../../../state/accounts';
+import { updateAccountProperty } from '@/state/accounts';
 
 const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> = ({ account, isDeposit }) => {
   const [character, setCharacter] = useCharacterState();
@@ -62,14 +62,21 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
       });
 
     setIsLoading(true);
-    await fetchNui(
+    const resp = await fetchNui<{ success: boolean; message?: string }>(
       !isDeposit ? 'withdrawMoney' : 'depositMoney',
       { accountId: account.id, amount: values.amount },
       {
-        data: true,
+        data: { success: false, message: 'something_went_wrong' },
         delay: 1500,
       }
     );
+
+    if (!resp.success) {
+      setIsLoading(false);
+      form.setError('amount', { type: 'value', message: locales[resp.message as keyof typeof locales] });
+
+      return;
+    }
 
     updateAccountProperty(account.id, 'balance', isDeposit ? account.balance + amount : account.balance - amount);
 

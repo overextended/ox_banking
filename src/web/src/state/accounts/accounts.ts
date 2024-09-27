@@ -47,6 +47,9 @@ const [accountsDataAtom] = atomsWithQuery<{ numberOfPages: number; accounts: Acc
 
       await delay(500);
 
+      console.log(accounts.length + 1);
+      console.log((accounts.length + 1) / 4);
+
       return {
         accounts: defaultAccount ? [defaultAccount, ...accounts.filter((account) => !account.isDefault)] : accounts,
         numberOfPages: Math.ceil((accounts.length + 1) / 4),

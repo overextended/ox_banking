@@ -34,18 +34,24 @@ const TransferAccountModal: React.FC<{ accountId: number }> = ({ accountId }) =>
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
 
-    const resp = await fetchNui<true | string>(
+    const resp = await fetchNui<{ success: boolean; message?: string }>(
       'transferOwnership',
       {
         accountId,
         targetStateId: values.stateId,
       },
-      { data: true, delay: 1500 }
+      {
+        data: {
+          success: true,
+        },
+        delay: 1500,
+      }
     );
 
-    if (typeof resp === 'string') {
+    if (!resp.success) {
       setIsLoading(false);
-      form.setError('stateId', { type: 'value', message: locales[resp as keyof typeof locales] });
+
+      form.setError('stateId', { type: 'value', message: locales[resp.message as keyof typeof locales] });
 
       return;
     }
