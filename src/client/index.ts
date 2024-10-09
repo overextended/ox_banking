@@ -105,7 +105,7 @@ if (Config.UseOxTarget) {
     name: 'access_atm',
     icon: 'fa-solid fa-money-check',
     label: Locale('target_access_atm'),
-    onSelect: openAtm,
+    export: 'openAtm',
     distance: 1.3,
   };
 
@@ -113,7 +113,7 @@ if (Config.UseOxTarget) {
     name: 'access_bank',
     icon: 'fa-solid fa-dollar-sign',
     label: Locale('target_access_bank'),
-    onSelect: openBank,
+    export: 'openBank',
     distance: 1.3,
   };
 
