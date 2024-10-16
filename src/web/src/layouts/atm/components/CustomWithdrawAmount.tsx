@@ -43,7 +43,7 @@ const CustomWithdrawAmount: React.FC<Props> = ({ isWithdrawing, handleWithdraw, 
     if (form.formState.errors.amount) {
       form.clearErrors('amount');
     }
-  }, [account, form?.formState])
+  }, [account])
   
 
   return (
