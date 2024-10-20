@@ -124,7 +124,6 @@ if (Config.UseOxTarget) {
       coords: bank.coords,
       size: bank.size,
       rotation: bank.rotation,
-      debug: true,
       drawSprite: true,
       options: bankOptions,
     });
