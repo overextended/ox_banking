@@ -1,7 +1,41 @@
 # ox_banking
 
-## WIP - NOT READY FOR PRODUCTION USE
+A complete banking system for FiveM for the [ox_core](https://github.com/overextended/ox_core) framework implementing shared accounts, logs, invoices and more.
 
-Work in progress banking resource for [ox_core](https://github.com/overextended/ox_core)
+![](https://img.shields.io/github/downloads/overextended/ox_banking/total?logo=github)
+![](https://img.shields.io/github/downloads/overextended/ox_banking/latest/total?logo=github)
+![](https://img.shields.io/github/contributors/overextended/ox_banking?logo=github)
+![](https://img.shields.io/github/v/release/overextended/ox_banking?logo=github)
 
-**DO NOT** use this unless you intend to contribute to the development, it's still WIP and **not** ready for production.
+## 🔗 Links
+- 💾 [Download](https://github.com/overextended/ox_banking/releases/latest/download/ox_banking.zip)
+  - Download the latest release directly.
+
+## ✨ Features
+
+### Dashboard
+
+- Weekly overview of income and expenses on the default account
+- Overview of recent transactions and invoices
+
+### Accounts
+
+- Ability to create new accounts
+- Shared and group accounts
+- Withdraw, deposit and transfer balance from an acccount
+- See unpaid, paid and sent invoices for an account
+- Overview of account balanace changes with logs
+- Abiltiy to convert personal accounts to shared
+- Access management for shared accounts
+- Access for group accounts based on group grades
+
+### ATM
+
+- Withdraw only ATMs placed throughout the map
+
+## 📦 Dependencies
+
+- [ox_core](https://github.com/overextended/ox_core)
+- [ox_inventory](https://github.com/overextended/ox_inventory)
+- [ox_lib](https://github.com/overextended/ox_lib)
+- [oxmysql](https://github.com/overextended/oxmysql)
