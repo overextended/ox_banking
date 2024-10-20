@@ -18,12 +18,12 @@ interface Props {
 }
 
 const CustomWithdrawAmount: React.FC<Props> = ({ isWithdrawing, handleWithdraw, account }) => {
-  const formSchema = z.object({
+  const formSchema = React.useMemo(() => z.object({
     amount: z
       .number({ coerce: true, message: locales.amount_required_number })
       .min(1, { message: locales.amount_greater_than_zero })
       .max(account?.balance ?? 0, { message: locales.amount_greater_than_balance }),
-  });
+  }), [account?.balance]);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
