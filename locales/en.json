@@ -58,7 +58,7 @@
   "manage_access": "Manage access",
   "delete_account": "Delete account",
   "amount": "Amount",
-  "amount_greater_than_zero": "Amount should be a number greater than 0",
+  "amount_greater_than_zero": "Amount must be a number greater than 0",
   "field_required": "%s is required",
   "available_balance": "Available balance: %s",
   "available_cash": "Available cash: %s",

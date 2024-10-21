@@ -17,11 +17,14 @@ interface Props {
   account: Account;
 }
 
-const formSchema = z.object({
-  amount: z.number({ coerce: true, message: locales.amount_required_number }).min(1),
-});
-
 const CustomWithdrawAmount: React.FC<Props> = ({ isWithdrawing, handleWithdraw, account }) => {
+  const formSchema = React.useMemo(() => z.object({
+    amount: z
+      .number({ coerce: true, message: locales.amount_required_number })
+      .min(1, { message: locales.amount_greater_than_zero })
+      .max(account?.balance ?? 0, { message: locales.amount_greater_than_balance }),
+  }), [account?.balance]);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,14 +34,17 @@ const CustomWithdrawAmount: React.FC<Props> = ({ isWithdrawing, handleWithdraw, 
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { amount } = values;
-
-    if (amount > (account?.balance ?? 0)) {
-      form.setError('amount', { message: locales.amount_greater_than_balance });
-      return;
-    }
+    if (!amount) return;
 
     handleWithdraw(amount);
   }
+
+  React.useEffect(() => {
+    if (form.formState.errors.amount) {
+      form.clearErrors('amount');
+    }
+  }, [account])
+  
 
   return (
     <BaseCard title={locales.custom_amount} icon={Settings2}>
@@ -67,3 +73,4 @@ const CustomWithdrawAmount: React.FC<Props> = ({ isWithdrawing, handleWithdraw, 
 };
 
 export default CustomWithdrawAmount;
+
