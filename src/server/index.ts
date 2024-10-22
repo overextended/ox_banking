@@ -338,7 +338,7 @@ onClientCallback(
 
     if (!hasPermission) return false;
 
-    const currentRole = account.getCharacterRole(stateId);
+    const currentRole = await account.getCharacterRole(stateId);
 
     if (currentRole) return { success: false, message: 'invalid_input' };
 
