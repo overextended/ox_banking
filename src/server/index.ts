@@ -201,7 +201,7 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
 
   const invoices = await oxmysql.rawExecute<Invoice[]>(
     `
-     SELECT ai.id, ai.amount, UNIX_TIMESTAMP(ai.dueDate) as dueDate, UNIX_TIMESTAMP(ai.paidAt) as paidAt, a.label,
+     SELECT ai.id, ai.amount, UNIX_TIMESTAMP(ai.dueDate) as dueDate, UNIX_TIMESTAMP(ai.paidAt) as paidAt, CONCAT(a.label, ' - ', IFNULL(co.fullName, g.label))) AS label,
      CASE
         WHEN ai.payerId IS NOT NULL THEN 'paid'
         WHEN NOW() > ai.dueDate THEN 'overdue'
@@ -209,6 +209,8 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
      END AS status
      FROM accounts_invoices ai
      LEFT JOIN accounts a ON a.id = ai.fromAccount
+     LEFT JOIN characters co ON (a.owner IS NOT NULL AND co.charId = a.owner)
+     LEFT JOIN ox_groups g ON (a.owner IS NULL AND g.name = a.group)
      WHERE ai.toAccount = ?
      ORDER BY ai.id DESC
      LIMIT 5

@@ -25,7 +25,7 @@ const InvoiceItem: React.FC<{ invoice: Invoice }> = ({ invoice }) => {
         )}
       </div>
       <div className="ml-4 space-y-1">
-        <p className="text-sm font-medium leading-none">{invoice.label}</p>
+        <p className="line-clamp-1 text-sm font-medium leading-none">{invoice.label}</p>
         <p className="text-muted-foreground text-xs">
           {invoice.status === 'paid'
             ? locales.invoice_paid_at.format(formatDate(invoice.paidAt))
