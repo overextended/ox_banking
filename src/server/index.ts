@@ -201,7 +201,7 @@ onClientCallback('ox_banking:getDashboardData', async (playerId): Promise<Dashbo
 
   const invoices = await oxmysql.rawExecute<Invoice[]>(
     `
-     SELECT ai.id, ai.amount, UNIX_TIMESTAMP(ai.dueDate) as dueDate, UNIX_TIMESTAMP(ai.paidAt) as paidAt, CONCAT(a.label, ' - ', IFNULL(co.fullName, g.label))) AS label,
+     SELECT ai.id, ai.amount, UNIX_TIMESTAMP(ai.dueDate) as dueDate, UNIX_TIMESTAMP(ai.paidAt) as paidAt, CONCAT(a.label, ' - ', IFNULL(co.fullName, g.label)) AS label,
      CASE
         WHEN ai.payerId IS NOT NULL THEN 'paid'
         WHEN NOW() > ai.dueDate THEN 'overdue'
@@ -329,22 +329,20 @@ onClientCallback(
       accountId,
       stateId,
       role,
-    }: {
-      accountId: number;
-      stateId: string;
-      role: OxAccountRole;
+    }) => {
+    try {
+      const account = await GetAccount(accountId);
+      const hasPermission = await (account == null ? void 0 : account.playerHasPermission(playerId, 'addUser'));
+      if (!hasPermission) return false;
+      
+      const currentRole = await account.getCharacterRole(stateId);
+      if (currentRole) return { success: false, message: 'invalid_input' };
+      
+      return await account.setCharacterRole(stateId, role) || { success: false, message: 'state_id_not_exists' };
+    } catch (error) {
+      console.error('Error in addUserToAccount callback: ${error.message}');
+      return { success: false, message: 'internal_error' };
     }
-  ) => {
-    const account = await GetAccount(accountId);
-    const hasPermission = await account?.playerHasPermission(playerId, 'addUser');
-
-    if (!hasPermission) return false;
-
-    const currentRole = await account.getCharacterRole(stateId);
-
-    if (currentRole) return { success: false, message: 'invalid_input' };
-
-    return (await account.setCharacterRole(stateId, role)) || { success: false, message: 'state_id_not_exists' };
   }
 );
 
