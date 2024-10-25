@@ -17,8 +17,7 @@ import type {
 
 versionCheck('overextended/ox_banking');
 
-// TODO: bump to 1.0.2 on tag release
-const coreDepCheck: true | [false, string] = checkDependency('ox_core', '1.0.1');
+const coreDepCheck: true | [false, string] = checkDependency('ox_core', '1.1.0');
 
 if (coreDepCheck !== true) {
   setInterval(() => {
