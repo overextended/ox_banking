@@ -1,6 +1,6 @@
 import type { OxAccountRole, OxAccountUserMetadata } from '@overextended/ox_core';
 import { CreateAccount, GetAccount, GetCharacterAccount, GetPlayer } from '@overextended/ox_core/server';
-import { onClientCallback } from '@overextended/ox_lib/server';
+import { onClientCallback, versionCheck, checkDependency } from '@overextended/ox_lib/server';
 import { oxmysql } from '@overextended/oxmysql';
 import type { DateRange } from 'react-day-picker';
 import type {
@@ -14,6 +14,17 @@ import type {
   RawLogItem,
   Transaction,
 } from '../common/typings';
+
+versionCheck('overextended/ox_banking');
+
+// TODO: bump to 1.0.2 on tag release
+const coreDepCheck: true | [false, string] = checkDependency('ox_core', '1.0.1');
+
+if (coreDepCheck !== true) {
+  setInterval(() => {
+    console.error(coreDepCheck[1]);
+  }, 1000);
+}
 
 onClientCallback('ox_banking:getAccounts', async (playerId): Promise<Account[]> => {
   const player = GetPlayer(playerId);
