@@ -39,15 +39,25 @@ const openAtm = async ({ entity }: { entity: number }) => {
   if (!canOpenUi) return;
 
   const atmEnter = await requestAnimDict('mini@atmenter');
-  const [x, y, z] = GetOffsetFromEntityInWorldCoords(entity, 0, -0.7, 1);
-  const heading = GetEntityHeading(entity);
-  const sequence = OpenSequenceTask(0) as unknown as number;
 
-  TaskGoStraightToCoord(0, x, y, z, 1.0, 5000, heading, 0.25);
-  TaskPlayAnim(0, atmEnter, 'enter', 4.0, -2.0, 1600, 0, 0.0, false, false, false);
-  CloseSequenceTask(sequence);
-  TaskPerformSequence(cache.ped, sequence);
-  ClearSequenceTask(sequence);
+  // The ATM location can sometimes be invalid (0.0,0.0,0.0)
+  const [cX, cY, cZ] = GetEntityCoords(entity, false);
+  const [pX, pY, pZ] = GetEntityCoords(cache.ped, false);
+
+  const doAnim = (entity && DoesEntityExist(entity) && Math.abs((cX - cY) + (cZ - pX) + (pY - pZ)) < 5.0) 
+
+  if (doAnim)
+  {
+    const [x, y, z] = GetOffsetFromEntityInWorldCoords(entity, 0, -0.7, 1);
+    const heading = GetEntityHeading(entity);
+    const sequence = OpenSequenceTask(0) as unknown as number;
+  
+    TaskGoStraightToCoord(0, x, y, z, 1.0, 5000, heading, 0.25);
+    TaskPlayAnim(0, atmEnter, 'enter', 4.0, -2.0, 1600, 0, 0.0, false, false, false);
+    CloseSequenceTask(sequence);
+    TaskPerformSequence(cache.ped, sequence);
+    ClearSequenceTask(sequence);
+  }
   setupUi();
 
   await sleep(0);
