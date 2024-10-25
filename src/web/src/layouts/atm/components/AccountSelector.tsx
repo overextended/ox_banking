@@ -41,11 +41,13 @@ const AccountSelector: React.FC<Props> = ({ setSelectedAccount }) => {
                 <div className="bg-background flex flex-col gap-4 rounded-lg border p-4 shadow-sm">
                   <div>
                     <p className="line-clamp-1">{account.label}</p>
-                    <p className="text-muted-foreground">
+                    <p className="text-muted-foreground line-clamp-1 text-sm">
                       {account.type === 'personal'
                         ? locales.personal_account
                         : account.type === 'shared'
-                          ? locales.shared_account
+                          ? account.role === 'owner'
+                            ? locales.shared_account
+                            : account.owner
                           : locales.group_account}
                     </p>
                   </div>
