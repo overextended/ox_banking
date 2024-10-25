@@ -56,7 +56,7 @@ const AccountSettings: React.FC = () => {
               children: <RenameAccountModal accountId={account.id} initialName={account.label} />,
             })
           }
-          disabled={!hasPermission('manageAccount', account.role)}
+          disabled={account.type === 'group' || !hasPermission('manageAccount', account.role)}
           label={locales.rename}
           icon={Pencil}
         />
@@ -70,7 +70,7 @@ const AccountSettings: React.FC = () => {
           label={locales.delete_account}
           icon={Trash}
           variant="destructive"
-          disabled={account.isDefault || !hasPermission('closeAccount', account.role)}
+          disabled={account.isDefault || account.type === 'group' || !hasPermission('closeAccount', account.role)}
           onClick={() =>
             modal.open({
               title: locales.delete_account,
