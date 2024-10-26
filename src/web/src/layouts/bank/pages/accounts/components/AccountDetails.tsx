@@ -18,7 +18,7 @@ const AccountDetails: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <BaseCard title="Details" icon={ScanText} className="flex-1">
+    <BaseCard title={locales.details} icon={ScanText} className="flex-1">
       <div className="grid grid-cols-[1.5fr_repeat(2,1fr)] gap-2">
         <div className="flex flex-col gap-4">
           <div className="flex flex-col">
