@@ -137,8 +137,19 @@ onClientCallback(
 
     if (!hasPermission) return;
 
-    const targetAccountId =
-      transferType === 'account' ? (target as number) : (await GetCharacterAccount(target))?.accountId;
+    let targetAccountId = 0;
+
+    try {
+      targetAccountId =
+        transferType === 'account'
+          ? (await GetAccount(target as number))?.accountId
+          : (await GetCharacterAccount(target))?.accountId;
+    } catch (e) {
+      return {
+        success: false,
+        message: 'account_id_not_exists',
+      };
+    }
 
     if (transferType === 'person' && !targetAccountId)
       return {
