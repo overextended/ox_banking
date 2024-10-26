@@ -8,8 +8,8 @@ let hasLoadedUi = false;
 let isUiOpen = false;
 let isATMopen = false;
 
-function canOpenUi() {
-  return IsPedOnFoot(cache.ped);
+function canOpenUi(): boolean {
+  return IsPedOnFoot(cache.ped) && !IsPedDeadOrDying(cache.ped, true);
 }
 
 function setupUi() {
