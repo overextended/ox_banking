@@ -39,7 +39,7 @@ const DepositWithdrawModal: React.FC<{ account: Account; isDeposit?: boolean }> 
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const schema = z.number().min(0);
+    const schema = z.number().min(1);
 
     if (!schema.safeParse(+values.amount).success)
       return form.setError('amount', {

@@ -42,7 +42,7 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const schema = z.number().min(0);
+    const schema = z.number().min(1);
 
     if (values.transferType === 'account' && !schema.safeParse(+values.target).success)
       return form.setError('target', {
