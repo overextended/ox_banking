@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import locales from '@/locales';
+import { queryClient } from '@/main';
 import { updateAccountProperty, useSetActiveAccountId } from '@/state/accounts';
 import { fetchNui } from '@/utils/fetchNui';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -56,9 +57,7 @@ const TransferAccountModal: React.FC<{ accountId: number }> = ({ accountId }) =>
       return;
     }
 
-    // todo: probably fetch the updated account instead of updating it as the name would need to be updated as well
-    updateAccountProperty(accountId, 'role', 'manager');
-    setActiveAccountId(null);
+    await queryClient.invalidateQueries({ queryKey: ['accounts'] });
 
     setIsLoading(false);
     modal.close();
