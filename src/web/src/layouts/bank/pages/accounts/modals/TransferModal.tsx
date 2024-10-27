@@ -155,9 +155,9 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="max-h-[150px]">
-                      {accounts.map((account) => (
-                        <SelectItem key={account.id} value={account.id.toString()}>
-                          {account.label}
+                      {accounts.map((acc) => (
+                        <SelectItem disabled={acc.id === account.id} key={acc.id} value={acc.id.toString()}>
+                          {acc.label}
                         </SelectItem>
                       ))}
                     </SelectContent>

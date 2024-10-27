@@ -163,6 +163,12 @@ onClientCallback(
         message: 'account_id_not_exists',
       };
 
+    if (account.accountId === targetAccountId)
+      return {
+        success: false,
+        message: 'same_account_transfer',
+      };
+
     const player = GetPlayer(playerId);
     return await account.transferBalance({
       toId: targetAccountId,
