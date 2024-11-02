@@ -30,7 +30,10 @@ createBuilder(
     },
   ],
   async (outfiles) => {
+    if (web) await exec(`cd ./src/web && vite build ${watch ? '--watch' : ''}`);
+
     const files = await getFiles('dist/web', 'data');
+
     await createFxmanifest({
       client_scripts: ['@ox_lib/init.lua', 'src/client/client.lua', outfiles.client],
       server_scripts: ['@oxmysql/lib/MySQL.lua', outfiles.server],
@@ -43,5 +46,3 @@ createBuilder(
     });
   }
 );
-
-if (web) await exec(`cd ./src/web && vite build ${watch ? '--watch' : ''}`);
