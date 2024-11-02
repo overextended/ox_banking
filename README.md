@@ -10,6 +10,10 @@ A complete banking system for FiveM for the [ox_core](https://github.com/overext
 ## 🔗 Links
 - 💾 [Download](https://github.com/overextended/ox_banking/releases/latest/download/ox_banking.zip)
   - Download the latest release directly.
+- 📽️ [Showcase](https://youtu.be/WJhNDEC4Zys)
+  - Watch the video showcase of the resource.
+- 🛤️ [Cfx.re](https://forum.cfx.re/t/free-ox-banking/5277542)
+  - See our release thread for discussions or other information.
 
 ## ✨ Features
 
