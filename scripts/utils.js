@@ -1,4 +1,6 @@
-import { stat, readdir } from 'fs/promises';
+//@ts-check
+
+import { stat, readdir, readFile } from 'fs/promises';
 import { spawn } from 'child_process';
 
 /**
@@ -38,22 +40,27 @@ export function exec(command) {
  * @return {Promise<string[]>}
  */
 export async function getFiles(...args) {
-  let files = [];
+  const files = await Promise.all(
+    args.map(async (dir) => {
+      try {
+        const dirents = await readdir(`${dir}/`, { withFileTypes: true });
+        const paths = await Promise.all(
+          dirents.map(async (dirent) => {
+            const path = `${dir}/${dirent.name}`;
+            return dirent.isDirectory() ? await getFiles(path) : path;
+          })
+        );
 
-  for (let index = 0; index < args.length; index++) {
-    let dir = `${args[index]}/`;
-    const dirents = await readdir(dir, { withFileTypes: true });
+        return paths.flat();
+      } catch (err) {
+        return [];
+      }
+    })
+  );
 
-    files = [
-      ...files,
-      ...(await Promise.all(
-        dirents.map((dirent) => {
-          const path = dir + dirent.name;
-          return dirent.isDirectory() ? getFiles(path) : path;
-        })
-      )),
-    ];
-  }
+  return files.flat();
+}
 
-  return files.flat(1);
+export async function getPackage() {
+  return JSON.parse(await readFile('package.json', 'utf8'));
 }

@@ -9,7 +9,7 @@
     "web:dev": "cd src/web && vite dev",
     "web:watch": "cd src/web && vite build --watch",
     "build": "node scripts/build.js --mode=production",
-    "watch": "node scripts/build.js",
+    "watch": "node scripts/build.js --watch",
     "prettier": "prettier ./src/**/*.ts --write"
   },
   "keywords": [
@@ -58,6 +58,7 @@
     "zod": "^3.23.8"
   },
   "dependencies": {
+    "@overextended/fx-utils": "^0.0.4",
     "@overextended/ox_core": "^0.32.0",
     "@overextended/ox_lib": "latest",
     "@overextended/oxmysql": "latest",
