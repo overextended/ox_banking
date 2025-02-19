@@ -16,7 +16,7 @@ createBuilder(
       name: 'server',
       options: {
         platform: 'node',
-        target: ['node16'],
+        target: ['node22'],
         format: 'cjs',
       },
     },
@@ -24,7 +24,7 @@ createBuilder(
       name: 'client',
       options: {
         platform: 'browser',
-        target: ['es2021'],
+        target: ['es2023'],
         format: 'iife',
       },
     },
@@ -38,10 +38,11 @@ createBuilder(
       client_scripts: ['@ox_lib/init.lua', 'src/client/client.lua', outfiles.client],
       server_scripts: ['@oxmysql/lib/MySQL.lua', outfiles.server],
       files: [...files, 'locales/*.json'],
-      dependencies: ['/server:7290', '/onesync', 'ox_core', 'ox_lib', 'oxmysql', 'ox_inventory'],
+      dependencies: ['/server:12913', '/onesync', 'ox_core', 'ox_lib', 'oxmysql', 'ox_inventory'],
       metadata: {
         ui_page: 'dist/web/index.html',
         lua54: 'yes',
+        node_version: '22',
       },
     });
   }
