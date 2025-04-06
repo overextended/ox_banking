@@ -161,5 +161,6 @@
   "no_balance": "No balance",
   "no_access": "No access",
   "something_went_wrong": "Unknown error, something went wrong",
-  "account_id_not_exists": "No account with such id found"
+  "account_id_not_exists": "No account with such id found",
+  "same_account_transfer": "Cannot transfer money to the same account"
 }
