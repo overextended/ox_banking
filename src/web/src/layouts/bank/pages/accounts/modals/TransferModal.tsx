@@ -64,6 +64,12 @@ const TransferModal: React.FC<{ account: Account }> = ({ account }) => {
         message: locales.amount_greater_than_balance,
       });
 
+    if (values.transferType == 'account' && account.id == values.target)
+      return form.setError('target', {
+        type: 'value',
+        message: locales.same_account_transfer
+      })
+
     setIsLoading(true);
     const resp = await fetchNui<{ success: boolean; message?: string }>(
       'transferMoney',
