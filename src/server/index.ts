@@ -137,7 +137,7 @@ onClientCallback(
 
     if (!hasPermission) return;
 
-    target = typeof(target) == "string" ? Number.parseInt(target) : target
+    target = typeof(target) == 'string' ? Number.parseInt(target) : target
     let targetAccountId = 0;
 
     try {
