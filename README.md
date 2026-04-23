@@ -1,14 +1,14 @@
 # ox_banking
 
-A complete banking system for FiveM for the [ox_core](https://github.com/overextended/ox_core) framework implementing shared accounts, logs, invoices and more.
+A complete banking system for FiveM for the [ox_core](https://github.com/communityox/ox_core) framework implementing shared accounts, logs, invoices and more.
 
-![](https://img.shields.io/github/downloads/overextended/ox_banking/total?logo=github)
-![](https://img.shields.io/github/downloads/overextended/ox_banking/latest/total?logo=github)
-![](https://img.shields.io/github/contributors/overextended/ox_banking?logo=github)
-![](https://img.shields.io/github/v/release/overextended/ox_banking?logo=github)
+![](https://img.shields.io/github/downloads/communityox/ox_banking/total?logo=github)
+![](https://img.shields.io/github/downloads/communityox/ox_banking/latest/total?logo=github)
+![](https://img.shields.io/github/contributors/communityox/ox_banking?logo=github)
+![](https://img.shields.io/github/v/release/communityox/ox_banking?logo=github)
 
 ## 🔗 Links
-- 💾 [Download](https://github.com/overextended/ox_banking/releases/latest/download/ox_banking.zip)
+- 💾 [Download](https://github.com/communityox/ox_banking/releases/latest/download/ox_banking.zip)
   - Download the latest release directly.
 - 📽️ [Showcase](https://youtu.be/WJhNDEC4Zys)
   - Watch the video showcase of the resource.
@@ -39,7 +39,7 @@ A complete banking system for FiveM for the [ox_core](https://github.com/overext
 
 ## 📦 Dependencies
 
-- [ox_core](https://github.com/overextended/ox_core)
-- [ox_inventory](https://github.com/overextended/ox_inventory)
-- [ox_lib](https://github.com/overextended/ox_lib)
-- [oxmysql](https://github.com/overextended/oxmysql)
+- [ox_core](https://github.com/communityox/ox_core)
+- [ox_inventory](https://github.com/communityox/ox_inventory)
+- [ox_lib](https://github.com/communityox/ox_lib)
+- [oxmysql](https://github.com/communityox/oxmysql)

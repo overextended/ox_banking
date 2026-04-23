@@ -63,7 +63,7 @@ const AccountSettings: React.FC = () => {
         <AccountButton
           label={locales.manage_access}
           icon={Shield}
-          disabled={account.type === 'personal' || !hasPermission('manageUser', account.role)}
+          disabled={account.type !== 'shared' || !hasPermission('manageUser', account.role)}
           onClick={() => navigate(`/accounts/manage-access/${account.id}`)}
         />
         <AccountButton

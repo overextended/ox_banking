@@ -1,7 +1,7 @@
 //@ts-check
 
 import { exists, exec, getFiles } from './utils.js';
-import { createBuilder, createFxmanifest } from '@overextended/fx-utils';
+import { createBuilder, createFxmanifest } from '@communityox/fx-utils';
 
 const watch = process.argv.includes('--watch');
 const web = await exists('./src/web');

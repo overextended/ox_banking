@@ -1,4 +1,4 @@
-import { OxAccountPermissions, OxAccountRole } from '@overextended/ox_core';
+import { OxAccountPermissions, OxAccountRole } from '@communityox/ox_core';
 import { DateRange } from 'react-day-picker';
 
 export type AccountRole = OxAccountRole;

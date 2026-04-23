@@ -1,7 +1,7 @@
-import type { OxAccountRole, OxAccountUserMetadata } from '@overextended/ox_core';
-import { CreateAccount, GetAccount, GetCharacterAccount, GetPlayer } from '@overextended/ox_core/server';
-import { onClientCallback, versionCheck, checkDependency } from '@overextended/ox_lib/server';
-import { oxmysql } from '@overextended/oxmysql';
+import type { OxAccountRole, OxAccountUserMetadata } from '@communityox/ox_core';
+import { CreateAccount, GetAccount, GetCharacterAccount, GetPlayer } from '@communityox/ox_core/server';
+import { onClientCallback, versionCheck, checkDependency } from '@communityox/ox_lib/server';
+import { oxmysql } from '@communityox/oxmysql';
 import type { DateRange } from 'react-day-picker';
 import type {
   AccessTableData,
@@ -15,7 +15,7 @@ import type {
   Transaction,
 } from '../common/typings';
 
-versionCheck('overextended/ox_banking');
+versionCheck('communityox/ox_banking');
 
 const coreDepCheck: true | [false, string] = checkDependency('ox_core', '1.1.0');
 

@@ -9,8 +9,12 @@ interface Props {
 }
 
 const Pagination: React.FC<Props> = ({ maxPages, page, setPage }) => {
+  if (!maxPages) {
+    return null;
+  }
+
   return (
-    <div className="nd flex items-center gap-4 self-end">
+    <div className="flex items-center self-end gap-4 nd">
       <Button size="icon" onClick={() => setPage(--page)} disabled={page === 0}>
         <ChevronLeft size={20} />
       </Button>
