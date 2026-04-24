@@ -1,4 +1,4 @@
-import { cache } from '@communityox/ox_lib';
+import { cache } from '@overextended/ox_lib';
 
 export * from './locales';
 

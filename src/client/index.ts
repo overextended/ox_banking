@@ -1,6 +1,6 @@
 import { Config, LoadJsonFile, Locale } from '@common/.';
-import { OxAccountPermissions, OxAccountRole } from '@communityox/ox_core';
-import { cache, getLocales, hideTextUI, requestAnimDict, sleep, waitFor } from '@communityox/ox_lib/client';
+import { OxAccountPermissions, OxAccountRole } from '@overextended/ox_core';
+import { cache, getLocales, hideTextUI, requestAnimDict, sleep, waitFor } from '@overextended/ox_lib/client';
 import type { Character } from '../common/typings';
 import { SendTypedNUIMessage, serverNuiCallback } from './utils';
 

@@ -17,9 +17,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/communityox/ox_banking.git"
+    "url": "https://github.com/overextended/ox_banking.git"
   },
-  "bugs": "https://github.com/communityox/ox_banking/issues",
+  "bugs": "https://github.com/overextended/ox_banking/issues",
   "devDependencies": {
     "@babel/core": "^7.25.7",
     "@citizenfx/client": "latest",
@@ -58,10 +58,10 @@
     "zod": "^3.23.8"
   },
   "dependencies": {
-    "@communityox/fx-utils": "^0.0.4",
-    "@communityox/ox_core": "^1.5.3",
-    "@communityox/ox_lib": "latest",
-    "@communityox/oxmysql": "latest",
+    "@overextended/fx-utils": "^0.0.4",
+    "@overextended/ox_core": "^1.5.3",
+    "@overextended/ox_lib": "latest",
+    "@overextended/oxmysql": "latest",
     "@radix-ui/react-dialog": "^1.1.2",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
